@@ -91,7 +91,7 @@ menu.addEventListener('click',event=>{if(event.target.closest('a'))setMenu(false
 header.querySelector('a').addEventListener('click',()=>setMenu(false));
 function updateHeader(){header.classList.toggle('is-scrolled',window.scrollY>80);}
 window.addEventListener('scroll', updateHeader, {passive:true});updateHeader();
-window.addEventListener('resize',()=>{if(window.innerWidth>768)setMenu(false);});
+window.addEventListener('resize',()=>{if(window.innerWidth>1200)setMenu(false);});
 document.addEventListener('keydown',event=>{
  if(event.key==='Escape' && !menu.hidden){setMenu(false);toggle.focus();}
  if(event.key==='Tab' && !menu.hidden){const focusables=[toggle,...menu.querySelectorAll('a')];const idx=focusables.indexOf(document.activeElement);event.preventDefault();focusables[(idx+(event.shiftKey?-1:1)+focusables.length)%focusables.length].focus();}
@@ -171,4 +171,53 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
   const rect = dialog.getBoundingClientRect();
   if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
  });
+})();
+
+(() => {
+ const tabs = [...document.querySelectorAll('[data-refurbish-tab]')];
+ const panels = [...document.querySelectorAll('[data-refurbish-panel]')];
+ if (!tabs.length) return;
+ let focus = 'layout';
+ const labels = {layout:'01 / Spatial reconfiguration',materials:'02 / Material upgrades',reuse:'03 / Adaptive reuse'};
+ const briefs = {layout:'I would like to reconfigure the layout of an existing space.',materials:'I would like to explore material upgrades for an existing space.',reuse:'I would like to repurpose an existing commercial building.'};
+ document.querySelector('.refurbish-tabs').setAttribute('role','tablist');
+ document.querySelector('.refurbish-tabs').setAttribute('aria-orientation','vertical');
+ function selectTab(key) {
+  focus = key;
+  for (const tab of tabs) { const active = tab.dataset.refurbishTab === key; tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1; }
+  for (const panel of panels) panel.hidden=panel.dataset.refurbishPanel!==key;
+  document.getElementById('refurbish-view-number').textContent=labels[key];
+ }
+ for (const panel of panels) {panel.setAttribute('role','tabpanel');panel.tabIndex=0;}
+ tabs.forEach((tab,index) => {
+  tab.setAttribute('role','tab');
+  tab.addEventListener('click',()=>selectTab(tab.dataset.refurbishTab));
+  tab.addEventListener('keydown',event=>{
+   let next;
+   if (event.key==='ArrowDown'||event.key==='ArrowRight') next=(index+1)%tabs.length;
+   else if (event.key==='ArrowUp'||event.key==='ArrowLeft') next=(index+tabs.length-1)%tabs.length;
+   else if (event.key==='Home') next=0;
+   else if (event.key==='End') next=tabs.length-1;
+   if(next!==undefined){event.preventDefault();selectTab(tabs[next].dataset.refurbishTab);tabs[next].focus();}
+  });
+ });
+ selectTab('layout');
+ document.querySelector('[data-refurbish-inquiry]').addEventListener('click',()=>{
+  const form=document.getElementById('inquiry');
+  form.querySelector('[name=interest]').value='Retrofit';
+  const message=form.querySelector('[name=message]');
+  if(!message.value.trim()) message.value=briefs[focus]+'\n\nCurrent use:\nLocation / approximate area:\nWhat I want to change:';
+  form.dispatchEvent(new Event('input',{bubbles:true}));
+ });
+ const grid=document.querySelector('.deployment-grid');
+ const cards=[...grid.querySelectorAll('[data-deployment-kind]')];
+ const filters=[...document.querySelectorAll('[data-deployment-filter]')];
+ const descriptions={all:'Four approaches. One studio.',new:'Three approaches for your new build.',existing:'Refurbish and repurpose your existing space.'};
+ filters.forEach(button=>button.addEventListener('click',()=>{
+  const kind=button.dataset.deploymentFilter;
+  for (const filter of filters) filter.setAttribute('aria-pressed',String(filter===button));
+  for (const card of cards) card.hidden=kind!=='all'&&card.dataset.deploymentKind!==kind;
+  grid.classList.toggle('is-existing',kind==='existing');
+  document.getElementById('deployment-status').textContent=descriptions[kind];
+ }));
 })();

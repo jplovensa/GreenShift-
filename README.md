@@ -43,3 +43,9 @@ Desktop/mobile source layouts, DOM styles and four tier-dialog states were captu
 The static build and JavaScript syntax checks passed. Chromium verified both 1440px and 390px layouts, all sections, all four dialogs and selected-tier handoffs, form review, mobile navigation, no horizontal overflow, no JavaScript errors, and no missing local assets. No-JavaScript / failed-asset checks and the normal-motion intro passed. Side-by-side source comparisons and screenshots are in verification/. See design-qa.md for deliberate differences and visual verification evidence.
 
 The spatial presentation uses vendored Three.js 0.160.0 (MIT license included) and compiled Tailwind 3.4 utilities. It requires no CDN requests or package installation at runtime. Preview images are captures of the supplied experiences. The Drop Pod walkthrough remains embedded from its original GitHub Pages URL.
+
+## Refurbishment and deployment journeys
+
+The Refurbishment Studio at `#refurbish` includes keyboard-accessible layout, material, and adaptive-reuse tabs, the existing refurbishment film, a launchable spatial study, and a three-step service journey. Its inquiry action selects Retrofit and adds the selected focus only when the message is empty; existing customer notes remain intact and any previous inquiry review is invalidated.
+
+Deployment at `#tiers` retains all four service descriptions and detailed dialogs, with customer-goal headlines and filters for new builds or existing spaces. Refurbishment is accessible directly from navigation and the deployment section. The compact navigation is used through 1200px so service links remain readable on tablets.
