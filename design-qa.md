@@ -9,7 +9,7 @@ The user authorized building a local prototype without cloud-browser verificatio
 - Cinematic: /workspace/generated_images/exec-d4e38afa-b291-4f7b-9d49-aa2a7dab4859.png
 - Editorial: /workspace/generated_images/exec-6849039b-dbf6-4f59-81d6-018f4e1d0cd3.png
 - Atelier: /workspace/generated_images/exec-2bf118cf-7c78-4454-ab53-8ce99ad2c6da.png
-- User supplied house-shaped GreenShift logo in the conversation, reproduced as public/assets/logo.png.
+- User supplied house-shaped GreenShift logo in the conversation, reproduced as assets/logo.png.
 
 ## Implementation evidence
 
@@ -38,3 +38,11 @@ Full-view and focused-region visual comparisons: blocked by unavailable browser 
 Capture all variants at 1440px and mobile 390px. Compare source and implementation side by side; check typography, logo crop, imagery, spacing and overflow. Exercise native dialogs, keyboard navigation, email validation, reduced motion, WhatsApp handoff and actual video playback. Replace logo asset with original brand artwork. Fix observed P0/P1/P2 findings before production acceptance.
 
 Comparison history: no browser comparison could run; no visual pass claimed.
+
+## Version 1 GitHub hosting correction
+
+Selected implementation is now index.html / cinematic.html only, with no concept switcher. Runtime uses plain deferred scripts and linked CSS, a local font, and relative assets. No Vite or npm imports remain.
+
+Dependency-free static build and JavaScript syntax checks passed. JSDOM loaded actual external HTML/JS/CSS through an HTTP server mounted at /GreenShift-/ without script/resource errors. All tier-to-inquiry flows, navigation, reviewed WhatsApp payload, and referenced asset URLs passed. These are functional DOM and HTTP checks, not browser visual evidence. Live Pages configuration and deployment status could not be read because GitHub API access was denied.
+
+final result: blocked

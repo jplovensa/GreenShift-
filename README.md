@@ -1,51 +1,51 @@
-# GreenShift studio — three design directions
+# GreenShift Design Studio
 
-Three responsive frontend prototypes based on the approved design concepts:
+Version 1 (Cinematic Studio), implemented in browser-native JavaScript, HTML and CSS. The repository root is a complete static website: no Vite, npm packages, JSON module imports or runtime build tool is needed to load it.
 
-1. `cinematic.html` — Cinematic Studio: immersive architecture video and warm ivory sections.
-2. `editorial.html` — Editorial Architecture: paper, serif headlines and framed imagery.
-3. `atelier.html` — Digital Atelier: sage surfaces, bold typography and a split hero.
+The website uses the supplied hero video, a prepared transparent house-shaped logo asset, and the original site copy. Studio capabilities lead to architectural tier details and a project inquiry review. Visitors send the reviewed inquiry themselves through WhatsApp; there is no automatic submission or simulated success message.
 
-`index.html` defaults to the cinematic direction. The bottom version selector links between all three. Each includes the complete shared studio, tiers, philosophy, ecosystem, delivery protocol and inquiry experience.
+## GitHub Pages
 
-## Develop
+All URLs are relative, so the website supports both a custom domain and the repository path `/GreenShift-/`.
 
-Use the existing checkout; no worktree is necessary. Node.js 20.19+ or 22.12+ is required by Vite (validated using Node.js 24).
+The `.github/workflows/pages.yml` workflow copies the site into `dist/` and deploys it on pushes to `main`.
+
+If this repository has not already enabled Pages with Actions, open **Settings → Pages → Build and deployment → Source → GitHub Actions**, then run **Actions → Deploy GreenShift to GitHub Pages → Run workflow**. The deployment job reports the actual published URL. Changing repository Pages settings could not be verified here because access to GitHub's Pages API was denied.
+
+Alternatively, the root files also support branch-based Pages hosting: choose **Deploy from a branch**, `main`, `/ (root)`. The `.nojekyll` file disables unnecessary Jekyll processing. Use one publishing method.
+
+The selected website is `index.html`. The prior `cinematic.html` URL also works; `editorial.html` and `atelier.html` forward to the selected version.
+
+## Local development
+
+Node.js 18+ is enough for the helper scripts. No dependencies need installing.
 
 ```sh
-cd /workspace/GreenShift-
-npm ci
-npm run dev -- --port 4173 --strictPort
+npm run dev -- --port 4173
 ```
 
-## Build
+Or serve the repository using any static HTTP server. JavaScript files are plain deferred scripts, styles are linked normally and the icon font is included locally.
+
+## Optional static packaging
 
 ```sh
 npm run build
+node scripts/serve.mjs --dist --port 4173
 ```
 
-The `dist/` directory contains all three pages and required assets. Deploy its contents to a static host, or serve it using `python3 -m http.server 4173 --directory dist`. Use an HTTP server rather than opening the HTML as local files because the production app uses JavaScript modules.
+`dist/` contains only public website files. To simulate the GitHub repository URL:
 
-## Content and assets
+```sh
+node scripts/serve.mjs --dist --port 4183 --base /GreenShift-/
+```
 
-Copy was recovered from the publicly served greenshift.id JavaScript bundle. Original wording, architectural tier specifications, delivery protocol and contact details are retained. The studio headline is promoted to the hero. Existing wording that describes GreenShift as the development and capital arm of Fjäll Group remains intact to respect the instruction to keep the copy.
+## Checks
 
-The supplied hero-studio.mp4 is used unchanged. Its frame provides a static poster and reduced-motion fallback. The supplied house-shaped logo was reproduced as a transparent raster web asset using ImageGen because the inline attachment was not available as a directly downloadable file. Replace public/assets/logo.png with the original production artwork for exact logo fidelity.
+- Dependency-free static packaging passed.
+- JavaScript syntax checks passed.
+- External scripts and CSS loaded without DOM resource or script errors under `/GreenShift-/`.
+- All four tier dialogs and selected-tier inquiry handoffs passed DOM checks.
+- Navigation and reviewed WhatsApp inquiry payload passed DOM checks.
+- Every HTML-referenced script, stylesheet, logo, poster, video and the local icon font returned successfully under the repository path.
 
-Architecture imagery is conceptual; no fabricated completed projects or client names were added.
-
-## Interactions
-
-- Responsive navigation and three-direction selector.
-- Tier details in an accessible native dialog, with Escape dismissal and tier selection carried into the inquiry.
-- Video pause/play and reduced-motion support.
-- Expandable ecosystem information.
-- Required inquiry fields, email validation and a message review step.
-- The user explicitly opens WhatsApp to send to the existing public contact number. No automatic submission, backend connection or fake success state.
-- Editing a reviewed inquiry removes its stale send link.
-
-## Validation
-
-Production build passed. All three variants passed 84 DOM assertions across navigation, tier details, inquiry review and video controls. HTTP requests confirmed each page, video, poster and logo returns successfully. These checks do not establish real-browser behavior, responsive rendering, font rendering, keyboard focus behavior or visual fidelity. Browser screenshot comparison and design QA remain blocked because browser tools are unavailable in this chat; the user authorized this local fallback. See design-qa.md.
-
-This prototype has not been published. Production integration, privacy/terms content and delivery of inquiries beyond the WhatsApp handoff are outside this frontend prototype.
+Browser visual QA and live GitHub Pages deployment remain unverified. The original inline logo was reproduced as a raster asset; replace `assets/logo.png` with original production artwork for exact logo fidelity. See `design-qa.md`.
