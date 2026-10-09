@@ -63,3 +63,15 @@ Added the material library inside the refurbishment studio: GX-100, BEMMELS brai
 The WebGL prototype's previous steel-skin EPS claim conflicted with Fjäll's current GX-100 description. Its material scene and explanatory text now use a nine-layer mirrored build-up: finish, Kalci board, fibreglass, PU glue, EPS, and mirrored faces. Undocumented thermal/acoustic/tolerance values were removed from that local prototype; the source project remains linked separately.
 
 Chromium passed all 12 material views on desktop and mobile, image decoding, no horizontal overflow, project film metadata/playback readiness, Escape dismissal, pause and focus return, specification handoff, preservation and deduplication of customer notes, and the static initial library without JavaScript. No missing local resources or homepage JavaScript errors occurred. The nine-layer WebGL scene and material-slide navigation were also checked. Screenshots are verification/materials-*.png. Source provenance is in assets/fjall-source-media.json.
+
+## GreenShift Asset Repurposing Studio — replacement
+
+Final result: passed.
+
+Replaced the refurbishment section from scratch with an original GreenShift journey: choose a repurposing direction, understand the existing asset, explore an interior renovation palette, assemble a brief, and discuss the project. The previous GSIH film and copied Fjäll catalog are removed from this section and their unused media files removed from the build. GreenShift's relationship to Fjäll remains a short positioning statement.
+
+Eight original AI-assisted images share warm mineral, oak, reeded glass and sage-green art direction. The new 24-second animated concept film uses original existing-shell, material, partition and reimagined-interior studies. It is clearly identified as conceptual imagery; no finished-project or measured before/after claim is made. The new library covers finishing panels, partitions, wall finishes, flooring, joinery and lighting with project-oriented usage and detailing notes.
+
+Visual inspection at 1440×1000 and 390×844 confirmed the film, three-column desktop/single-column mobile library, direction controls and brief summary fit without horizontal overflow. Image crops retain their material focal points, type hierarchy is consistent with the existing GreenShift site, and all images resolve. Screenshots: verification/asset-refurbish-*.png, asset-asset-direction-*.png, asset-material-library-*.png and asset-asset-brief-*.png.
+
+Chromium passed all three direction states, four filters, six detail dialogs, save/remove selections, updated inquiry brief with preserved customer notes, duplicate-brief prevention, full film metadata/playback readiness, Escape dismissal and focus return, and deployment-to-Retrofit details. No homepage JavaScript errors or missing local assets occurred. Static studio content and the contact route remained available without JavaScript.

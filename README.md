@@ -44,19 +44,12 @@ The static build and JavaScript syntax checks passed. Chromium verified both 144
 
 The spatial presentation uses vendored Three.js 0.160.0 (MIT license included) and compiled Tailwind 3.4 utilities. It requires no CDN requests or package installation at runtime. Preview images are captures of the supplied experiences. The Drop Pod walkthrough remains embedded from its original GitHub Pages URL.
 
-## Refurbishment and deployment journeys
+## Asset Repurposing Studio
 
-The Refurbishment Studio at `#refurbish` includes keyboard-accessible layout, material, and adaptive-reuse tabs, the Fjäll Garuda Spark refurbishment film, a playable full project film, and a three-step service journey. Its inquiry action selects Retrofit and adds the selected focus only when the message is empty; existing customer notes remain intact and any previous inquiry review is invalidated.
+The studio at `#refurbish` is a GreenShift experience for development concepts, renovation aesthetics and asset repurposing. Clients choose a starting direction, explore the existing-space study, browse six renovation categories, and collect a palette for their inquiry. The section uses original imagery and its own film; the Fjäll product catalog and Garuda Spark footage are removed from this journey.
 
-Deployment at `#tiers` retains all four service descriptions and detailed dialogs, with customer-goal headlines and filters for new builds or existing spaces. Refurbishment is accessible directly from navigation and the deployment section. The compact navigation is used through 1200px so service links remain readable on tablets.
+The renovation library at `#material-library` covers finishing panels, partitions, wall finishes, flooring, joinery and lighting. Filter categories, open detail dialogs, save or remove selections, and pass the direction and palette into a Retrofit inquiry. Existing customer notes remain intact; repeated use updates the generated brief instead of duplicating it. Sending remains an explicit reviewed WhatsApp handoff.
 
+Eight original AI-assisted visual studies support the experience. The 24-second MP4 is an original animated concept film assembled from the existing-shell, materials, partition and reimagined-interior studies. It is labelled as a concept film and does not claim to document a completed project or a measured before/after transformation. Media is hosted locally. Provenance: `assets/asset-studio-provenance.json`.
 
-## Fjäll material library and positioning
-
-GreenShift is presented as Fjäll Group’s design and development arm, focused on development concepts and refurbishment. Studio copy connects architecture, project management and capital coordination; the service journey connects design, engineering, preparation and delivery.
-
-The library at `#material-library` follows the supplied [Fjäll Group website](https://jplovensa.github.io/FG_Website/#materials): GX-100, BEMMELS, RoR roofing and materials at scale, each with material/usage/preparation views. Descriptions, technical build-ups and illustrative media come from that site's material studio. Images are identified as illustrations; final suitability and performance remain project-specific. A specification action adds the chosen material to the inquiry without deleting existing notes or duplicating the same addition.
-
-The refurbishment background is an interior-focused excerpt (00:12–00:38) of Fjäll’s 51-second Garuda Spark Innovation Hub retrofit film at Malang Creative Center. “Watch the refurbishment” opens the full project film with native controls; closing pauses playback and restores focus. Reduced-motion visitors see the actual project's interior poster. Media is local for GitHub Pages. Source details are in `assets/fjall-source-media.json`.
-
-The local WebGL spatial presentation now shows the same nine-layer GX-100 concept (finish, Kalci board, fibreglass mesh, PU glue, EPS, mirrored protective faces). Older steel-skin and unsupported performance figures in that demo were replaced with the documented build-up and project-specific specification text.
+The film supports play/pause, a full-view dialog, reduced-motion fallback, Escape dismissal and focus return. Static studio content and the contact route remain available without JavaScript. Deployment retains customer-focused cards and filters for new builds or existing spaces, and links directly into the studio.

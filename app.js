@@ -97,7 +97,7 @@ document.addEventListener('keydown',event=>{
  if(event.key==='Tab' && !menu.hidden){const focusables=[toggle,...menu.querySelectorAll('a')];const idx=focusables.indexOf(document.activeElement);event.preventDefault();focusables[(idx+(event.shiftKey?-1:1)+focusables.length)%focusables.length].focus();}
 });
 const videos=[...document.querySelectorAll('main video')];
-const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{for(const entry of entries){const video=entry.target;if(entry.isIntersecting && !reduced.matches)video.play().catch(()=>{});else video.pause();}},{threshold:.15}) : null;
+const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{for(const entry of entries){const video=entry.target;if(entry.isIntersecting && !reduced.matches && video.dataset.userPaused!=='true')video.play().catch(()=>{});else video.pause();}},{threshold:.15}) : null;
 for(const video of videos){video.muted=true;if(videoObserver)videoObserver.observe(video);}
 const heroVideo=document.querySelector('#hero video');
 if(heroVideo){
@@ -174,41 +174,6 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
 })();
 
 (() => {
- const tabs = [...document.querySelectorAll('[data-refurbish-tab]')];
- const panels = [...document.querySelectorAll('[data-refurbish-panel]')];
- if (!tabs.length) return;
- let focus = 'layout';
- const labels = {layout:'01 / Spatial reconfiguration',materials:'02 / Material upgrades',reuse:'03 / Adaptive reuse'};
- const briefs = {layout:'I would like to reconfigure the layout of an existing space.',materials:'I would like to explore material upgrades for an existing space.',reuse:'I would like to repurpose an existing commercial building.'};
- document.querySelector('.refurbish-tabs').setAttribute('role','tablist');
- document.querySelector('.refurbish-tabs').setAttribute('aria-orientation','vertical');
- function selectTab(key) {
-  focus = key;
-  for (const tab of tabs) { const active = tab.dataset.refurbishTab === key; tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1; }
-  for (const panel of panels) panel.hidden=panel.dataset.refurbishPanel!==key;
-  document.getElementById('refurbish-view-number').textContent=labels[key];
- }
- for (const panel of panels) {panel.setAttribute('role','tabpanel');panel.tabIndex=0;}
- tabs.forEach((tab,index) => {
-  tab.setAttribute('role','tab');
-  tab.addEventListener('click',()=>selectTab(tab.dataset.refurbishTab));
-  tab.addEventListener('keydown',event=>{
-   let next;
-   if (event.key==='ArrowDown'||event.key==='ArrowRight') next=(index+1)%tabs.length;
-   else if (event.key==='ArrowUp'||event.key==='ArrowLeft') next=(index+tabs.length-1)%tabs.length;
-   else if (event.key==='Home') next=0;
-   else if (event.key==='End') next=tabs.length-1;
-   if(next!==undefined){event.preventDefault();selectTab(tabs[next].dataset.refurbishTab);tabs[next].focus();}
-  });
- });
- selectTab('layout');
- document.querySelector('[data-refurbish-inquiry]').addEventListener('click',()=>{
-  const form=document.getElementById('inquiry');
-  form.querySelector('[name=interest]').value='Retrofit';
-  const message=form.querySelector('[name=message]');
-  if(!message.value.trim()) message.value=briefs[focus]+'\n\nCurrent use:\nLocation / approximate area:\nWhat I want to change:';
-  form.dispatchEvent(new Event('input',{bubbles:true}));
- });
  const grid=document.querySelector('.deployment-grid');
  const cards=[...grid.querySelectorAll('[data-deployment-kind]')];
  const filters=[...document.querySelectorAll('[data-deployment-filter]')];
@@ -223,40 +188,36 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
 })();
 
 (() => {
- const library = document.getElementById('gs-material-data');
- if (!library) return;
- const materials = JSON.parse(library.textContent);
- let key = 'eps', view = 0;
- const pickers = [...document.querySelectorAll('[data-gs-material]')];
- const views = [...document.querySelectorAll('[data-gs-material-view]')];
- const write = (id, value) => { document.getElementById(id).textContent = value; };
- function render() {
-  const material=materials[key], study=material.views[view];
-  for(const button of pickers) button.setAttribute('aria-pressed',String(button.dataset.gsMaterial===key));
-  for(const button of views) button.setAttribute('aria-pressed',String(Number(button.dataset.gsMaterialView)===view));
-  for(const [id,value] of Object.entries({'gs-material-index':material.index,'gs-material-kicker':material.kicker,'gs-material-title':material.title,'gs-material-description':material.description,'gs-material-build':material.explore,'gs-material-discuss':material.discuss,'gs-material-detail-title':material.detailTitle,'gs-material-source':material.source,'gs-material-note':study.note})) write(id,value);
-  const image=document.getElementById('gs-material-image');image.src='./assets/fg-'+study.image+'.webp';image.alt=study.alt;
-  document.getElementById('gs-material-details').replaceChildren(...material.details.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
-  write('gs-material-announcement',material.title+' / '+study.label+' study');
+ const materials=JSON.parse(document.getElementById('asset-material-data').textContent);
+ const selected=new Set();let goal='layout',detailKey=null,detailOrigin=null;
+ const goals={layout:{label:'Make the layout work harder',title:'Layout & circulation',copy:'Review how people move, meet and use the space. Explore new zones, partitions, storage and circulation around the existing structure.'},identity:{label:'Give the interior a new identity',title:'Materials & atmosphere',copy:'Explore a coordinated palette of finishing panels, surfaces, joinery and lighting to change how an existing interior feels.'},repurpose:{label:'Prepare the asset for a new use',title:'Asset repositioning',copy:'Start with the intended new use. Review spatial needs, retained elements and the design changes needed to give the asset its next purpose.'}};
+ const byKey=key=>materials.find(m=>m.key===key);
+ const summary=document.getElementById('asset-brief-list');
+ function syncSelection(){
+  document.querySelectorAll('[data-asset-save]').forEach(input=>input.checked=selected.has(input.dataset.assetSave));
+  summary.replaceChildren();
+  if(!selected.size){const li=document.createElement('li');li.textContent='No finishes selected yet. Explore the library above.';summary.append(li);}
+  for(const key of selected){const li=document.createElement('li'),text=document.createElement('span'),remove=document.createElement('button');text.textContent=byKey(key).title;remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+byKey(key).title+' from brief');remove.addEventListener('click',()=>{selected.delete(key);syncSelection();(summary.querySelector("button")||document.getElementById("asset-inquiry")).focus({preventScroll:true});});li.append(text,remove);summary.append(li);}
+  document.getElementById('asset-brief-goal').textContent=goals[goal].label;
+  document.getElementById('asset-brief-status').textContent=selected.size?selected.size+' renovation '+(selected.size===1?'category':'categories')+' saved to your brief.':'Your direction and selected finishes will be added to the inquiry.';
+  if(detailKey){const active=selected.has(detailKey);document.getElementById('asset-detail-save').textContent=active?'Remove from my brief':'Add to my brief';document.getElementById('asset-detail-save').setAttribute('aria-pressed',String(active));}
  }
- pickers.forEach(button=>button.addEventListener('click',()=>{key=button.dataset.gsMaterial;view=0;render();}));
- views.forEach(button=>button.addEventListener('click',()=>{view=Number(button.dataset.gsMaterialView);render();}));
- document.getElementById('gs-material-inquiry').addEventListener('click',()=>{
-  const form=document.getElementById('inquiry'), message=form.querySelector('[name=message]');
-  const addition='Material specification to discuss: '+materials[key].title+'. Please review suitability for my refurbishment project.';
-  form.querySelector('[name=interest]').value='Retrofit';
-  if(!message.value.includes(addition)) {
-   const next=message.value.trim()?message.value+'\n\n'+addition:addition;
-   if(next.length<=message.maxLength) message.value=next;
-   else write('gs-material-announcement','Your message is full. Include the material you want to discuss in your project notes.');
-  }
-  form.dispatchEvent(new Event('input',{bubbles:true}));
- });
- const dialog=document.getElementById('refurbish-film-dialog'), video=dialog.querySelector('video');
- const opener=document.getElementById('refurbish-film-open');
- const background=document.querySelector('.refurbish-film>video');
- opener.addEventListener('click',()=>{background.pause();dialog.showModal();document.body.classList.add('dialog-open');video.play().catch(()=>{});document.getElementById('refurbish-film-close').focus();});
- document.getElementById('refurbish-film-close').addEventListener('click',()=>dialog.close());
- dialog.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches && rect.bottom>0 && rect.top<innerHeight)background.play().catch(()=>{});});
- dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
+ document.querySelectorAll('[data-asset-goal]').forEach(button=>button.addEventListener('click',()=>{goal=button.dataset.assetGoal;document.querySelectorAll('[data-asset-goal]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.getElementById('asset-goal-title').textContent=goals[goal].title;document.getElementById('asset-goal-copy').textContent=goals[goal].copy;syncSelection();}));
+ document.querySelectorAll('[data-asset-filter]').forEach(button=>button.addEventListener('click',()=>{const family=button.dataset.assetFilter;document.querySelectorAll('[data-asset-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('[data-asset-family]').forEach(card=>card.hidden=family!=='all'&&card.dataset.assetFamily!==family);}));
+ document.querySelectorAll('[data-asset-save]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)selected.add(input.dataset.assetSave);else selected.delete(input.dataset.assetSave);syncSelection();}));
+ const detail=document.getElementById('asset-material-dialog');
+ document.querySelectorAll('[data-asset-detail]').forEach(button=>button.addEventListener('click',()=>{detailKey=button.dataset.assetDetail;detailOrigin=button;const material=byKey(detailKey);const image=document.getElementById('asset-detail-image');image.src='./assets/'+material.image+'.jpg';image.alt='Original concept study of '+material.title.toLowerCase();for(const [id,text] of Object.entries({'asset-material-title':material.title,'asset-material-intro':material.intro,'asset-material-options':material.options,'asset-material-uses':material.uses,'asset-material-resolve':material.resolve}))document.getElementById(id).textContent=text;syncSelection();detail.showModal();document.body.classList.add('dialog-open');detail.querySelector('.asset-material-close').focus();}));
+ detail.querySelector('.asset-material-close').addEventListener('click',()=>detail.close());
+ document.getElementById('asset-detail-save').addEventListener('click',()=>{if(selected.has(detailKey))selected.delete(detailKey);else selected.add(detailKey);syncSelection();});
+ detail.addEventListener('close',()=>{document.body.classList.remove('dialog-open');detailOrigin?.focus({preventScroll:true});});
+ document.getElementById('asset-inquiry').addEventListener('click',event=>{const form=document.getElementById('inquiry'),message=form.querySelector('[name=message]');const block='[GreenShift asset repurposing brief]\nDirection: '+goals[goal].label+'\nRenovation palette: '+([...selected].map(key=>byKey(key).title).join(', ')||'To explore with the studio')+'\n[/GreenShift asset repurposing brief]';const notes=message.value.replace(/\n*\[GreenShift asset repurposing brief\][\s\S]*?\[\/GreenShift asset repurposing brief\]/g,'');const next=notes.trim()?notes+'\n\n'+block:block;if(next.length>message.maxLength){event.preventDefault();document.getElementById('asset-brief-status').textContent='Your existing notes leave too little room for this brief. Shorten the inquiry message before adding it.';return;}message.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));});
+ const background=document.getElementById('asset-film'),toggle=document.getElementById('asset-film-toggle');
+ function syncFilm(){const paused=background.paused;toggle.innerHTML='<i class="ph ph-'+(paused?'play':'pause')+'" aria-hidden="true"></i>';toggle.setAttribute('aria-label',(paused?'Play':'Pause')+' concept film');}
+ background.addEventListener('play',syncFilm);background.addEventListener('pause',syncFilm);syncFilm();
+ toggle.addEventListener('click',()=>{if(background.paused){background.dataset.userPaused='false';background.play().catch(()=>{});}else{background.dataset.userPaused='true';background.pause();}});
+ const film=document.getElementById('asset-film-dialog'),video=film.querySelector('video'),opener=document.getElementById('asset-film-open');
+ opener.addEventListener('click',()=>{background.pause();film.showModal();document.body.classList.add('dialog-open');video.play().catch(()=>{});film.querySelector('.asset-film-close').focus();});
+ film.querySelector('.asset-film-close').addEventListener('click',()=>film.close());
+ film.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&background.dataset.userPaused!=='true'&&rect.bottom>0&&rect.top<innerHeight)background.play().catch(()=>{});});
+ for(const dialog of [detail,film])dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
 })();
