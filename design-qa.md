@@ -35,3 +35,11 @@ Chromium tests passed at desktop and mobile for all seven sections; four tier di
 ## Remaining scope
 
 Source Privacy and Terms controls have no substantive policy destination and retain the source behavior. Contact delivery is a WhatsApp handoff, not an integration with the original site's backend. Exact original logo artwork can replace prepared raster assets. Video-frame differences in comparisons are expected. Live deployment is checked separately after push; local visual QA passing does not itself establish publication.
+
+## Experience Studio update
+
+The opening reveal now has a transparent surface, legible logos over the video, and no white panel. Fjäll artwork replaces the studio hierarchy's text heading. Existing homepage copy remains intact; an Experience Studio section extends VR Spatial Planning with two actual project previews and a conceive → experience → refine sequence.
+
+The Drop Pod preview was captured after entering the supplied cinematic walkthrough. Its launcher embeds the original experience. The Garuda Spark preview and presentation retain the supplied architectural scene and controls; Three.js 0.160.0, compiled Tailwind utilities, and Inter are hosted locally so that the WebGL presentation does not depend on third-party CDNs. Both cards also link to the original full experiences. Frames are created only after a visitor launches a project and removed on close.
+
+Chromium verified desktop (1440px) and mobile (390px) layouts, image loading, no horizontal overflow, actual WebGL initialization and Next Insight transitions, both launchers, frame cleanup, focus return, intro transparency and automatic dismissal. No homepage JavaScript errors occurred. Repository-path hosting and no-JavaScript links were checked separately. Screenshots: verification/experience-desktop.png, experience-mobile.png, experience-webgl-desktop.png, experience-webgl-mobile.png, and experience-intro.png.

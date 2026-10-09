@@ -32,6 +32,8 @@ Edit static section markup in index.html, behavior in app.js, styles in style.cs
 - Required fields and email validation, review of the inquiry, and an explicit WhatsApp handoff to the existing public contact number. The source site's contact backend is not copied or invoked; no automatic messages or fake submission states are used.
 - Video playback follows viewport visibility and reduced-motion preference. The hero has a play/pause control.
 - Opening countdown from 540 to 45 days, followed by GreenShift as part of Fjäll Group; Skip and Escape dismiss immediately. Reduced-motion mode uses a short static reveal. A fixed upper bound prevents a failed asset or animation from trapping visitors.
+- Experience Studio pairs the Drop Pod Villas walkthrough with a locally hosted Three.js spatial presentation adapted from the supplied Garuda Spark Innovation Hub reference. Launchers load presentations only on demand; closing removes the frame and restores focus. Full-experience links remain available without JavaScript.
+- Intro logos appear directly over the video, with a transparent reveal surface. The studio hierarchy uses Fjäll artwork.
 - Full page content is present without JavaScript, and remains visible if assets fail.
 
 ## Sources and checks
@@ -39,3 +41,5 @@ Edit static section markup in index.html, behavior in app.js, styles in style.cs
 Desktop/mobile source layouts, DOM styles and four tier-dialog states were captured after network access was activated. Live media files were copied from greenshift.id. Inter is hosted locally from the official Fontsource npm package because Google Fonts access was unavailable; its license is included. User-supplied inline logos remain prepared raster reproductions and can be replaced with original production artwork for exact brand fidelity.
 
 The static build and JavaScript syntax checks passed. Chromium verified both 1440px and 390px layouts, all sections, all four dialogs and selected-tier handoffs, form review, mobile navigation, no horizontal overflow, no JavaScript errors, and no missing local assets. No-JavaScript / failed-asset checks and the normal-motion intro passed. Side-by-side source comparisons and screenshots are in verification/. See design-qa.md for deliberate differences and visual verification evidence.
+
+The spatial presentation uses vendored Three.js 0.160.0 (MIT license included) and compiled Tailwind 3.4 utilities. It requires no CDN requests or package installation at runtime. Preview images are captures of the supplied experiences. The Drop Pod walkthrough remains embedded from its original GitHub Pages URL.

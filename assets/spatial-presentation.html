@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Adapted from jplovensa.github.io/SCH-FG_GSIH_MCC/ for the GreenShift Experience Studio; locally hosted styles and Three.js. -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Garuda Spark Innovation Hub MCC - Development Concept</title>
+    <link rel="stylesheet" href="./spatial-styles.css">
+    
+    <style>
+@font-face{font-family:Inter;font-style:normal;font-weight:300;font-display:swap;src:url(./inter-300.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:400;font-display:swap;src:url(./inter-400.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url(./inter-500.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url(./inter-600.woff2) format("woff2")}
+@font-face{font-family:Inter;font-style:normal;font-weight:700;font-display:swap;src:url(./inter-700.woff2) format("woff2")}
+
+        body { margin: 0; overflow: hidden; background-color: #f4f4f5; font-family: 'Inter', sans-serif; user-select: none; touch-action: none; }
+        .hide-ui { opacity: 0; transform: translateY(16px); filter: blur(4px); pointer-events: none; }
+        .show-ui { opacity: 1; transform: translateY(0); filter: blur(0px); pointer-events: auto; }
+        .dot-active { width: 2.5rem; background-color: #54d2b2; box-shadow: 0 0 12px rgba(84,210,178,0.4); }
+        .dot-inactive { width: 0.75rem; background-color: rgba(0,0,0,0.1); }
+
+        /* Cinematic Animations */
+        @keyframes cinematicContinuousZoom {
+            0% { transform: scale(0.92); }
+            100% { transform: scale(1.05); }
+        }
+        @keyframes blurReveal {
+            0% { opacity: 0; filter: blur(20px); transform: translateY(15px) scale(0.95); }
+            100% { opacity: 1; filter: blur(0px); transform: translateY(0) scale(1); }
+        }
+        @keyframes ambientPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+        
+        .cinematic-zoom { animation: cinematicContinuousZoom 12s cubic-bezier(0.2, 0.0, 0.2, 1) forwards; }
+        .ambient-glow { animation: ambientPulse 4s ease-in-out infinite; }
+        
+        .reveal-1 { animation: blurReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.1s; }
+        .reveal-2 { animation: blurReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.3s; }
+        .reveal-3 { animation: blurReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.5s; }
+        .reveal-progress { animation: blurReveal 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; animation-delay: 0.8s; }
+
+        /* Hide scrollbars for modals */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-gray-900 selection:bg-[#54d2b2]/30">
+
+    <!-- CINEMATIC PRELOADER -->
+    <div id="preloader" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#f8fafc] transition-opacity duration-1000 ease-in-out opacity-100 overflow-hidden font-['Inter']">
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-[#54d2b2]/20 via-transparent to-[#0a84ff]/10 blur-[100px] ambient-glow"></div>
+        </div>
+
+        <div class="cinematic-zoom flex flex-col items-center justify-center w-full h-full relative z-10 px-6">
+            <div class="reveal-1 bg-[#111111] border border-black/5 rounded-[2rem] px-6 py-4 md:px-10 md:py-6 flex items-center justify-center gap-4 md:gap-8 shadow-2xl">
+                <svg viewBox="0 0 200 250" class="h-6 md:h-12">
+                    <path d="M 10 165 L 10 190 L 190 190 L 190 130 L 10 130 L 10 70 L 100 10 L 190 70 L 190 95 M 55 38 L 55 190 M 145 38 L 145 190" fill="none" stroke="#a88854" stroke-width="12" stroke-linejoin="miter" stroke-linecap="square" />
+                    <text x="100" y="240" font-family="'Inter', sans-serif" font-size="34" font-weight="700" fill="#a88854" letter-spacing="12" text-anchor="middle">SECHA</text>
+                </svg>
+                <div class="w-px h-8 md:h-14 bg-white/10"></div>
+                <svg viewBox="0 0 650 200" class="h-5 md:h-9">
+                    <g transform="translate(10, 20)">
+                        <path d="M 10 95 L 130 25 L 240 90 L 180 125 L 130 95 L 70 130 Z" fill="#54d2b2" />
+                        <path d="M 90 120 L 140 90 L 210 130 L 160 160 Z" fill="#3c8273" />
+                    </g>
+                    <text x="260" y="110" font-family="'Inter', sans-serif" font-size="96" font-weight="900" fill="#54d2b2" letter-spacing="-2">FJÄLL</text>
+                    <text x="265" y="175" font-family="'Inter', sans-serif" font-size="64" font-weight="700" fill="transparent" stroke="#3c8273" stroke-width="2.5" letter-spacing="11">GROUP</text>
+                </svg>
+            </div>
+
+            <div class="reveal-2 mt-8 md:mt-10 flex items-center gap-2 bg-[#54d2b2]/10 border border-[#54d2b2]/20 text-[#54d2b2] px-4 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-widest uppercase">
+                <span class="w-1.5 h-1.5 bg-[#54d2b2] rounded-full animate-pulse"></span>
+                DEVELOPMENT CONCEPT
+            </div>
+
+            <h1 class="reveal-3 mt-8 text-center text-4xl md:text-[5.5rem] font-bold tracking-tighter leading-[1.05] text-[#111111]">
+                Tech Meets<br>
+                <span class="text-[#54d2b2]">Heritage.</span>
+            </h1>
+
+            <div class="mt-12 md:mt-16 w-56 md:w-72 flex flex-col items-center reveal-progress z-20">
+                <div class="w-full h-1 bg-[#e2e8f0] rounded-full overflow-hidden relative mb-4 shadow-[inset_0_1px_2px_rgba(0,0,0,0.1)]">
+                    <div id="progress-bar" class="absolute top-0 left-0 h-full bg-gradient-to-r from-[#54d2b2] via-[#0a84ff] to-[#54d2b2] bg-[length:200%_100%] rounded-full shadow-[0_0_12px_rgba(84,210,178,0.8)]" style="width: 0%; animation: gradientFlow 2s linear infinite;"></div>
+                </div>
+                <div class="flex justify-between w-full text-[9px] md:text-[10px] font-mono text-gray-400 uppercase tracking-widest">
+                    <span>Loading Hub Data</span>
+                    <span id="progress-text" class="text-gray-900 font-bold">0%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3D CANVAS -->
+    <div id="canvas-container" class="absolute inset-0 z-0 cursor-move">
+        <canvas id="glcanvas" class="w-full h-full block outline-none"></canvas>
+    </div>
+
+    <!-- VR HUD & CONTROLS -->
+    <div id="vr-ui" class="absolute inset-0 pointer-events-none flex-col items-center justify-between z-20 hidden p-4 md:p-8">
+        
+        <!-- Game Top HUD -->
+        <div class="w-full flex justify-between items-start">
+            <div class="bg-white/80 backdrop-blur-md px-3 py-2 md:px-4 md:py-3 rounded-xl border border-black/5 text-gray-900 shadow-xl flex flex-col transition-colors duration-300" id="objective-container">
+                <span class="text-[8px] md:text-[9px] font-bold text-[#54d2b2] uppercase tracking-widest mb-0.5">PropTech Engine</span>
+                <span id="game-objective" class="text-xs md:text-sm font-bold tracking-tight transition-colors duration-300">Scan Facility Assets</span>
+            </div>
+            
+            <div class="flex flex-col items-end gap-2">
+                <div class="hidden md:block bg-black/80 backdrop-blur-md px-4 py-2 rounded-xl border border-white/10 text-white shadow-xl text-xs font-mono tracking-widest">
+                    <span class="text-[#54d2b2]">RENDER:</span> D5 WebGL2 <span class="mx-2 text-white/30">|</span> <span class="text-[#54d2b2]">PING:</span> 12ms
+                </div>
+                <div class="hidden md:block bg-black/50 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/5 text-white/70 text-[9px] font-mono uppercase tracking-wider">
+                    Live Telemetry Active
+                </div>
+            </div>
+        </div>
+
+        <!-- Crosshair & Interaction Prompt -->
+        <div class="flex flex-col items-center justify-center relative flex-1 w-full pointer-events-none">
+            <div class="w-1.5 h-1.5 bg-black/40 rounded-full border border-white/80 shadow-[0_0_4px_rgba(255,255,255,0.5)] transition-all duration-200" id="crosshair"></div>
+            <div id="game-prompt" class="absolute top-1/2 mt-4 bg-black/80 backdrop-blur-md text-[#54d2b2] font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-lg opacity-0 transition-opacity duration-300 shadow-xl uppercase border border-[#54d2b2]/30 text-center">
+                [ Asset Scanned ]
+            </div>
+        </div>
+
+        <!-- Desktop Controls Overlay -->
+        <div class="hidden md:flex absolute bottom-8 left-1/2 -translate-x-1/2 items-center gap-6 text-xs font-mono text-white/70 bg-black/50 backdrop-blur-md px-6 py-2.5 rounded-full border border-white/10 shadow-2xl pointer-events-auto">
+            <span class="flex items-center gap-2"><span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">C</span> Camera</span>
+            <span class="flex items-center gap-2"><span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">Scroll</span> Zoom</span>
+            <span class="flex items-center gap-2"><span class="bg-white/20 px-1.5 py-0.5 rounded text-white font-bold">E</span> Analyse EPS</span>
+            <span class="flex items-center gap-2 text-[#54d2b2]"><span class="bg-[#54d2b2]/20 border border-[#54d2b2]/50 px-1.5 py-0.5 rounded">ESC</span> Exit VR</span>
+        </div>
+
+        <!-- Mobile Touch Action Buttons -->
+        <div id="mobile-actions" class="absolute bottom-6 right-4 flex-col gap-3 z-50 pointer-events-auto hidden">
+            <button id="btn-mob-zoom-in" class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full text-gray-900 border border-black/10 flex items-center justify-center font-black text-lg shadow-lg active:bg-[#54d2b2] active:text-white transition-colors">+</button>
+            <button id="btn-mob-zoom-out" class="w-10 h-10 bg-white/90 backdrop-blur-md rounded-full text-gray-900 border border-black/10 flex items-center justify-center font-black text-lg shadow-lg active:bg-[#54d2b2] active:text-white transition-colors">-</button>
+            <button id="btn-mob-cam" class="w-10 h-10 bg-gray-900 backdrop-blur-md rounded-full text-white border border-black/10 flex items-center justify-center shadow-lg active:bg-[#54d2b2] transition-colors mt-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            </button>
+            <button id="btn-mob-analyze" class="w-10 h-10 bg-[#54d2b2] backdrop-blur-md rounded-full text-white border border-[#54d2b2]/50 flex items-center justify-center shadow-lg active:bg-white active:text-[#54d2b2] font-black text-[10px] mt-2 transition-colors">EPS</button>
+            <button id="btn-exit-vr-mob" class="w-10 h-10 bg-red-500 backdrop-blur-md rounded-full text-white border border-red-400 flex items-center justify-center shadow-lg active:bg-white active:text-red-500 font-bold text-[10px] mt-4 transition-colors">X</button>
+        </div>
+
+        <!-- Mobile Virtual Joystick -->
+        <div id="mobile-joystick" class="absolute bottom-6 left-4 w-28 h-28 bg-white/10 backdrop-blur-md rounded-full border border-white/20 hidden touch-none z-50 items-center justify-center pointer-events-auto shadow-xl">
+            <div id="mobile-joystick-knob" class="w-12 h-12 bg-white/90 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.2)] transition-transform duration-75"></div>
+        </div>
+
+    </div>
+
+    <!-- DIRECTOR GENERAL UI OVERLAY (Standard Presentation) -->
+    <div id="main-ui" class="absolute inset-0 z-10 pointer-events-none flex p-4 md:p-12 transition-all duration-1000 opacity-0 translate-y-4">
+        
+        <div class="w-full md:w-[420px] h-full flex flex-col justify-between pointer-events-auto">
+            <div class="flex flex-col items-start pt-6 md:pt-0">
+                <div class="backdrop-blur-md bg-white/70 border border-black/5 rounded-2xl p-4 md:p-6 w-fit shadow-xl">
+                    <h3 class="text-[10px] font-bold tracking-[0.3em] text-[#54d2b2] uppercase mb-1">Development Concept</h3>
+                    <h1 class="text-xs md:text-sm font-semibold tracking-wide text-gray-900 uppercase">KOMDIGI // Garuda Spark Hub</h1>
+                </div>
+            </div>
+
+            <div class="relative pb-6 md:pb-0">
+                <div id="pagination" class="flex gap-2 mb-4 md:mb-6">
+                    <button aria-label="Select presentation insight" class="dot h-1.5 rounded-full transition-all duration-500 ease-out dot-active" data-index="0"></button>
+                    <button aria-label="Select presentation insight" class="dot h-1.5 rounded-full transition-all duration-500 ease-out dot-inactive" data-index="1"></button>
+                    <button aria-label="Select presentation insight" class="dot h-1.5 rounded-full transition-all duration-500 ease-out dot-inactive" data-index="2"></button>
+                    <button aria-label="Select presentation insight" class="dot h-1.5 rounded-full transition-all duration-500 ease-out dot-inactive" data-index="3"></button>
+                    <button aria-label="Select presentation insight" class="dot h-1.5 rounded-full transition-all duration-500 ease-out dot-inactive" data-index="4"></button>
+                </div>
+
+                <div id="slide-content" class="backdrop-blur-2xl bg-white/80 border border-black/5 rounded-3xl p-6 md:p-8 shadow-2xl transition-all duration-300 transform show-ui max-h-[60vh] md:max-h-none overflow-y-auto">
+                    <div class="inline-block border border-black/5 bg-gray-100/50 rounded-full px-3 py-1 mb-3 md:mb-4">
+                        <span id="slide-phase" class="text-[9px] md:text-[10px] font-mono tracking-widest text-gray-500"></span>
+                    </div>
+                    
+                    <h2 id="slide-title" class="text-2xl md:text-3xl font-bold tracking-tight leading-tight mb-1 md:mb-2 text-gray-900"></h2>
+                    <h3 id="slide-subtitle" class="text-xs md:text-sm font-semibold text-[#54d2b2] uppercase tracking-widest mb-4 md:mb-6"></h3>
+                    
+                    <p id="slide-desc" class="text-gray-600 leading-relaxed text-xs md:text-sm font-medium border-l-2 border-[#54d2b2] pl-3 md:pl-4"></p>
+
+                    <div class="flex gap-2 md:gap-3 mt-6 md:mt-8">
+                        <button id="btn-prev" aria-label="Previous insight" class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 transition-colors shadow-sm shrink-0">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+                        </button>
+                        <button id="btn-next" aria-label="Next insight" class="flex-1 h-10 md:h-12 flex items-center justify-center gap-2 rounded-full bg-gray-900 text-white font-semibold hover:bg-black transition-all shadow-lg hover:scale-[1.02]">
+                            <span id="btn-next-text" class="text-sm">Next Insight</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute top-6 right-4 md:top-1/2 md:right-12 md:-translate-y-1/2 pointer-events-auto">
+            <button id="btn-enter-vr" class="relative group bg-white/80 backdrop-blur-xl border border-black/5 text-gray-900 hover:text-white px-3 py-5 md:px-4 md:py-8 rounded-[1rem] md:rounded-[1.5rem] transition-all duration-500 shadow-xl flex flex-col items-center gap-3 md:gap-5 overflow-hidden hover:scale-105 hover:shadow-[0_0_30px_rgba(84,210,178,0.4)]">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#54d2b2] to-[#3c8273] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-0"></div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="relative z-10 group-hover:stroke-white text-[#54d2b2] transition-colors duration-300 md:w-6 md:h-6"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                <span class="relative z-10 text-[9px] md:text-[10px] font-bold tracking-widest uppercase transition-colors duration-300" style="writing-mode: vertical-rl; text-orientation: mixed; transform: rotate(180deg);">Immersive VR</span>
+            </button>
+        </div>
+
+    </div>
+
+    <!-- MATERIAL ANALYSIS MODAL -->
+    <div id="material-modal" class="fixed inset-0 z-[60] flex items-center justify-end p-4 md:p-8 pointer-events-none opacity-0 transition-opacity duration-500 font-['Inter']">
+        <!-- CRITICAL FIX: Removed pointer-events-auto from this background overlay -->
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="mat-modal-bg"></div>
+        
+        <div class="relative w-full md:w-[450px] h-full max-h-[85vh] md:max-h-full bg-white/95 backdrop-blur-3xl border border-white/50 rounded-3xl p-6 md:p-10 shadow-2xl transform translate-x-full transition-transform duration-500 overflow-y-auto flex flex-col" id="mat-modal-content">
+            <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
+                <h3 class="text-[#54d2b2] font-bold tracking-[0.2em] uppercase text-xs flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 bg-[#54d2b2] rounded-full animate-pulse"></span> Analysis
+                </h3>
+                <button id="btn-close-mat" class="text-gray-400 hover:text-gray-900 bg-gray-100 rounded-full p-2 transition-colors pointer-events-auto">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 mb-2">EPS Sandwich Panel</h2>
+            <p class="text-sm text-gray-500 mb-8 leading-relaxed">Real-time exploded physical visualization of the proprietary structural and acoustic core.</p>
+
+            <div class="space-y-4 flex-1">
+                <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <h4 class="font-bold text-gray-900 text-sm mb-1">01. Structural Skin</h4>
+                    <p class="text-xs text-gray-500">0.5mm Galvalume with AZ150 thermal coating.</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-[#54d2b2]/10 border border-[#54d2b2]/20">
+                    <h4 class="font-bold text-[#3c8273] text-sm mb-1">02. Acoustic Core</h4>
+                    <p class="text-xs text-[#3c8273]/80">High-Density Fire Retardant EPS. Class 45 STC.</p>
+                </div>
+                <div class="p-4 rounded-2xl bg-gray-50 border border-gray-100">
+                    <h4 class="font-bold text-gray-900 text-sm mb-1">03. Polyurethane Binding</h4>
+                    <p class="text-xs text-gray-500">Industrial grade elastic adhesive layer.</p>
+                </div>
+            </div>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200">
+                <div class="flex justify-between items-center text-sm mb-2">
+                    <span class="text-gray-500 font-medium">Thermal Resistance</span>
+                    <span class="font-bold text-gray-900">R-Value 4.1/in</span>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-500 font-medium">Factory Tolerance</span>
+                    <span class="font-bold text-[#54d2b2]">± 0.2mm</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEDICATED EPS SIMULATION HUD -->
+    <div id="simulation-hud" class="absolute bottom-24 left-1/2 -translate-x-1/2 md:bottom-8 md:left-auto md:translate-x-0 md:right-12 z-20 pointer-events-none opacity-0 transition-opacity duration-700 transform translate-y-4">
+        <div class="bg-black/90 backdrop-blur-2xl border border-[#54d2b2]/30 rounded-2xl p-5 md:p-6 text-white shadow-[0_20px_50px_rgba(0,0,0,0.5)] w-72 md:w-80">
+            <div class="flex items-center justify-between mb-3 md:mb-4 border-b border-white/10 pb-2 md:pb-3">
+                <h4 class="text-[#54d2b2] text-[9px] md:text-[10px] font-bold tracking-widest uppercase flex items-center gap-2">
+                    <span class="w-1.5 h-1.5 md:w-2 md:h-2 bg-[#54d2b2] rounded-full animate-pulse"></span>
+                    Material Analysis
+                </h4>
+                <span class="text-[8px] md:text-[9px] font-mono text-white/50 border border-white/10 px-1.5 py-0.5 rounded">LIVE</span>
+            </div>
+            
+            <div class="space-y-2 md:space-y-3 font-mono text-[10px] md:text-xs">
+                <div class="flex justify-between items-end">
+                    <span class="text-white/50">Structural Skin</span>
+                    <span class="text-right text-[#e2e8f0] font-semibold">0.5mm Galvalume<br><span class="text-[8px] md:text-[9px] text-white/30">AZ150 Coating</span></span>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="text-white/50">Acoustic Core</span>
+                    <span class="text-right text-[#e2e8f0] font-semibold">High-Density EPS<br><span class="text-[8px] md:text-[9px] text-white/30">Fire Retardant</span></span>
+                </div>
+                <div class="flex justify-between items-end pt-2 border-t border-white/5">
+                    <span class="text-white/50">Thermal (R-Value)</span>
+                    <span class="text-yellow-400 font-bold">4.1 / inch</span>
+                </div>
+                <div class="flex justify-between items-end">
+                    <span class="text-white/50">Acoustic (STC)</span>
+                    <span class="text-[#54d2b2] font-bold">Class 45</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js CDN -->
+    <script src="./three-0.160.0.min.js"></script>
+    
+    <script>
+        // --- SAFE DOM BINDING HELPER ---
+        const safeBind = (id, event, callback) => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener(event, callback);
+        };
+
+        // --- DATA ---
+        const slides = [
+            { phase: "01 // IMMERSIVE PROPTECH", title: "Tech Meets Heritage", subtitle: "Garuda Spark Innovation Hub MCC", desc: "A 245sqm interactive blueprint. Experience real-time architectural visualisation, modular cost-estimation, and spatial analysis in a fully immersive 3D environment.", pos: [22, 28, 22], lookAt: [0, 0, 0], focus: "all" },
+            { phase: "02 // PARAMETRIC DESIGN", title: "Fjäll EPS Architecture", subtitle: "Acoustic Meeting Rooms", desc: "Proprietary 20cm acoustic EPS modular panels enclose the 10-person executive meeting room. Engineered for absolute acoustic privacy and zero structural impact on the legacy MCC foundation.", pos: [-16, 12, 16], lookAt: [-5.5, 1, 4.5], focus: "eps" },
+            { phase: "03 // DYNAMIC ZONING", title: "Fluid Collaboration", subtitle: "Communal Space & Offices", desc: "Test different layout configurations instantly. Premium 12mm cast acrylic partitions rendered with accurate physics-based light transmission.", pos: [0, 16, -18], lookAt: [-2, 1, -3], focus: "glass" },
+            { phase: "04 // DIGITAL TWIN", title: "The Golden Anchor", subtitle: "Parametric Garuda", desc: "Fusing ancient proportions with kinetic engineering. A central light-refracting anchor acting as a digital twin for the main lobby.", pos: [14, 8, 16], lookAt: [0, 2, 4], focus: "artifact" },
+            { phase: "05 // MATERIAL SIMULATION", title: "Fjäll Sandwich Panel", subtitle: "Simulation Game Studio", desc: "Examine the proprietary multi-layered EPS sandwich panel. Real-time high-fidelity rendering simulates structural grade steel facings and the acoustic foam core.", pos: [-3, 6, -1], lookAt: [-5.5, 1.5, -6.5], focus: "studio" }
+        ];
+
+        // --- GLOBAL STATE ---
+        let currentSlideIndex = 0;
+        let isVrMode = false;
+        let isTransitioning = false;
+        let isLoaded = false;
+        let cinematicPhase = 0; 
+        
+        let cameraMode = 0; 
+        let targetFov = 32;
+        let isAnalyzing = false;
+        
+        const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+        const vrState = {
+            active: false, locked: false, pitch: 0, yaw: 0,
+            fwd: false, bwd: false, lft: false, rgt: false, sprint: false,
+            velocity: null, direction: null, joystickMove: null,
+            bobTimer: 0
+        };
+
+        let scene, camera, renderer, clock, playerPos;
+        let epsGroup, glassGroup, furnitureGroup, artifactGroup, panelGroup;
+        let frontSkin, frontGlue, epsCore, backGlue, backSkin, garudaLight, studioLight, coreObj, ring1, ring2;
+        let targetPos, targetLook, currentLook;
+        let isThreeSetupComplete = false;
+
+        const gamePOIs = [
+            { title: "Acoustic Meeting Room", triggered: false, rawPos: [-5.5, 0, 4.5], pos: null },
+            { title: "Communal Workspace", triggered: false, rawPos: [-4.5, 0, -1.5], pos: null },
+            { title: "Executive Office", triggered: false, rawPos: [4.5, 0, -5.5], pos: null },
+            { title: "Garuda Artifact", triggered: false, rawPos: [0, 0, 7.9], pos: null },
+            { title: "Fjäll EPS Simulator", triggered: false, rawPos: [-5.5, 0, -6.5], pos: null }
+        ];
+
+        // --- UI DOM UPDATES ---
+        function updateUIText() {
+            const slide = slides[currentSlideIndex];
+            
+            const ph = document.getElementById('slide-phase'); if (ph) ph.innerText = slide.phase;
+            const ti = document.getElementById('slide-title'); if (ti) ti.innerText = slide.title;
+            const su = document.getElementById('slide-subtitle'); if (su) su.innerText = slide.subtitle;
+            const de = document.getElementById('slide-desc'); if (de) de.innerText = slide.desc;
+            const nt = document.getElementById('btn-next-text'); if (nt) nt.innerText = currentSlideIndex === slides.length - 1 ? 'Restart Briefing' : 'Next Insight';
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                if (index === currentSlideIndex) {
+                    dot.classList.add('dot-active');
+                    dot.classList.remove('dot-inactive', 'hover:bg-black/20');
+                } else {
+                    dot.classList.remove('dot-active');
+                    dot.classList.add('dot-inactive', 'hover:bg-black/20');
+                }
+            });
+        }
+
+        function goToSlide(index) {
+            if (isTransitioning || index === currentSlideIndex) return;
+            isTransitioning = true;
+            
+            const slideContent = document.getElementById('slide-content');
+            if(slideContent) {
+                slideContent.classList.remove('show-ui');
+                slideContent.classList.add('hide-ui');
+            }
+
+            setTimeout(() => {
+                currentSlideIndex = index;
+                updateUIText();
+                if(slideContent) {
+                    slideContent.classList.remove('hide-ui');
+                    slideContent.classList.add('show-ui');
+                }
+                isTransitioning = false;
+            }, 300);
+        }
+
+        // Base UI Binds
+        safeBind('btn-next', 'click', () => goToSlide((currentSlideIndex + 1) % slides.length));
+        safeBind('btn-prev', 'click', () => goToSlide((currentSlideIndex - 1 + slides.length) % slides.length));
+        
+        const dotsList = document.querySelectorAll('.dot');
+        dotsList.forEach(dot => dot.addEventListener('click', (e) => goToSlide(parseInt(e.target.dataset.index))));
+
+        // --- MATERIAL ANALYSIS LOGIC ---
+        function toggleMaterialAnalysis() {
+            isAnalyzing = !isAnalyzing;
+            const matModal = document.getElementById('material-modal');
+            const matModalContent = document.getElementById('mat-modal-content');
+            
+            if (isAnalyzing) {
+                if(matModal) matModal.classList.remove('opacity-0', 'pointer-events-none');
+                if(matModalContent) {
+                    matModalContent.classList.remove('translate-x-full');
+                    matModalContent.classList.add('pointer-events-auto');
+                }
+                
+                if (isTouchDevice) {
+                    const joy = document.getElementById('mobile-joystick');
+                    if(joy) joy.classList.replace('flex', 'hidden');
+                    if (vrState.joystickMove) vrState.joystickMove.set(0, 0);
+                } else if (document.pointerLockElement) {
+                    document.exitPointerLock();
+                }
+            } else {
+                if(matModal) matModal.classList.add('opacity-0', 'pointer-events-none');
+                if(matModalContent) {
+                    matModalContent.classList.add('translate-x-full');
+                    matModalContent.classList.remove('pointer-events-auto');
+                }
+                
+                if (isTouchDevice && isVrMode) {
+                    const joy = document.getElementById('mobile-joystick');
+                    if(joy) joy.classList.replace('hidden', 'flex');
+                } else if (!isTouchDevice && isVrMode) {
+                    const canvas = document.getElementById('glcanvas');
+                    if(canvas) canvas.requestPointerLock();
+                }
+            }
+        }
+        
+        safeBind('mat-modal-bg', 'click', () => { if(isAnalyzing) toggleMaterialAnalysis(); });
+        safeBind('btn-close-mat', 'click', () => { if(isAnalyzing) toggleMaterialAnalysis(); });
+
+        // --- VR ENTRY/EXIT LOGIC ---
+        function toggleVRMode() {
+            isVrMode = !isVrMode;
+            vrState.active = isVrMode;
+            
+            const mainUi = document.getElementById('main-ui');
+            const vrUi = document.getElementById('vr-ui');
+            const canvasContainer = document.getElementById('canvas-container');
+            const canvas = document.getElementById('glcanvas');
+            const mobActions = document.getElementById('mobile-actions');
+            const joystick = document.getElementById('mobile-joystick');
+
+            if (isVrMode) {
+                if (mainUi) {
+                    mainUi.style.opacity = '0';
+                    mainUi.style.pointerEvents = 'none'; 
+                }
+                if (vrUi) vrUi.classList.replace('hidden', 'flex');
+
+                if (isTouchDevice) {
+                    if (canvasContainer) canvasContainer.classList.replace('cursor-move', 'cursor-auto');
+                    if (joystick) joystick.classList.replace('hidden', 'flex');
+                    if (mobActions) mobActions.classList.replace('hidden', 'flex');
+                } else {
+                    if (canvasContainer) canvasContainer.classList.replace('cursor-move', 'cursor-crosshair');
+                    if (isThreeSetupComplete && canvas) canvas.requestPointerLock();
+                }
+            } else {
+                if (isLoaded && mainUi) {
+                    mainUi.style.opacity = '1';
+                    mainUi.style.pointerEvents = ''; 
+                }
+                if (vrUi) vrUi.classList.replace('flex', 'hidden');
+                if (isAnalyzing) toggleMaterialAnalysis();
+
+                if (isTouchDevice) {
+                    if (canvasContainer) canvasContainer.classList.replace('cursor-auto', 'cursor-move');
+                    if (joystick) joystick.classList.replace('flex', 'hidden');
+                    if (mobActions) mobActions.classList.replace('flex', 'hidden');
+                    if (vrState.joystickMove) vrState.joystickMove.set(0, 0); 
+                } else {
+                    if (canvasContainer) canvasContainer.classList.replace('cursor-crosshair', 'cursor-move');
+                    if (document.pointerLockElement === canvas) document.exitPointerLock();
+                }
+                cameraMode = 0;
+                targetFov = 32;
+            }
+        }
+        
+        safeBind('btn-enter-vr', 'click', toggleVRMode);
+        safeBind('btn-exit-vr', 'click', toggleVRMode);
+        safeBind('btn-exit-vr-mob', 'touchstart', (e) => { e.preventDefault(); toggleVRMode(); });
+
+        safeBind('canvas-container', 'click', () => { 
+            const canvas = document.getElementById('glcanvas');
+            if (isVrMode && !isTouchDevice && isThreeSetupComplete && !isAnalyzing && canvas) {
+                canvas.requestPointerLock(); 
+            }
+        });
+
+        // --- MOBILE ACTION BINDS ---
+        safeBind('btn-mob-zoom-in', 'touchstart', (e) => { e.preventDefault(); targetFov = Math.max(15, targetFov - 10); });
+        safeBind('btn-mob-zoom-out', 'touchstart', (e) => { e.preventDefault(); targetFov = Math.min(75, targetFov + 10); });
+        safeBind('btn-mob-cam', 'touchstart', (e) => { e.preventDefault(); cameraMode = (cameraMode + 1) % 3; });
+        safeBind('btn-mob-analyze', 'touchstart', (e) => { e.preventDefault(); toggleMaterialAnalysis(); });
+
+        updateUIText(); 
+
+        // --- STRICTLY SANDBOXED 3D INITIALIZATION ---
+        function init3D() {
+            if (typeof THREE === 'undefined') return false;
+
+            try {
+                // Initialize Vectors safely
+                vrState.velocity = new THREE.Vector3();
+                vrState.direction = new THREE.Vector3();
+                vrState.joystickMove = new THREE.Vector2();
+                targetPos = new THREE.Vector3();
+                targetLook = new THREE.Vector3();
+                currentLook = new THREE.Vector3(0, 0, 0);
+                playerPos = new THREE.Vector3(0, 0, 0);
+                clock = new THREE.Clock();
+
+                gamePOIs.forEach(poi => {
+                    poi.pos = new THREE.Vector3(poi.rawPos[0], poi.rawPos[1], poi.rawPos[2]);
+                });
+
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color('#f4f4f5'); 
+                scene.fog = new THREE.FogExp2('#f4f4f5', 0.015); 
+
+                camera = new THREE.PerspectiveCamera(targetFov, window.innerWidth / window.innerHeight, 0.1, 150);
+                camera.rotation.order = 'YXZ'; 
+                camera.position.set(0, 55, 0.1); 
+
+                const canvas = document.getElementById('glcanvas');
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, powerPreference: "high-performance" });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                
+                renderer.shadowMap.enabled = true;
+                renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
+                renderer.outputColorSpace = THREE.SRGBColorSpace;
+                renderer.toneMapping = THREE.ACESFilmicToneMapping;
+                renderer.toneMappingExposure = 1.15; 
+
+                // Lighting
+                scene.add(new THREE.AmbientLight(0xffffff, 0.4)); 
+                const keyLight = new THREE.DirectionalLight(0xfff4e6, 2.5); 
+                keyLight.position.set(15, 30, 15);
+                keyLight.castShadow = true;
+                keyLight.shadow.mapSize.width = 2048;
+                keyLight.shadow.mapSize.height = 2048;
+                keyLight.shadow.bias = -0.0001;
+                scene.add(keyLight);
+                
+                const fillLight = new THREE.DirectionalLight(0xe0f2fe, 1.2); 
+                fillLight.position.set(-20, 10, -20);
+                scene.add(fillLight);
+
+                const createZoneLight = (colour, intensity, x, y, z) => {
+                    const light = new THREE.PointLight(colour, intensity, 15);
+                    light.position.set(x, y, z);
+                    scene.add(light);
+                };
+                createZoneLight(0xffaa00, 1.5, -5.5, 3.0, 4.5);
+                createZoneLight(0x00aaff, 1.5, 4.5, 3.0, -5.5);
+                createZoneLight(0x54d2b2, 1.5, -4.5, 3.0, -1.5);
+                createZoneLight(0xeab308, 1.5, 0, 3.5, 4.0);
+
+                // Materials
+                const floorMat = new THREE.MeshPhysicalMaterial({ color: 0xf8fafc, roughness: 0.1, metalness: 0.1, clearcoat: 0.6, clearcoatRoughness: 0.15 }); 
+                const wallEpsMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.8, metalness: 0.05, clearcoat: 0.1 }); 
+                const darkWallMat = new THREE.MeshPhysicalMaterial({ color: 0x94a3b8, roughness: 0.3, metalness: 0.4, clearcoat: 0.3 }); 
+                const glassMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0.1, roughness: 0.0, transmission: 1.0, thickness: 0.5, ior: 1.52, clearcoat: 1.0, transparent: true });
+                const deskMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.1, metalness: 0.1, clearcoat: 1.0, clearcoatRoughness: 0.05 }); 
+                const woodMat = new THREE.MeshPhysicalMaterial({ color: 0xd4a373, roughness: 0.4, metalness: 0.0, clearcoat: 0.5 }); 
+                const accentMat = new THREE.MeshPhysicalMaterial({ color: 0xeab308, roughness: 0.15, metalness: 1.0, clearcoat: 1.0 }); 
+                const seatGreyMat = new THREE.MeshPhysicalMaterial({ color: 0x64748b, roughness: 0.8, metalness: 0.1 }); 
+
+                const steelSkinMat = new THREE.MeshPhysicalMaterial({ color: 0xcbd5e1, metalness: 0.9, roughness: 0.2, clearcoat: 1.0, clearcoatRoughness: 0.1 });
+                const adhesiveMat = new THREE.MeshPhysicalMaterial({ color: 0xd97706, metalness: 0.1, roughness: 0.9, transmission: 0.3, transparent: true, opacity: 0.9 });
+                const epsCoreMat = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 1.0, metalness: 0.0, clearcoat: 0.0, transmission: 0.25, ior: 1.1, transparent: true });
+                const pedestalMat = new THREE.MeshPhysicalMaterial({ color: 0x0f172a, metalness: 0.7, roughness: 0.3, clearcoat: 1.0 });
+
+                // Hierarchy
+                diorama = new THREE.Group(); diorama.position.set(0, -2, 0); scene.add(diorama);
+                epsGroup = new THREE.Group(); diorama.add(epsGroup);
+                glassGroup = new THREE.Group(); diorama.add(glassGroup);
+                furnitureGroup = new THREE.Group(); diorama.add(furnitureGroup);
+                const baseGroup = new THREE.Group(); diorama.add(baseGroup);
+                artifactGroup = new THREE.Group(); artifactGroup.position.set(0, 2.5, 4.0); diorama.add(artifactGroup);
+                
+                studioGroup = new THREE.Group(); studioGroup.position.set(-5.5, 0.0, -6.5); diorama.add(studioGroup);
+                panelGroup = new THREE.Group(); panelGroup.position.set(0, 1.8, 0); studioGroup.add(panelGroup);
+
+                const floorLayer = new THREE.Mesh(new THREE.PlaneGeometry(15, 16.3), floorMat);
+                floorLayer.rotation.x = -Math.PI / 2; floorLayer.receiveShadow = true; 
+                baseGroup.add(floorLayer);
+                
+                const gridHelper = new THREE.GridHelper(20, 20, 0xe2e8f0, 0xf1f5f9); 
+                gridHelper.position.y = 0.01;
+                baseGroup.add(gridHelper);
+
+                const shadowPlane = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.ShadowMaterial({ opacity: 0.15 })); 
+                shadowPlane.rotation.x = -Math.PI / 2; shadowPlane.position.y = -0.01; shadowPlane.receiveShadow = true;
+                baseGroup.add(shadowPlane);
+
+                // Internal Builder Helpers
+                const addMesh = (geo, mat, x, y, z, group, cast = true) => {
+                    const mesh = new THREE.Mesh(geo, mat);
+                    mesh.position.set(x, y, z);
+                    mesh.castShadow = cast; mesh.receiveShadow = true;
+                    group.add(mesh);
+                    return mesh;
+                };
+
+                const addTable = (w, d, x, z, group) => {
+                    addMesh(new THREE.BoxGeometry(w, 0.05, d), deskMat, x, 0.75, z, group);
+                    addMesh(new THREE.CylinderGeometry(0.04, 0.04, 0.75, 8), darkWallMat, x - w/2 + 0.1, 0.375, z - d/2 + 0.1, group);
+                    addMesh(new THREE.CylinderGeometry(0.04, 0.04, 0.75, 8), darkWallMat, x + w/2 - 0.1, 0.375, z - d/2 + 0.1, group);
+                    addMesh(new THREE.CylinderGeometry(0.04, 0.04, 0.75, 8), darkWallMat, x - w/2 + 0.1, 0.375, z + d/2 - 0.1, group);
+                    addMesh(new THREE.CylinderGeometry(0.04, 0.04, 0.75, 8), darkWallMat, x + w/2 - 0.1, 0.375, z + d/2 - 0.1, group);
+                };
+
+                const addChair = (x, z, angle, group) => {
+                    const chairGrp = new THREE.Group();
+                    const seat = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.05, 0.4), seatGreyMat); seat.position.y = 0.45; seat.castShadow = true; chairGrp.add(seat);
+                    const back = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.4, 0.05), seatGreyMat); back.position.set(0, 0.65, -0.18); back.castShadow = true; chairGrp.add(back);
+                    const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.45, 8), darkWallMat); leg.position.y = 0.225; chairGrp.add(leg);
+                    chairGrp.position.set(x, 0, z); chairGrp.rotation.y = angle;
+                    group.add(chairGrp);
+                };
+
+                // Add Architecture
+                addMesh(new THREE.BoxGeometry(15, 0.5, 0.2), darkWallMat, 0, 0.25, -8.15, baseGroup); 
+                addMesh(new THREE.BoxGeometry(15, 0.5, 0.2), darkWallMat, 0, 0.25, 8.15, baseGroup);  
+                addMesh(new THREE.BoxGeometry(0.2, 0.5, 16.3), darkWallMat, -7.5, 0.25, 0, baseGroup); 
+                addMesh(new THREE.BoxGeometry(0.2, 0.5, 16.3), darkWallMat, 7.5, 0.25, 0, baseGroup);
+
+                addMesh(new THREE.BoxGeometry(3.85, 3.6, 0.2), wallEpsMat, -5.575, 1.8, 0.77, epsGroup); 
+                addMesh(new THREE.BoxGeometry(0.05, 3.6, 7.38), glassMat, -3.65, 1.8, 4.46, glassGroup, false); 
+                addTable(1.0, 3.6, -5.575, 4.46, furnitureGroup); 
+                for (let i = 0; i < 5; i++) { 
+                    let zOffset = 3.0 + (i * 0.73);
+                    addChair(-6.3, zOffset, Math.PI/2, furnitureGroup);
+                    addChair(-4.85, zOffset, -Math.PI/2, furnitureGroup);
+                }
+
+                addTable(5.0, 1.0, -4.5, -1.5, furnitureGroup); 
+                for (let i = 0; i < 5; i++) { 
+                    let xOffset = -6.5 + (i * 1.0);
+                    addChair(xOffset, -2.2, 0, furnitureGroup);
+                    addChair(xOffset, -0.8, Math.PI, furnitureGroup);
+                }
+
+                const sofaGeo = new THREE.BoxGeometry(1.5, 0.5, 0.7);
+                addMesh(sofaGeo, seatGreyMat, 1.5, 0.25, -6.5, furnitureGroup).rotation.y = -Math.PI/2;
+                addTable(0.6, 0.6, 0.5, -6.5, furnitureGroup); 
+                addChair(-0.3, -6.0, Math.PI/2, furnitureGroup);
+                addChair(-0.3, -7.0, Math.PI/2, furnitureGroup);
+
+                addMesh(new THREE.BoxGeometry(0.05, 3.6, 4.45), glassMat, 3.22, 1.8, -5.925, glassGroup, false); 
+                addMesh(new THREE.BoxGeometry(4.28, 3.6, 0.05), glassMat, 5.36, 1.8, -3.7, glassGroup, false); 
+                addTable(1.2, 0.6, 4.5, -5.5, furnitureGroup);
+                addTable(1.2, 0.6, 4.5, -6.1, furnitureGroup);
+                addTable(1.2, 0.6, 5.7, -5.5, furnitureGroup);
+                addTable(1.2, 0.6, 5.7, -6.1, furnitureGroup);
+                addChair(4.5, -4.9, 0, furnitureGroup); addChair(5.7, -4.9, 0, furnitureGroup);
+                addChair(4.5, -6.7, Math.PI, furnitureGroup); addChair(5.7, -6.7, Math.PI, furnitureGroup);
+
+                addMesh(new THREE.BoxGeometry(3.0, 0.9, 0.6), deskMat, 5.5, 0.45, -1.0, furnitureGroup); 
+
+                addMesh(new THREE.BoxGeometry(4.0, 0.2, 3.0), woodMat, 5.5, 0.1, 3.5, furnitureGroup); 
+                addMesh(new THREE.BoxGeometry(3.0, 0.4, 2.0), woodMat, 6.0, 0.2, 3.0, furnitureGroup); 
+                addMesh(new THREE.BoxGeometry(2.0, 0.6, 1.0), woodMat, 6.5, 0.3, 2.5, furnitureGroup); 
+                addMesh(new THREE.CylinderGeometry(0.4, 0.4, 0.1, 16), accentMat, 5.5, 0.25, 4.0, furnitureGroup); 
+                addMesh(new THREE.CylinderGeometry(0.4, 0.4, 0.1, 16), darkWallMat, 6.5, 0.45, 3.5, furnitureGroup); 
+                addTable(2.5, 0.6, 5.5, 6.0, furnitureGroup); 
+                addChair(5.5, 6.8, Math.PI, furnitureGroup);
+
+                addMesh(sofaGeo, seatGreyMat, -1.0, 0.25, 7.5, furnitureGroup);
+                addMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.4, 16), darkWallMat, -2.0, 0.2, 6.5, furnitureGroup);
+                addMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.4, 16), accentMat, -1.0, 0.2, 6.5, furnitureGroup);
+                addMesh(new THREE.CylinderGeometry(0.3, 0.3, 0.4, 16), darkWallMat, 0.0, 0.2, 6.5, furnitureGroup);
+
+                // Garuda Artifact
+                coreObj = new THREE.Mesh(new THREE.OctahedronGeometry(0.4, 0), accentMat);
+                coreObj.scale.set(1, 1.5, 0.5); artifactGroup.add(coreObj);
+                const ringGeo = new THREE.TorusGeometry(0.8, 0.02, 16, 64);
+                ring1 = new THREE.Mesh(ringGeo, accentMat); ring1.rotation.x = Math.PI/2; artifactGroup.add(ring1);
+                ring2 = new THREE.Mesh(ringGeo, accentMat); ring2.rotation.y = Math.PI/2; artifactGroup.add(ring2);
+                
+                garudaLight = new THREE.SpotLight(0xeab308, 0, 10, Math.PI/4, 0.5, 1);
+                garudaLight.position.set(0, 4, 2);
+                garudaLight.target = coreObj;
+                artifactGroup.add(garudaLight);
+                scene.add(garudaLight.target);
+
+                // Simulation Game Studio - 5 Layer Fjäll EPS Sandwich Panel
+                addMesh(new THREE.CylinderGeometry(1.2, 1.4, 0.2, 32), pedestalMat, 0, 0.1, 0, studioGroup);
+                
+                frontSkin = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.015), steelSkinMat); frontSkin.castShadow = true;
+                frontGlue = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.58, 0.01), adhesiveMat);
+                epsCore = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.58, 0.16), epsCoreMat); epsCore.castShadow = true;
+                backGlue = new THREE.Mesh(new THREE.BoxGeometry(1.18, 1.58, 0.01), adhesiveMat);
+                backSkin = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.6, 0.015), steelSkinMat); backSkin.castShadow = true;
+                
+                panelGroup.add(frontSkin); panelGroup.add(frontGlue); panelGroup.add(epsCore); panelGroup.add(backGlue); panelGroup.add(backSkin);
+                
+                studioLight = new THREE.SpotLight(0xffffff, 0, 15, Math.PI/6, 0.5, 1);
+                studioLight.position.set(-5.5, 6.0, -6.5);
+                studioLight.target = panelGroup;
+                scene.add(studioLight);
+                scene.add(studioLight.target);
+                
+                // PC Controls
+                window.addEventListener('keydown', (e) => {
+                    if (!vrState.active) return;
+                    switch(e.code) {
+                        case 'KeyW': case 'ArrowUp': vrState.fwd = true; break;
+                        case 'KeyA': case 'ArrowLeft': vrState.lft = true; break;
+                        case 'KeyS': case 'ArrowDown': vrState.bwd = true; break;
+                        case 'KeyD': case 'ArrowRight': vrState.rgt = true; break;
+                        case 'ShiftLeft': case 'ShiftRight': vrState.sprint = true; break;
+                        case 'KeyC': cameraMode = (cameraMode + 1) % 3; break;
+                        case 'KeyE': if(!isAnalyzing) toggleMaterialAnalysis(); break;
+                    }
+                });
+                window.addEventListener('keyup', (e) => {
+                    switch(e.code) {
+                        case 'KeyW': case 'ArrowUp': vrState.fwd = false; break;
+                        case 'KeyA': case 'ArrowLeft': vrState.lft = false; break;
+                        case 'KeyS': case 'ArrowDown': vrState.bwd = false; break;
+                        case 'KeyD': case 'ArrowRight': vrState.rgt = false; break;
+                        case 'ShiftLeft': case 'ShiftRight': vrState.sprint = false; break;
+                    }
+                });
+
+                // Desktop Mouse/Scroll Controls
+                window.addEventListener('wheel', (e) => {
+                    if(vrState.active && !isAnalyzing) {
+                        targetFov = Math.max(15, Math.min(75, targetFov + e.deltaY * 0.05));
+                    }
+                });
+                document.addEventListener('mousemove', (e) => {
+                    if (!vrState.locked || !vrState.active || isTouchDevice || isAnalyzing) return;
+                    vrState.yaw -= e.movementX * 0.002;
+                    vrState.pitch -= e.movementY * 0.002;
+                    vrState.pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, vrState.pitch));
+                });
+                document.addEventListener('pointerlockchange', () => {
+                    const canvas = document.getElementById('glcanvas');
+                    vrState.locked = document.pointerLockElement === canvas;
+                    if (!vrState.locked && vrState.active && !isTouchDevice && !isAnalyzing) toggleVRMode(); 
+                });
+
+                // Mobile Touch Controls safely bound
+                let lastTouchX = 0, lastTouchY = 0, joyActive = false;
+                let joyCenter = { x: 0, y: 0 };
+                const touchCanvasContainer = document.getElementById('canvas-container');
+                const joyZone = document.getElementById('mobile-joystick');
+                const joyKnob = document.getElementById('mobile-joystick-knob');
+
+                if (touchCanvasContainer) {
+                    touchCanvasContainer.addEventListener('touchstart', (e) => {
+                        if (!vrState.active || !isTouchDevice || isAnalyzing) return;
+                        const touch = Array.from(e.touches).find(t => t.target.id !== 'mobile-joystick-knob' && t.target.id !== 'mobile-joystick');
+                        if (touch) { lastTouchX = touch.pageX; lastTouchY = touch.pageY; }
+                    });
+
+                    touchCanvasContainer.addEventListener('touchmove', (e) => {
+                        if (!vrState.active || !isTouchDevice || isAnalyzing) return;
+                        const touch = Array.from(e.touches).find(t => t.target.id !== 'mobile-joystick-knob' && t.target.id !== 'mobile-joystick');
+                        if (touch && lastTouchX !== 0) {
+                            vrState.yaw -= (touch.pageX - lastTouchX) * 0.006;
+                            vrState.pitch -= (touch.pageY - lastTouchY) * 0.006;
+                            vrState.pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, vrState.pitch));
+                            lastTouchX = touch.pageX;
+                            lastTouchY = touch.pageY;
+                        }
+                    });
+                }
+
+                if (joyZone) {
+                    joyZone.addEventListener('touchstart', (e) => {
+                        e.preventDefault(); 
+                        joyActive = true;
+                        const rect = joyZone.getBoundingClientRect();
+                        joyCenter = { x: rect.left + rect.width/2, y: rect.top + rect.height/2 };
+                        updateJoystick(e.touches[0]);
+                    });
+                    joyZone.addEventListener('touchmove', (e) => {
+                        e.preventDefault();
+                        if (joyActive) updateJoystick(e.touches[0]);
+                    });
+                    joyZone.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        joyActive = false;
+                        if(joyKnob) joyKnob.style.transform = `translate(0px, 0px)`;
+                        if (vrState.joystickMove) vrState.joystickMove.set(0, 0);
+                    });
+                }
+
+                function updateJoystick(touch) {
+                    let dx = touch.clientX - joyCenter.x;
+                    let dy = touch.clientY - joyCenter.y;
+                    const distance = Math.min(Math.hypot(dx, dy), 30); 
+                    const angle = Math.atan2(dy, dx);
+                    const knobX = Math.cos(angle) * distance;
+                    const knobY = Math.sin(angle) * distance;
+                    if(joyKnob) joyKnob.style.transform = `translate(${knobX}px, ${knobY}px)`;
+                    if (vrState.joystickMove) vrState.joystickMove.set(knobX / 30, knobY / 30); 
+                }
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                isThreeSetupComplete = true;
+            } catch (error) {
+                console.error("Three.js architecture failed to load:", error);
+            }
+        }
+
+        // --- PRELOADER SEQUENCE & LOOP INIT ---
+        let loadProgress = 0;
+        const loadInterval = setInterval(() => {
+            loadProgress += Math.random() * 5.5 + 2.0; 
+            if (loadProgress >= 100) {
+                loadProgress = 100;
+                clearInterval(loadInterval);
+                cinematicPhase = 1; 
+                
+                if (typeof THREE !== 'undefined' && !isThreeSetupComplete) init3D();
+                
+                setTimeout(() => {
+                    const pl = document.getElementById('preloader');
+                    if(pl) {
+                        pl.style.opacity = '0';
+                        pl.style.pointerEvents = 'none';
+                        // Destructively remove preloader node to guarantee it doesn't block clicks
+                        setTimeout(() => pl.remove(), 1000); 
+                    }
+                    setTimeout(() => {
+                        cinematicPhase = 2; 
+                        const mu = document.getElementById('main-ui');
+                        if (mu) {
+                            mu.classList.remove('opacity-0', 'translate-y-4');
+                            mu.classList.add('opacity-100', 'translate-y-0');
+                        }
+                        isLoaded = true;
+                    }, 1000); 
+                }, 500); 
+            }
+            const pb = document.getElementById('progress-bar');
+            if (pb) pb.style.width = Math.min(loadProgress, 100) + '%';
+            const pt = document.getElementById('progress-text');
+            if (pt) pt.innerText = Math.floor(Math.min(loadProgress, 100)) + '%';
+        }, 40);
+
+        // --- MAIN RENDER LOOP ---
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isThreeSetupComplete && scene && camera && renderer) {
+                const delta = Math.min(clock.getDelta(), 0.1); 
+                const elapsedTime = clock.getElapsedTime();
+
+                let targetZSpread = 0; 
+
+                if (vrState.active) {
+                    
+                    if (isAnalyzing) {
+                        targetZSpread = 0.5; // Trigger panel explosion
+                        const studioCamPos = new THREE.Vector3(-5.5, 1.6, -4.0);
+                        const studioLookAt = new THREE.Vector3(-5.5, 1.8, -6.5);
+                        
+                        camera.position.lerp(studioCamPos, 0.05);
+                        currentLook.lerp(studioLookAt, 0.05);
+                        camera.lookAt(currentLook);
+                        
+                        // Sync player position to avoid jumps when exiting analysis
+                        if (playerPos) {
+                            playerPos.copy(camera.position); 
+                            playerPos.y = 0;
+                        }
+                        vrState.pitch = 0;
+                        vrState.yaw = 0;
+
+                    } else {
+                        // Standard VR Movement Logic
+                        vrState.velocity.x -= vrState.velocity.x * 10.0 * delta;
+                        vrState.velocity.z -= vrState.velocity.z * 10.0 * delta;
+
+                        const joyY = vrState.joystickMove ? vrState.joystickMove.y : 0;
+                        const joyX = vrState.joystickMove ? vrState.joystickMove.x : 0;
+
+                        vrState.direction.z = Number(vrState.fwd) - Number(vrState.bwd) - joyY;
+                        vrState.direction.x = Number(vrState.rgt) - Number(vrState.lft) + joyX;
+                        vrState.direction.normalize();
+
+                        const speed = vrState.sprint ? 40.0 : 20.0;
+                        if (vrState.fwd || vrState.bwd || joyY !== 0) vrState.velocity.z -= vrState.direction.z * speed * delta;
+                        if (vrState.lft || vrState.rgt || joyX !== 0) vrState.velocity.x -= vrState.direction.x * speed * delta;
+
+                        const fwdVec = new THREE.Vector3(0, 0, -1).applyAxisAngle(new THREE.Vector3(0,1,0), vrState.yaw);
+                        const rgtVec = new THREE.Vector3(1, 0, 0).applyAxisAngle(new THREE.Vector3(0,1,0), vrState.yaw);
+
+                        if (playerPos) {
+                            playerPos.addScaledVector(fwdVec, -vrState.velocity.z * delta);
+                            playerPos.addScaledVector(rgtVec, vrState.velocity.x * delta);
+
+                            playerPos.x = Math.max(-7.0, Math.min(7.0, playerPos.x));
+                            playerPos.z = Math.max(-7.6, Math.min(7.6, playerPos.z));
+                            
+                            // Handle Multiple Camera Angle Views
+                            if (cameraMode === 0) { // FPV
+                                camera.position.copy(playerPos);
+                                camera.position.y += Math.sin(vrState.bobTimer) * 0.08; 
+                                camera.rotation.set(vrState.pitch, vrState.yaw, 0, 'YXZ');
+                            } else if (cameraMode === 1) { // Aerial Drone
+                                camera.position.lerp(playerPos.clone().add(new THREE.Vector3(0, 15, 0)), 0.1);
+                                currentLook.lerp(playerPos, 0.1);
+                                camera.lookAt(currentLook);
+                            } else if (cameraMode === 2) { // Isometric Follow
+                                camera.position.lerp(playerPos.clone().add(new THREE.Vector3(8, 8, 8)), 0.1);
+                                currentLook.lerp(playerPos, 0.1);
+                                camera.lookAt(currentLook);
+                            }
+                        }
+
+                        const isMoving = vrState.fwd || vrState.bwd || vrState.lft || vrState.rgt || (vrState.joystickMove && vrState.joystickMove.lengthSq() > 0);
+                        if (isMoving) vrState.bobTimer += delta * (vrState.sprint ? 14 : 8);
+                        else vrState.bobTimer += (0 - vrState.bobTimer) * delta * 5; 
+                    }
+
+                    // Handle interaction prompts
+                    let promptVisible = false;
+                    const gameObjectiveEl = document.getElementById('game-objective');
+                    const gamePromptEl = document.getElementById('game-prompt');
+                    const crosshairEl = document.getElementById('crosshair');
+
+                    for (let i = 0; i < gamePOIs.length; i++) {
+                        const poi = gamePOIs[i];
+                        if (poi.pos && playerPos) {
+                            const dist = Math.hypot(playerPos.x - poi.pos.x, playerPos.z - poi.pos.z);
+                            if (dist < 2.5) {
+                                promptVisible = true;
+                                if (poi.title === "Fjäll EPS Simulator") {
+                                    targetZSpread = 0.4; 
+                                }
+
+                                if (!poi.triggered) {
+                                    poi.triggered = true;
+                                    if(gameObjectiveEl) {
+                                        gameObjectiveEl.innerText = "Asset Scanned: " + poi.title;
+                                        const parentClasses = gameObjectiveEl.parentElement.classList;
+                                        parentClasses.remove('text-gray-900');
+                                        parentClasses.add('text-[#54d2b2]');
+                                        
+                                        setTimeout(() => {
+                                            parentClasses.remove('text-[#54d2b2]');
+                                            parentClasses.add('text-gray-900');
+                                            gameObjectiveEl.innerText = "Scan Facility Assets";
+                                        }, 3000);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (promptVisible && !isAnalyzing) {
+                        if(gamePromptEl) gamePromptEl.style.opacity = '1';
+                        if(crosshairEl) {
+                            crosshairEl.style.transform = 'scale(1.5)';
+                            crosshairEl.style.backgroundColor = '#54d2b2';
+                            crosshairEl.style.borderColor = 'transparent';
+                        }
+                    } else {
+                        if(gamePromptEl) gamePromptEl.style.opacity = '0';
+                        if(crosshairEl) {
+                            crosshairEl.style.transform = 'scale(1)';
+                            crosshairEl.style.backgroundColor = 'rgba(0,0,0,0.4)';
+                            crosshairEl.style.borderColor = 'rgba(255,255,255,0.8)';
+                        }
+                    }
+
+                    // Reset Isometric offsets
+                    epsGroup.position.y += (0 - epsGroup.position.y) * 0.1;
+                    glassGroup.position.y += (0 - glassGroup.position.y) * 0.1;
+                    furnitureGroup.position.y += (0 - furnitureGroup.position.y) * 0.1;
+                    garudaLight.intensity += (2.0 - garudaLight.intensity) * 0.1;
+                    studioLight.intensity += (0 - studioLight.intensity) * 0.1;
+
+                    // Smooth FOV Zoom
+                    camera.fov += (targetFov - camera.fov) * 0.1;
+                    camera.updateProjectionMatrix();
+
+                } else {
+                    // Presentation Cinematic View
+                    if (cinematicPhase === 0) {
+                        targetPos.set(0, 55, 0.1); targetLook.set(0, 0, 0);
+                        camera.position.copy(targetPos); currentLook.copy(targetLook);
+                    } else if (cinematicPhase === 1) {
+                        const orbitRadius = 10;
+                        targetPos.set(Math.sin(elapsedTime * 0.15) * orbitRadius, 35, Math.cos(elapsedTime * 0.15) * orbitRadius); 
+                        targetLook.set(0, 0, 0);
+                    } else {
+                        const slide = slides[currentSlideIndex];
+                        targetPos.set(slide.pos[0], slide.pos[1], slide.pos[2]);
+                        targetLook.set(slide.lookAt[0], slide.lookAt[1], slide.lookAt[2]);
+                    }
+
+                    const camDamp = 1 - Math.exp(-1.5 * delta); 
+                    camera.position.lerp(targetPos, camDamp);
+                    currentLook.lerp(targetLook, camDamp);
+                    camera.lookAt(currentLook);
+                    
+                    vrState.yaw = 0; vrState.pitch = -Math.PI / 4; 
+
+                    let targetEpsY = 0, targetGlassY = 0, targetFurnY = 0, garudaLgt = 0, studioLgt = 0;
+                    if (cinematicPhase === 2) {
+                        const slide = slides[currentSlideIndex];
+                        if (slide.focus === 'eps') { targetEpsY = 1.0; targetFurnY = -0.5; } 
+                        else if (slide.focus === 'glass') { targetGlassY = 1.0; targetFurnY = -0.5; } 
+                        else if (slide.focus === 'artifact') { garudaLgt = 5.0; }
+                        else if (slide.focus === 'studio') { 
+                            studioLgt = 8.0; 
+                            targetZSpread = 0.4; 
+                            targetFurnY = -0.5; 
+                        }
+                    }
+
+                    const moveDamp = 1 - Math.exp(-5 * delta);
+                    epsGroup.position.y += (targetEpsY - epsGroup.position.y) * moveDamp;
+                    glassGroup.position.y += (targetGlassY - glassGroup.position.y) * moveDamp;
+                    furnitureGroup.position.y += (targetFurnY - furnitureGroup.position.y) * moveDamp;
+                    garudaLight.intensity += (garudaLgt - garudaLight.intensity) * moveDamp;
+                    studioLight.intensity += (studioLgt - studioLight.intensity) * moveDamp;
+                    
+                    camera.fov = 32; // Default presentation FOV
+                    camera.updateProjectionMatrix();
+                }
+
+                // Idle Animations
+                artifactGroup.position.y = 2.5 + Math.sin(elapsedTime * 2) * 0.15;
+                coreObj.rotation.y = elapsedTime * 0.5;
+                ring1.rotation.x = (Math.PI/2) + Math.sin(elapsedTime) * 0.2;
+                ring2.rotation.z = Math.cos(elapsedTime * 0.8) * 0.2;
+
+                // Exploded View 5-Layer Panel Animation
+                panelGroup.rotation.y = elapsedTime * 0.5;
+                panelGroup.position.y = 1.8 + Math.sin(elapsedTime * 2) * 0.1;
+                const expDamp = 1 - Math.exp(-6 * delta);
+                frontSkin.position.z += (targetZSpread * 2 - frontSkin.position.z) * expDamp;
+                frontGlue.position.z += (targetZSpread * 1 - frontGlue.position.z) * expDamp;
+                backGlue.position.z += (-targetZSpread * 1 - backGlue.position.z) * expDamp;
+                backSkin.position.z += (-targetZSpread * 2 - backSkin.position.z) * expDamp;
+
+                const simHud = document.getElementById('simulation-hud');
+                if (simHud) {
+                    if (isAnalyzing || (cinematicPhase === 2 && slides[currentSlideIndex].focus === 'studio')) {
+                        simHud.classList.remove('opacity-0', 'translate-y-4');
+                        simHud.classList.add('opacity-100', 'translate-y-0');
+                    } else {
+                        simHud.classList.add('opacity-0', 'translate-y-4');
+                        simHud.classList.remove('opacity-100', 'translate-y-0');
+                    }
+                }
+
+                renderer.render(scene, camera);
+            }
+        }
+        
+        animate();
+
+    </script>
+</body>
+</html>

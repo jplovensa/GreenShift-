@@ -132,3 +132,43 @@ form.addEventListener('submit',event=>{
 });
 form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').removeAttribute('href');});document.getElementById('edit-inquiry').addEventListener('click',()=>{review.hidden=true;document.querySelector('[name=message]').focus();});
 })();
+
+(() => {
+ const projects = {
+  drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
+  spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' }
+ };
+ const dialog = document.getElementById('experience-dialog');
+ const host = document.getElementById('experience-frame');
+ let trigger;
+ for (const button of document.querySelectorAll('[data-experience]')) {
+  button.addEventListener('click', () => {
+   const project = projects[button.dataset.experience];
+   if (!project) return;
+   trigger = button;
+   document.getElementById('experience-dialog-title').textContent = project.title;
+   document.getElementById('experience-external').href = project.external || project.url;
+   const frame = document.createElement('iframe');
+   frame.title = project.title;
+   frame.src = project.url;
+   frame.allow = 'fullscreen; autoplay; xr-spatial-tracking';
+   frame.allowFullscreen = true;
+   frame.referrerPolicy = 'strict-origin-when-cross-origin';
+   host.replaceChildren(frame);
+   dialog.showModal();
+   document.body.classList.add('dialog-open');
+   document.getElementById('experience-close').focus();
+  });
+ }
+ document.getElementById('experience-close').addEventListener('click', () => dialog.close());
+ dialog.addEventListener('close', () => {
+  host.replaceChildren();
+  document.body.classList.remove('dialog-open');
+  trigger?.focus({preventScroll: true});
+ });
+ dialog.addEventListener('click', event => {
+  if (event.target !== dialog) return;
+  const rect = dialog.getBoundingClientRect();
+  if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.close();
+ });
+})();
