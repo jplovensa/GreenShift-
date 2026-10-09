@@ -56,3 +56,7 @@ The previous local version rendered in Chromium without JavaScript exceptions, s
 Chromium evidence: verification/desktop.png (1440x1000 CSS pixels, deviceScaleFactor 1) and verification/mobile.png (390x844 CSS pixels, deviceScaleFactor 1). Both screenshots were inspected. Reduced motion enabled. Real native tier dialogs, all four tier-to-inquiry selections, inquiry review, and mobile navigation passed. No page errors or horizontal overflow. verification/no-javascript.png confirms visible content with scripting disabled and all external media/font assets blocked.
 
 This verifies local browser loading and core behavior, not the inaccessible live deployment or a full source-design comparison. Full design QA remains blocked.
+
+## Opening video sequence
+
+Implemented requested 540-to-45-day countdown and GreenShift / part of Fjäll Group reveal over the supplied architecture video. Chromium screenshot evidence: verification/intro-countdown-1440.png, verification/intro-reveal-1440.png, and corresponding 390px captures. The desktop reveal was inspected. Desktop and mobile browser checks passed: count finishes at exactly 45, reveal displays, overlay automatically detaches, body scroll and main content interaction return, native tier dialogs still work, and no JavaScript errors. Skip, Escape, reduced-motion static reveal, blocked asset completion and JavaScript-disabled page visibility also passed. Live GitHub Pages publication remains unverified.

@@ -1,3 +1,74 @@
+// The introduction is optional enhancement: the static homepage always exists.
+(() => {
+  const app = document.getElementById('app');
+  if (!app) return;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const intro = document.createElement('section');
+  intro.className = 'studio-intro';
+  intro.setAttribute('role', 'dialog');
+  intro.setAttribute('aria-modal', 'true');
+  intro.setAttribute('aria-label', 'GreenShift introduction — from 540 to 45 days, part of Fjäll Group');
+  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="metadata" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><button class="intro-skip" type="button">Skip intro <i class="ph ph-arrow-right" aria-hidden="true"></i></button><div class="intro-count" aria-hidden="true"><p class="eyebrow">Build your home. Without the wait.</p><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span><p class="intro-range">540 days <span>→</span> 45 days</p></div><div class="intro-brand"><div class="intro-brand-sheet"><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div>`;
+  let closed = false, frame = 0;
+  const timers = [];
+  const previousFocus = document.activeElement;
+  const previousInert = app.inert;
+  const media = intro.querySelector('video');
+  const skip = intro.querySelector('button');
+  function finish() {
+    if (closed) return;
+    closed = true;
+    timers.forEach(clearTimeout);
+    cancelAnimationFrame(frame);
+    media.pause();
+    intro.remove();
+    app.inert = previousInert;
+    document.body.classList.remove('intro-open');
+    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('visibilitychange', onVisibility);
+    if (document.activeElement === document.body && previousFocus && previousFocus !== document.body) previousFocus.focus({preventScroll:true});
+  }
+  function onKey(event) {
+    if (event.key === 'Escape') { event.preventDefault(); finish(); }
+    else if (event.key === 'Tab') { event.preventDefault(); skip.focus(); }
+  }
+  function onVisibility() { if (document.hidden) finish(); }
+  // Independent upper bound: failed video, missing logo, or interrupted animation
+  // must never trap visitors behind a loader.
+  timers.push(setTimeout(finish, 6200));
+  skip.addEventListener('click', finish);
+  document.addEventListener('keydown', onKey);
+  document.addEventListener('visibilitychange', onVisibility);
+  document.body.appendChild(intro);
+  app.inert = true;
+  document.body.classList.add('intro-open');
+  skip.focus({preventScroll:true});
+  function reveal() {
+    intro.querySelector('.intro-number').textContent = '45';
+    intro.classList.add('is-brand');
+    timers.push(setTimeout(() => {
+      intro.classList.add('is-leaving');
+      timers.push(setTimeout(finish, reduced ? 0 : 500));
+    }, reduced ? 700 : 1500));
+  }
+  if (reduced) {
+    intro.classList.add('is-reduced');
+    reveal();
+    return;
+  }
+  media.play().catch(() => {}); // Poster remains visible if playback is unavailable.
+  const start = performance.now();
+  function tick(now) {
+    if (closed) return;
+    const progress = Math.min(1, (now - start) / 2600);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    intro.querySelector('.intro-number').textContent = String(Math.round(540 - 495 * eased));
+    if (progress < 1) frame = requestAnimationFrame(tick);
+    else timers.push(setTimeout(reveal, 350));
+  }
+  frame = requestAnimationFrame(tick);
+})();
+
 (() => {
 const content = JSON.parse(document.getElementById("studio-data").textContent);
 const icon=(name)=>`<i class="ph ph-${name}" aria-hidden="true"></i>`;

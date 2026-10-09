@@ -52,3 +52,11 @@ node scripts/serve.mjs --dist --port 4183 --base /GreenShift-/
 - Every HTML-referenced script, stylesheet, logo, poster, video and the local icon font returned successfully under the repository path.
 
 Local browser rendering and interactions are verified. Live GitHub Pages deployment remains unverified because network access to the reported URL returned 403. The original inline logo was reproduced as a raster asset; replace `assets/logo.png` with original production artwork for exact logo fidelity. See `design-qa.md`.
+
+## Video introduction
+
+The homepage opens with the supplied architecture video behind a 540-to-45-day countdown, followed by GreenShift as part of Fjäll Group. The countdown takes 2.6 seconds, holds at 45 for 0.35 seconds, reveals the brands for 1.5 seconds and fades away in 0.5 seconds. Skip or Escape dismisses it immediately. Background content is inert only while the introduction is active; focus and scrolling return on dismissal. Reduced-motion visitors receive a brief static brand reveal without video autoplay or countdown animation.
+
+A separate 6.2-second upper bound prevents media/animation failures from trapping visitors. With JavaScript disabled, the introduction does not appear and the static homepage remains available. Local Chromium checks passed at 1440px and 390px for all stages, automatic cleanup, Skip, Escape, reduced motion, missing media/logo/font assets, and no-JavaScript loading. Intro screenshots are in verification/intro-*.png.
+
+The Fjäll Group inline logo reference was prepared as a transparent raster reproduction in assets/fjall-group.png. Replace with original brand artwork when available for exact production fidelity.

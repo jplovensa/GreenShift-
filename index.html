@@ -4642,6 +4642,33 @@ body[data-mode=atelier]{background:#e4ebdf;--paper:#e4ebdf;--ink:#0b2017;--line:
 /* The selected public site has no prototype comparison toolbar. */
 footer{padding-bottom:55px}
 @media(max-width:580px){footer{padding-bottom:45px}}
+
+/* Optional video introduction. The HTML page remains visible if scripting fails. */
+.intro-open{overflow:hidden}
+.studio-intro{position:fixed;inset:0;z-index:1000;background:#0c2118;color:#fff;display:grid;place-items:center;opacity:1;transition:opacity .5s ease;isolation:isolate}
+.intro-video,.intro-shade{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.intro-video{opacity:.5}
+.intro-shade{background:#0c211880;z-index:-1}
+.intro-skip{position:absolute;right:clamp(22px,4vw,64px);top:28px;display:flex;align-items:center;gap:20px;padding:12px 18px;background:transparent;color:#fff;border:1px solid #ffffff70;font-size:12px;z-index:3}
+.intro-skip:hover{background:#ffffff18}
+.intro-count{text-align:center;transition:opacity .5s,transform .5s}
+.intro-count>.eyebrow{margin:0 20px 30px;color:#e2e9dc}
+.intro-number{display:block;font-size:clamp(130px,24vw,330px);line-height:.95;font-weight:400;letter-spacing:-.07em;font-variant-numeric:tabular-nums;min-width:3.3ch;padding-right:.07em}
+.intro-days{display:block;font-size:12px;letter-spacing:.6em;margin-top:24px;padding-left:.6em}
+.intro-range{font-size:12px;letter-spacing:.08em;margin:42px 0 0;color:#e2e9dc}
+.intro-range span{margin:0 25px}
+.intro-brand{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(18px);transition:opacity .65s,transform .65s;pointer-events:none;padding:24px}
+.intro-brand-sheet{background:#faf9f4;color:#11231d;width:min(590px,100%);padding:55px 40px;text-align:center}
+.intro-greenshift{display:block;width:min(360px,100%);height:68px;object-fit:cover;margin:0 auto 28px}
+.intro-brand-sheet>.eyebrow{margin:0 0 16px;color:#586c5b}
+.intro-fjall{display:block;width:min(240px,100%);height:85px;object-fit:contain;margin:0 auto}
+.intro-promise{font-size:13px;margin:30px 0 0;color:#586c5b}
+.studio-intro.is-brand .intro-count{opacity:0;transform:translateY(-18px)}
+.studio-intro.is-brand .intro-brand{opacity:1;transform:none}
+.studio-intro.is-leaving{opacity:0;pointer-events:none}
+.studio-intro.is-reduced .intro-video{display:none}
+@media(max-width:580px){.intro-number{font-size:42vw}.intro-count>.eyebrow{font-size:9px;letter-spacing:.12em}.intro-brand-sheet{padding:45px 24px}.intro-greenshift{height:52px}.intro-skip{top:20px}.intro-fjall{width:210px;height:76px}}
+@media(prefers-reduced-motion:reduce){.studio-intro,.intro-count,.intro-brand{transition:none}}
 </style>
 </head>
 <body data-mode="cinematic">
@@ -4755,7 +4782,78 @@ footer{padding-bottom:55px}
     }
   ]
 }</script>
-<script id="studio-behavior">(() => {
+<script id="studio-behavior">// The introduction is optional enhancement: the static homepage always exists.
+(() => {
+  const app = document.getElementById('app');
+  if (!app) return;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const intro = document.createElement('section');
+  intro.className = 'studio-intro';
+  intro.setAttribute('role', 'dialog');
+  intro.setAttribute('aria-modal', 'true');
+  intro.setAttribute('aria-label', 'GreenShift introduction — from 540 to 45 days, part of Fjäll Group');
+  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="metadata" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><button class="intro-skip" type="button">Skip intro <i class="ph ph-arrow-right" aria-hidden="true"></i></button><div class="intro-count" aria-hidden="true"><p class="eyebrow">Build your home. Without the wait.</p><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span><p class="intro-range">540 days <span>→</span> 45 days</p></div><div class="intro-brand"><div class="intro-brand-sheet"><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div>`;
+  let closed = false, frame = 0;
+  const timers = [];
+  const previousFocus = document.activeElement;
+  const previousInert = app.inert;
+  const media = intro.querySelector('video');
+  const skip = intro.querySelector('button');
+  function finish() {
+    if (closed) return;
+    closed = true;
+    timers.forEach(clearTimeout);
+    cancelAnimationFrame(frame);
+    media.pause();
+    intro.remove();
+    app.inert = previousInert;
+    document.body.classList.remove('intro-open');
+    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('visibilitychange', onVisibility);
+    if (document.activeElement === document.body && previousFocus && previousFocus !== document.body) previousFocus.focus({preventScroll:true});
+  }
+  function onKey(event) {
+    if (event.key === 'Escape') { event.preventDefault(); finish(); }
+    else if (event.key === 'Tab') { event.preventDefault(); skip.focus(); }
+  }
+  function onVisibility() { if (document.hidden) finish(); }
+  // Independent upper bound: failed video, missing logo, or interrupted animation
+  // must never trap visitors behind a loader.
+  timers.push(setTimeout(finish, 6200));
+  skip.addEventListener('click', finish);
+  document.addEventListener('keydown', onKey);
+  document.addEventListener('visibilitychange', onVisibility);
+  document.body.appendChild(intro);
+  app.inert = true;
+  document.body.classList.add('intro-open');
+  skip.focus({preventScroll:true});
+  function reveal() {
+    intro.querySelector('.intro-number').textContent = '45';
+    intro.classList.add('is-brand');
+    timers.push(setTimeout(() => {
+      intro.classList.add('is-leaving');
+      timers.push(setTimeout(finish, reduced ? 0 : 500));
+    }, reduced ? 700 : 1500));
+  }
+  if (reduced) {
+    intro.classList.add('is-reduced');
+    reveal();
+    return;
+  }
+  media.play().catch(() => {}); // Poster remains visible if playback is unavailable.
+  const start = performance.now();
+  function tick(now) {
+    if (closed) return;
+    const progress = Math.min(1, (now - start) / 2600);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    intro.querySelector('.intro-number').textContent = String(Math.round(540 - 495 * eased));
+    if (progress < 1) frame = requestAnimationFrame(tick);
+    else timers.push(setTimeout(reveal, 350));
+  }
+  frame = requestAnimationFrame(tick);
+})();
+
+(() => {
 const content = JSON.parse(document.getElementById("studio-data").textContent);
 const icon=(name)=>`<i class="ph ph-${name}" aria-hidden="true"></i>`;
 const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#navigation');
