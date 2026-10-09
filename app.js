@@ -97,7 +97,7 @@ document.addEventListener('keydown',event=>{
  if(event.key==='Tab' && !menu.hidden){const focusables=[toggle,...menu.querySelectorAll('a')];const idx=focusables.indexOf(document.activeElement);event.preventDefault();focusables[(idx+(event.shiftKey?-1:1)+focusables.length)%focusables.length].focus();}
 });
 const videos=[...document.querySelectorAll('main video')];
-const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{for(const entry of entries){const video=entry.target;if(entry.isIntersecting && !reduced.matches && video.dataset.userPaused!=='true')video.play().catch(()=>{});else video.pause();}},{threshold:.15}) : null;
+const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{for(const entry of entries){const video=entry.target;if(entry.isIntersecting && (!reduced.matches || video.dataset.manualPlayback==='true') && video.dataset.userPaused!=='true' && !video.ended)video.play().catch(()=>{});else video.pause();}},{threshold:.15}) : null;
 for(const video of videos){video.muted=true;if(videoObserver)videoObserver.observe(video);}
 const heroVideo=document.querySelector('#hero video');
 if(heroVideo){
@@ -212,12 +212,12 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  detail.addEventListener('close',()=>{document.body.classList.remove('dialog-open');detailOrigin?.focus({preventScroll:true});});
  document.getElementById('asset-inquiry').addEventListener('click',event=>{const form=document.getElementById('inquiry'),message=form.querySelector('[name=message]');const block='[GreenShift asset repurposing brief]\nDirection: '+goals[goal].label+'\nRenovation palette: '+([...selected].map(key=>byKey(key).title).join(', ')||'To explore with the studio')+'\n[/GreenShift asset repurposing brief]';const notes=message.value.replace(/\n*\[GreenShift asset repurposing brief\][\s\S]*?\[\/GreenShift asset repurposing brief\]/g,'');const next=notes.trim()?notes+'\n\n'+block:block;if(next.length>message.maxLength){event.preventDefault();document.getElementById('asset-brief-status').textContent='Your existing notes leave too little room for this brief. Shorten the inquiry message before adding it.';return;}message.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));});
  const background=document.getElementById('asset-film'),toggle=document.getElementById('asset-film-toggle');
- function syncFilm(){const paused=background.paused;toggle.innerHTML='<i class="ph ph-'+(paused?'play':'pause')+'" aria-hidden="true"></i>';toggle.setAttribute('aria-label',(paused?'Play':'Pause')+' concept film');}
- background.addEventListener('play',syncFilm);background.addEventListener('pause',syncFilm);syncFilm();
- toggle.addEventListener('click',()=>{if(background.paused){background.dataset.userPaused='false';background.play().catch(()=>{});}else{background.dataset.userPaused='true';background.pause();}});
+ function syncFilm(){const paused=background.paused;toggle.innerHTML='<i class="ph ph-'+(paused?'play':'pause')+'" aria-hidden="true"></i>';toggle.setAttribute('aria-label',(background.ended?'Replay':paused?'Play':'Pause')+' concept film');}
+ background.addEventListener('play',syncFilm);background.addEventListener('pause',syncFilm);background.addEventListener('ended',syncFilm);syncFilm();
+ toggle.addEventListener('click',()=>{if(background.paused){background.dataset.userPaused='false';background.dataset.manualPlayback='true';background.play().catch(()=>{});}else{background.dataset.userPaused='true';background.pause();}});
  const film=document.getElementById('asset-film-dialog'),video=film.querySelector('video'),opener=document.getElementById('asset-film-open');
  opener.addEventListener('click',()=>{background.pause();film.showModal();document.body.classList.add('dialog-open');video.play().catch(()=>{});film.querySelector('.asset-film-close').focus();});
  film.querySelector('.asset-film-close').addEventListener('click',()=>film.close());
- film.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&background.dataset.userPaused!=='true'&&rect.bottom>0&&rect.top<innerHeight)background.play().catch(()=>{});});
+ film.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&background.dataset.userPaused!=='true'&&!background.ended&&rect.bottom>0&&rect.top<innerHeight)background.play().catch(()=>{});});
  for(const dialog of [detail,film])dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
 })();

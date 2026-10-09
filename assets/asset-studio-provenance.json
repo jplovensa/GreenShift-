@@ -16,19 +16,26 @@
   "film_sequence": [
     {
       "study": "asset-existing.jpg",
-      "seconds": 6
-    },
-    {
-      "study": "asset-finishes.jpg",
-      "seconds": 5
-    },
-    {
-      "study": "asset-partitions.jpg",
-      "seconds": 5
+      "visible_seconds": [
+        0,
+        14
+      ]
     },
     {
       "study": "asset-reimagined.jpg",
-      "seconds": 8
+      "visible_seconds": [
+        10,
+        24
+      ]
     }
-  ]
+  ],
+  "film_render": {
+    "file": "asset-repurposing-smooth.mp4",
+    "fps": 60,
+    "duration_seconds": 24,
+    "transition": "Four-second dissolve at 00:10\u201300:14",
+    "camera": "Shared cosine-eased fractional-coordinate push-in; cubic sampling",
+    "playback": "Ends on the renovated interior; explicit replay instead of an abrupt background loop",
+    "reproduce": "python scripts/render-asset-film.py"
+  }
 }

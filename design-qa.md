@@ -75,3 +75,11 @@ Eight original AI-assisted images share warm mineral, oak, reeded glass and sage
 Visual inspection at 1440×1000 and 390×844 confirmed the film, three-column desktop/single-column mobile library, direction controls and brief summary fit without horizontal overflow. Image crops retain their material focal points, type hierarchy is consistent with the existing GreenShift site, and all images resolve. Screenshots: verification/asset-refurbish-*.png, asset-asset-direction-*.png, asset-material-library-*.png and asset-asset-brief-*.png.
 
 Chromium passed all three direction states, four filters, six detail dialogs, save/remove selections, updated inquiry brief with preserved customer notes, duplicate-brief prevention, full film metadata/playback readiness, Escape dismissal and focus return, and deployment-to-Retrofit details. No homepage JavaScript errors or missing local assets occurred. Static studio content and the contact route remained available without JavaScript.
+
+## Smooth refurbishment transformation film
+
+Final result: passed.
+
+Replaced the stepped four-shot zoom montage with a 24-second, 60fps move directly from the existing space into the renovation concept. A shared cosine-eased trajectory uses fractional perspective coordinates and cubic sampling, avoiding integer crop rounding. The four-second dissolve at 00:10–00:14 replaces hard cuts and intermediate sample shots. The background holds the final renovated interior and offers explicit replay rather than snapping back on a loop. A new media filename prevents cached copies of the old film from being reused.
+
+FFprobe confirmed 1280×720, 60fps, 1,440 frames and 24 seconds. FFmpeg scene detection found no transitions above a 0.1 scene-change threshold. The encoded final frame was inspected directly. Chromium verified desktop/mobile manual play and pause, persistence of pause across scrolling, final-frame hold, replay, full-view duration and timeline, dismissal and focus return. Screenshots at the start, dissolve and end are verification/smooth-film-*.png. The render is reproducible with scripts/render-asset-film.py. The film remains labelled as a concept study using the existing original imagery.
