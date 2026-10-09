@@ -46,3 +46,13 @@ Selected implementation is now index.html / cinematic.html only, with no concept
 Dependency-free static build and JavaScript syntax checks passed. JSDOM loaded actual external HTML/JS/CSS through an HTTP server mounted at /GreenShift-/ without script/resource errors. All tier-to-inquiry flows, navigation, reviewed WhatsApp payload, and referenced asset URLs passed. These are functional DOM and HTTP checks, not browser visual evidence. Live Pages configuration and deployment status could not be read because GitHub API access was denied.
 
 final result: blocked
+
+## Static HTML loading correction
+
+The user reported a blank page at https://jplovensa.github.io/GreenShift-/. This URL returned 403 through the available network route, including an escalated read; the live deployed artifact and its exact failure could not be inspected.
+
+The previous local version rendered in Chromium without JavaScript exceptions, so the deployed failure is not claimed reproduced. The website now renders all content as static HTML, with embedded CSS, data and JavaScript; missing companion resources cannot leave #app empty.
+
+Chromium evidence: verification/desktop.png (1440x1000 CSS pixels, deviceScaleFactor 1) and verification/mobile.png (390x844 CSS pixels, deviceScaleFactor 1). Both screenshots were inspected. Reduced motion enabled. Real native tier dialogs, all four tier-to-inquiry selections, inquiry review, and mobile navigation passed. No page errors or horizontal overflow. verification/no-javascript.png confirms visible content with scripting disabled and all external media/font assets blocked.
+
+This verifies local browser loading and core behavior, not the inaccessible live deployment or a full source-design comparison. Full design QA remains blocked.
