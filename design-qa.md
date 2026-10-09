@@ -1,62 +1,37 @@
-# Design QA
+# Design QA — greenshift.id adaptation
 
-final result: blocked
+final result: passed
 
-The user authorized building a local prototype without cloud-browser verification or publication tools.
+## Targets and evidence
 
-## Source visual targets
+Reference: https://www.greenshift.id/ . Source DOM, responsive styles and every section were captured at desktop 1440×1000 and mobile 390×844; all four tier-dialog states and mobile navigation were captured. Individual source captures are retained locally under reference/ (ignored by Git). Combined source/implementation evidence is committed in verification/compare-*.png.
 
-- Cinematic: /workspace/generated_images/exec-d4e38afa-b291-4f7b-9d49-aa2a7dab4859.png
-- Editorial: /workspace/generated_images/exec-6849039b-dbf6-4f59-81d6-018f4e1d0cd3.png
-- Atelier: /workspace/generated_images/exec-2bf118cf-7c78-4454-ab53-8ce99ad2c6da.png
-- User supplied house-shaped GreenShift logo in the conversation, reproduced as assets/logo.png.
+Implementation: static homepage served under /GreenShift-/. Screenshots: verification/adopted-desktop-*.png and verification/adopted-mobile-*.png. Viewports and pixels are 1440×1000 and 390×844, deviceScaleFactor 1. Combined images concatenate equal-size source and implementation screenshots, with source on the left. No density resampling was used. Source videos were active and implementation comparison captures used reduced motion/posters; frame differences are expected because the files are moving media.
 
-## Implementation evidence
+Source HTTPS resources were fetched through the configured proxy using Python's verified TLS trust and supplied unchanged to Chromium. Chromium's proxy CA error was not bypassed. The blocked Google Fonts CSS was replaced during capture with equivalent locally supplied Inter faces from the official Fontsource package; the implementation uses those same faces.
 
-Implementation screenshot: unavailable.
-Intended desktop comparison viewport: 1440px wide. Responsive CSS also targets 1100, 850 and 580px breakpoints. Actual rendered dimensions, source pixel normalization and device density have not been measured.
-State: default homepage, tier dialog and inquiry review are implemented; no browser screenshots captured.
-Full-view and focused-region visual comparisons: blocked by unavailable browser tools. No visual fidelity pass is claimed.
+## Comparison findings and corrections
+
+- [P1, fixed] The Google Fonts import contains semicolons in its URL. Initial removal truncated the import, leaving invalid CSS and breaking the source reset/typography. Removed the complete residual import, embedded valid local font declarations, reran browser checks and recaptured all implementation states. Post-fix comparisons show the source typography and section geometry restored.
+- [P1, fixed] A poster was derived before its source path was rewritten, leaving /videos/design-studio-poster.jpg. Rewrote posters from final local video paths. Subsequent browser checks found no missing asset responses.
+- [P2, fixed] The supplied studio logo's raster canvas proportions made it smaller than the source logo. Set its display to the source's 190×32 size with the proper crop. Recaptured and compared verification/compare-desktop-studio.png after correction.
 
 ## Required fidelity surfaces
 
-- Typography: implemented sans-serif cinematic/atelier and Georgia serif editorial; rendering, wrapping and visual match unverified.
-- Spacing/layout: separate full-width, editorial and split layouts; responsive overflow unverified.
-- Colors/tokens: ivory/deep forest, ivory/olive, and sage/evergreen systems; rendered contrast unverified.
-- Image quality: unchanged supplied video and extracted poster; transparent logo reproduced from the inline reference, not original artwork. Exact production logo fidelity requires original asset replacement.
-- Copy/content: public site content recovered and retained in shared sections and tier details. Existing capital-arm language intentionally preserved.
+- Typography: original Inter family and 300–700 weights are locally hosted. Captured inline sizes, line heights, tracking and heading/body hierarchy are retained. Desktop ecosystem/studio and mobile hero/tier comparisons show matched line wrapping and layout.
+- Spacing/layout: source DOM inline styles and responsive grids are adopted. Hero placement, section padding, ecosystem tracks, studio split, card proportions and tier-modal details align in comparison evidence. No overflow was found at 1440 or 390px.
+- Colors/tokens: source green/black/white surfaces, video overlays, subdued text and transparent/scrolled header states are retained.
+- Images/assets: original hero, studio and all four tier videos are local, with extracted static posters. The user's house-shaped GreenShift logo intentionally replaces the reference's square symbol. Prepared Fjäll Group artwork is retained for the requested intro. The hamburger uses the included Phosphor library; the original close icon was copied with the source modal markup.
+- Copy/content: original rendered copy and tier specifications are retained. Helper text explains the existing explicit WhatsApp review flow; no source backend submission is claimed.
 
-## Nonvisual validation
+## Deliberate adaptations
 
-- Vite production build: passed for index and all three variant pages.
-- 84 DOM assertions: passed, including navigation open/close, all four tier details and inquiry handoff in each variant, reviewed WhatsApp payload, stale payload invalidation and video toggle state.
-- HTTP checks: each variant, video, poster and logo returned 200 with expected content type.
-- Browser console errors: not checked. DOM tests do not validate native media playback, real focus trapping or layout.
+The user-supplied logos and requested 540-to-45 countdown remain. Native accessible dialogs replace the source custom overlay but retain its layout and detail copy; an inquiry action adds a direct conversion path. A hero playback control, focus outlines, reduced-motion behavior, Skip/Escape, and fail-safe static HTML are retained. Contact inquiries are reviewed and handed off to WhatsApp because this remains a frontend-only GitHub Pages website. These are intentional implementation constraints, not source drift.
 
-## Remaining verification
+## Functional verification
 
-Capture all variants at 1440px and mobile 390px. Compare source and implementation side by side; check typography, logo crop, imagery, spacing and overflow. Exercise native dialogs, keyboard navigation, email validation, reduced motion, WhatsApp handoff and actual video playback. Replace logo asset with original brand artwork. Fix observed P0/P1/P2 findings before production acceptance.
+Chromium tests passed at desktop and mobile for all seven sections; four tier dialogs and selected-tier handoff; required/email fields; reviewed inquiry link and stale-link invalidation; full-screen mobile navigation; and native dialog dismissal. There were no JavaScript errors, missing local asset responses or horizontal overflow. JavaScript-disabled and blocked-asset tests confirmed the static homepage remains visible. Normal-motion intro test reached exactly 45, showed the Fjäll reveal, dismissed and restored main-page interaction.
 
-Comparison history: no browser comparison could run; no visual pass claimed.
+## Remaining scope
 
-## Version 1 GitHub hosting correction
-
-Selected implementation is now index.html / cinematic.html only, with no concept switcher. Runtime uses plain deferred scripts and linked CSS, a local font, and relative assets. No Vite or npm imports remain.
-
-Dependency-free static build and JavaScript syntax checks passed. JSDOM loaded actual external HTML/JS/CSS through an HTTP server mounted at /GreenShift-/ without script/resource errors. All tier-to-inquiry flows, navigation, reviewed WhatsApp payload, and referenced asset URLs passed. These are functional DOM and HTTP checks, not browser visual evidence. Live Pages configuration and deployment status could not be read because GitHub API access was denied.
-
-final result: blocked
-
-## Static HTML loading correction
-
-The user reported a blank page at https://jplovensa.github.io/GreenShift-/. This URL returned 403 through the available network route, including an escalated read; the live deployed artifact and its exact failure could not be inspected.
-
-The previous local version rendered in Chromium without JavaScript exceptions, so the deployed failure is not claimed reproduced. The website now renders all content as static HTML, with embedded CSS, data and JavaScript; missing companion resources cannot leave #app empty.
-
-Chromium evidence: verification/desktop.png (1440x1000 CSS pixels, deviceScaleFactor 1) and verification/mobile.png (390x844 CSS pixels, deviceScaleFactor 1). Both screenshots were inspected. Reduced motion enabled. Real native tier dialogs, all four tier-to-inquiry selections, inquiry review, and mobile navigation passed. No page errors or horizontal overflow. verification/no-javascript.png confirms visible content with scripting disabled and all external media/font assets blocked.
-
-This verifies local browser loading and core behavior, not the inaccessible live deployment or a full source-design comparison. Full design QA remains blocked.
-
-## Opening video sequence
-
-Implemented requested 540-to-45-day countdown and GreenShift / part of Fjäll Group reveal over the supplied architecture video. Chromium screenshot evidence: verification/intro-countdown-1440.png, verification/intro-reveal-1440.png, and corresponding 390px captures. The desktop reveal was inspected. Desktop and mobile browser checks passed: count finishes at exactly 45, reveal displays, overlay automatically detaches, body scroll and main content interaction return, native tier dialogs still work, and no JavaScript errors. Skip, Escape, reduced-motion static reveal, blocked asset completion and JavaScript-disabled page visibility also passed. Live GitHub Pages publication remains unverified.
+Source Privacy and Terms controls have no substantive policy destination and retain the source behavior. Contact delivery is a WhatsApp handoff, not an integration with the original site's backend. Exact original logo artwork can replace prepared raster assets. Video-frame differences in comparisons are expected. Live deployment is checked separately after push; local visual QA passing does not itself establish publication.
