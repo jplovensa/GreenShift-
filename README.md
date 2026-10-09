@@ -46,6 +46,17 @@ The spatial presentation uses vendored Three.js 0.160.0 (MIT license included) a
 
 ## Refurbishment and deployment journeys
 
-The Refurbishment Studio at `#refurbish` includes keyboard-accessible layout, material, and adaptive-reuse tabs, the existing refurbishment film, a launchable spatial study, and a three-step service journey. Its inquiry action selects Retrofit and adds the selected focus only when the message is empty; existing customer notes remain intact and any previous inquiry review is invalidated.
+The Refurbishment Studio at `#refurbish` includes keyboard-accessible layout, material, and adaptive-reuse tabs, the Fjäll Garuda Spark refurbishment film, a playable full project film, and a three-step service journey. Its inquiry action selects Retrofit and adds the selected focus only when the message is empty; existing customer notes remain intact and any previous inquiry review is invalidated.
 
 Deployment at `#tiers` retains all four service descriptions and detailed dialogs, with customer-goal headlines and filters for new builds or existing spaces. Refurbishment is accessible directly from navigation and the deployment section. The compact navigation is used through 1200px so service links remain readable on tablets.
+
+
+## Fjäll material library and positioning
+
+GreenShift is presented as Fjäll Group’s design and development arm, focused on development concepts and refurbishment. Studio copy connects architecture, project management and capital coordination; the service journey connects design, engineering, preparation and delivery.
+
+The library at `#material-library` follows the supplied [Fjäll Group website](https://jplovensa.github.io/FG_Website/#materials): GX-100, BEMMELS, RoR roofing and materials at scale, each with material/usage/preparation views. Descriptions, technical build-ups and illustrative media come from that site's material studio. Images are identified as illustrations; final suitability and performance remain project-specific. A specification action adds the chosen material to the inquiry without deleting existing notes or duplicating the same addition.
+
+The refurbishment background is an interior-focused excerpt (00:12–00:38) of Fjäll’s 51-second Garuda Spark Innovation Hub retrofit film at Malang Creative Center. “Watch the refurbishment” opens the full project film with native controls; closing pauses playback and restores focus. Reduced-motion visitors see the actual project's interior poster. Media is local for GitHub Pages. Source details are in `assets/fjall-source-media.json`.
+
+The local WebGL spatial presentation now shows the same nine-layer GX-100 concept (finish, Kalci board, fibreglass mesh, PU glue, EPS, mirrored protective faces). Older steel-skin and unsupported performance figures in that demo were replaced with the documented build-up and project-specific specification text.

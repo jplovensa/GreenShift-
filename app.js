@@ -221,3 +221,42 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
   document.getElementById('deployment-status').textContent=descriptions[kind];
  }));
 })();
+
+(() => {
+ const library = document.getElementById('gs-material-data');
+ if (!library) return;
+ const materials = JSON.parse(library.textContent);
+ let key = 'eps', view = 0;
+ const pickers = [...document.querySelectorAll('[data-gs-material]')];
+ const views = [...document.querySelectorAll('[data-gs-material-view]')];
+ const write = (id, value) => { document.getElementById(id).textContent = value; };
+ function render() {
+  const material=materials[key], study=material.views[view];
+  for(const button of pickers) button.setAttribute('aria-pressed',String(button.dataset.gsMaterial===key));
+  for(const button of views) button.setAttribute('aria-pressed',String(Number(button.dataset.gsMaterialView)===view));
+  for(const [id,value] of Object.entries({'gs-material-index':material.index,'gs-material-kicker':material.kicker,'gs-material-title':material.title,'gs-material-description':material.description,'gs-material-build':material.explore,'gs-material-discuss':material.discuss,'gs-material-detail-title':material.detailTitle,'gs-material-source':material.source,'gs-material-note':study.note})) write(id,value);
+  const image=document.getElementById('gs-material-image');image.src='./assets/fg-'+study.image+'.webp';image.alt=study.alt;
+  document.getElementById('gs-material-details').replaceChildren(...material.details.map(text=>{const li=document.createElement('li');li.textContent=text;return li;}));
+  write('gs-material-announcement',material.title+' / '+study.label+' study');
+ }
+ pickers.forEach(button=>button.addEventListener('click',()=>{key=button.dataset.gsMaterial;view=0;render();}));
+ views.forEach(button=>button.addEventListener('click',()=>{view=Number(button.dataset.gsMaterialView);render();}));
+ document.getElementById('gs-material-inquiry').addEventListener('click',()=>{
+  const form=document.getElementById('inquiry'), message=form.querySelector('[name=message]');
+  const addition='Material specification to discuss: '+materials[key].title+'. Please review suitability for my refurbishment project.';
+  form.querySelector('[name=interest]').value='Retrofit';
+  if(!message.value.includes(addition)) {
+   const next=message.value.trim()?message.value+'\n\n'+addition:addition;
+   if(next.length<=message.maxLength) message.value=next;
+   else write('gs-material-announcement','Your message is full. Include the material you want to discuss in your project notes.');
+  }
+  form.dispatchEvent(new Event('input',{bubbles:true}));
+ });
+ const dialog=document.getElementById('refurbish-film-dialog'), video=dialog.querySelector('video');
+ const opener=document.getElementById('refurbish-film-open');
+ const background=document.querySelector('.refurbish-film>video');
+ opener.addEventListener('click',()=>{background.pause();dialog.showModal();document.body.classList.add('dialog-open');video.play().catch(()=>{});document.getElementById('refurbish-film-close').focus();});
+ document.getElementById('refurbish-film-close').addEventListener('click',()=>dialog.close());
+ dialog.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches && rect.bottom>0 && rect.top<innerHeight)background.play().catch(()=>{});});
+ dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
+})();

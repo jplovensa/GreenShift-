@@ -6,7 +6,7 @@ const value=(key,fallback)=>args.includes(key)?args[args.indexOf(key)+1]:fallbac
 const port=Number(value('--port','4173'));
 const root=fileURLToPath(new URL(args.includes('--dist')?'../dist/':'../',import.meta.url));
 const base=value('--base','/').replace(/\/$/,'');
-const types={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',png:'image/png',jpg:'image/jpeg',mp4:'video/mp4',woff2:'font/woff2'};
+const types={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',png:'image/png',jpg:'image/jpeg',webp:'image/webp',mp4:'video/mp4',woff2:'font/woff2'};
 http.createServer(async(req,res)=>{
  try {
   let route=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
