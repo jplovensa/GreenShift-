@@ -93,3 +93,9 @@ Verified comparison slider input and arrow keys, direction changes, material fil
 ## Website flow — studio-v10
 
 Passed desktop and mobile Chromium checks: section order, all three project routes, responsive navigation open/close, comparison input, material-to-inquiry handoff, film dialog and absence of runtime errors or horizontal overflow. Inspected the project-route screenshot. All seven local MP4 files match their pre-change SHA-256 hashes. Existing videos, project dialogs, embedded spatial experience and service copy remain; hero CTAs now lead to services and studio. Delivery copy follows development approaches and is labelled as the new-development delivery system. Build, JavaScript syntax and whitespace checks passed.
+
+## Unified working studio — v11
+
+The explanation of GreenShift now follows the hero. Removed the separate project-route, studio introduction, experience-studio, and refurbishment section wrappers. One studio contains three accessible panels: walkthrough/WebGL, renovation exploration, and material palette. One brief persists across all panels. Redundant studio process lists, repeated introductions and separate contact prompts were removed.
+
+Desktop and mobile Chromium checks passed: explanation order; one studio and one brief; tab arrows and panel visibility; direction selection; reveal slider; film modal; material filtering/detail selection; selections surviving panel changes; WebGL iframe opening and cleanup; inquiry handoff; previous refurbishment deep links; mobile navigation; no horizontal overflow or JavaScript errors. All seven MP4 files match their original hashes. Build, JavaScript syntax and whitespace checks passed. Screenshots: `verification/unified-studio-*.png`.

@@ -198,7 +198,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  function syncSelection(){
   document.querySelectorAll('[data-asset-save]').forEach(input=>input.checked=selected.has(input.dataset.assetSave));
   summary.replaceChildren();
-  if(!selected.size){const li=document.createElement('li');li.textContent='No finishes selected yet. Explore the library above.';summary.append(li);}
+  if(!selected.size){const li=document.createElement('li');li.textContent='No finishes selected yet. Open Shape the palette to explore.';summary.append(li);}
   for(const key of selected){const li=document.createElement('li'),text=document.createElement('span'),remove=document.createElement('button');text.textContent=byKey(key).title;remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+byKey(key).title+' from brief');remove.addEventListener('click',()=>{selected.delete(key);syncSelection();(summary.querySelector("button")||document.getElementById("asset-inquiry")).focus({preventScroll:true});});li.append(text,remove);summary.append(li);}
   document.getElementById('asset-brief-goal').textContent=goals[goal].label;
   document.getElementById('asset-brief-status').textContent=selected.size?selected.size+' renovation '+(selected.size===1?'category':'categories')+' saved to your brief.':'Your direction and selected finishes will be added to the inquiry.';
@@ -222,4 +222,24 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  film.querySelector('.asset-film-close').addEventListener('click',()=>film.close());
  film.addEventListener('close',()=>{video.pause();document.body.classList.remove('dialog-open');opener.focus({preventScroll:true});const rect=background.getBoundingClientRect();if(!matchMedia('(prefers-reduced-motion: reduce)').matches&&background.dataset.userPaused!=='true'&&!background.ended&&rect.bottom>0&&rect.top<innerHeight)background.play().catch(()=>{});});
  for(const dialog of [detail,film])dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const rect=dialog.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)dialog.close();});
+})();
+
+// One studio with a shared brief. Panels remain readable when JavaScript is unavailable.
+(() => {
+ const tabs=[...document.querySelectorAll('[data-studio-tab]')];
+ const panels=[...document.querySelectorAll('.unified-panel')];
+ const aliases={'#experience-studio':'explore','#refurbish':'renovate','#asset-direction':'renovate','#asset-transformation':'renovate','#material-library':'palette','#asset-brief':'palette'};
+ function activate(key,focus=false){
+  tabs.forEach(tab=>{const active=tab.dataset.studioTab===key;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;if(active&&focus)tab.focus();});
+  panels.forEach(panel=>{panel.hidden=panel.id!=='studio-panel-'+key;if(panel.hidden)panel.querySelectorAll('video').forEach(v=>v.pause());});
+ }
+ tabs.forEach((tab,index)=>{
+  tab.addEventListener('click',()=>activate(tab.dataset.studioTab));
+  tab.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(index+1)%tabs.length;else if(event.key==='ArrowLeft')next=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')next=0;else if(event.key==='End')next=tabs.length-1;else return;event.preventDefault();activate(tabs[next].dataset.studioTab,true);});
+ });
+ document.querySelectorAll('[data-studio-next]').forEach(button=>button.addEventListener('click',()=>{activate(button.dataset.studioNext,true);document.querySelector('.unified-tabs').scrollIntoView({block:'start',behavior:'instant'});}));
+ function route(hash,scroll){if(aliases[hash]){activate(aliases[hash]);if(scroll)document.getElementById('studio').scrollIntoView({block:'start',behavior:'instant'});}}
+ document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&aliases[link.getAttribute('href')]){event.preventDefault();history.pushState(null,'',link.getAttribute('href'));route(link.getAttribute('href'),true);}});
+ window.addEventListener('hashchange',()=>route(location.hash,true));
+ activate(aliases[location.hash]||'explore');if(aliases[location.hash])requestAnimationFrame(()=>route(location.hash,true));
 })();

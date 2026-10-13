@@ -54,6 +54,6 @@ Eight original AI-assisted visual studies support the experience. The 24-second 
 
 The 60fps film uses fractional-coordinate cubic sampling to avoid stepped zoom jitter, holds the finished interior at its end, and supports explicit replay. Re-render with `python scripts/render-asset-film.py` (FFmpeg required). The film supports play/pause, a full-view dialog, reduced-motion fallback, Escape dismissal and focus return. Static studio content and the contact route remain available without JavaScript. Deployment retains customer-focused cards and filters for new builds or existing spaces, and links directly into the studio.
 
-## Website flow
+## Unified studio experience
 
-The main journey is video hero → project routes → design studio → immersive experiences → refurbishment → development approaches → delivery system → ecosystem → timeline → inquiry. Services navigation and the hero CTA lead to three customer routes. Existing section IDs, service copy and all seven local video files are retained.
+GreenShift’s explanation appears directly below the hero. The former standalone studio, experience, refurbishment and project-route sections are replaced by one workspace at `#studio`. Three accessible tabs hold walkthroughs/WebGL, renovation film and comparison, and the material palette. One persistent brief carries direction and finishes into the inquiry. Previous refurbishment and experience anchors select the corresponding tab. Tab arrows, Home/End, next-step controls and brief edit controls support keyboard use. Without JavaScript all panels remain readable. Seven original video files remain unchanged. Supporting new-development protocol copy appears once after deployment options.
