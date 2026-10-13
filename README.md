@@ -53,3 +53,7 @@ The renovation library at `#material-library` covers finishing panels, partition
 Eight original AI-assisted visual studies support the experience. The 24-second MP4 is an original animated concept film assembled from the existing-shell and reimagined-interior studies, with one shared camera trajectory and a four-second dissolve. It is labelled as a concept film and does not claim to document a completed project or a measured before/after transformation. Media is hosted locally. Provenance: `assets/asset-studio-provenance.json`.
 
 The 60fps film uses fractional-coordinate cubic sampling to avoid stepped zoom jitter, holds the finished interior at its end, and supports explicit replay. Re-render with `python scripts/render-asset-film.py` (FFmpeg required). The film supports play/pause, a full-view dialog, reduced-motion fallback, Escape dismissal and focus return. Static studio content and the contact route remain available without JavaScript. Deployment retains customer-focused cards and filters for new builds or existing spaces, and links directly into the studio.
+
+## Website flow
+
+The main journey is video hero → project routes → design studio → immersive experiences → refurbishment → development approaches → delivery system → ecosystem → timeline → inquiry. Services navigation and the hero CTA lead to three customer routes. Existing section IDs, service copy and all seven local video files are retained.

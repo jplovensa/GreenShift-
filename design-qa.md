@@ -89,3 +89,7 @@ FFprobe confirmed 1280×720, 60fps, 1,440 frames and 24 seconds. FFmpeg scene de
 Passed desktop (1440px) and mobile (390px) browser checks. The section now leads with the transformation film and chapter navigation, then direction selection, an interactive existing-space/renovation concept comparison, and a material workspace with a sticky desktop brief. The existing service copy, original renovation imagery and smooth 60fps film remain. On mobile the brief follows the palette.
 
 Verified comparison slider input and arrow keys, direction changes, material filtering, detail-dialog selection, checkbox synchronization, transfer of direction and finishes into the inquiry, deduplication of repeated transfers, film dialog, zero horizontal overflow and zero JavaScript errors. Screenshots are saved as `verification/refurbishment-v9-*.png`. Concept imagery remains labelled. Build and JavaScript syntax checks passed.
+
+## Website flow — studio-v10
+
+Passed desktop and mobile Chromium checks: section order, all three project routes, responsive navigation open/close, comparison input, material-to-inquiry handoff, film dialog and absence of runtime errors or horizontal overflow. Inspected the project-route screenshot. All seven local MP4 files match their pre-change SHA-256 hashes. Existing videos, project dialogs, embedded spatial experience and service copy remain; hero CTAs now lead to services and studio. Delivery copy follows development approaches and is labelled as the new-development delivery system. Build, JavaScript syntax and whitespace checks passed.
