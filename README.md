@@ -57,3 +57,7 @@ The 60fps film uses fractional-coordinate cubic sampling to avoid stepped zoom j
 ## Unified studio experience
 
 GreenShift’s explanation appears directly below the hero. The former standalone studio, experience, refurbishment and project-route sections are replaced by one workspace at `#studio`. Three accessible tabs hold walkthroughs/WebGL, renovation film and comparison, and the material palette. One persistent brief carries direction and finishes into the inquiry. Previous refurbishment and experience anchors select the corresponding tab. Tab arrows, Home/End, next-step controls and brief edit controls support keyboard use. Without JavaScript all panels remain readable. Seven original video files remain unchanged. Supporting new-development protocol copy appears once after deployment options.
+
+## Client presentation studio
+
+The exact delivery-system explanation appears directly after the hero. The studio opens with a three-slide client presentation: studio film, Drop Pod Villas walkthrough, and Garuda Spark spatial presentation. Both demos launch in an accessible dialog with full-presentation links. Renovation and materials remain connected to the shared brief. Original generated concept imagery replaces the renovation and six material visuals; previews are screenshots of the real presentations. Video posters are refreshed from the unchanged MP4s. Provenance: assets/studio-client-provenance.json.

@@ -1,0 +1,24 @@
+{
+  "studio_material_atlas": {
+    "file": "studio-material-atlas.png",
+    "origin": "Original AI-generated six-frame renovation material concept sheet",
+    "display": "CSS selects a tile for each category and detail view; source remains intact"
+  },
+  "studio_renovation_diptych": {
+    "file": "studio-renovation-diptych.png",
+    "origin": "Original AI-generated existing-space and renovated-space concept studies",
+    "note": "Illustrative concept, not documentation of a completed renovation"
+  },
+  "client_walkthrough_preview": {
+    "file": "client-walkthrough-preview.png",
+    "origin": "Browser screenshot of https://jplovensa.github.io/Drop-Pod-Experience-/experience.html"
+  },
+  "client_spatial_preview": {
+    "file": "client-spatial-preview.png",
+    "origin": "Browser screenshot of local spatial-presentation.html, with full source linked at https://jplovensa.github.io/SCH-FG_GSIH_MCC/"
+  },
+  "video_posters": {
+    "origin": "New frames extracted from original unchanged local videos"
+  },
+  "video_integrity": "All seven MP4 SHA-256 hashes verified unchanged"
+}

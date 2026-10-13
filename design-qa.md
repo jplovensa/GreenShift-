@@ -105,3 +105,9 @@ Desktop and mobile Chromium checks passed: explanation order; one studio and one
 Removed the obsolete `#studio img:not(.studio-fjall-logo)` rule that forced all studio images to 190 × 32 pixels. Project previews, both renovation comparison layers and six material images now use their component dimensions. Also separated brief labels from edit controls after visual review.
 
 Verified that all visible studio images decode and fill their containers on desktop and mobile. Comparison input and material dialog still work, with no horizontal overflow or JavaScript errors. Inspected renovation and mobile palette screenshots; evidence: `verification/studio-images-*.png`. All source JPGs decoded successfully; no video assets changed. Build and whitespace checks passed.
+
+## Client presentation studio — v12
+
+Moved the exact delivery-system section from the supplied screenshot directly below the hero, without rewriting its copy. Rebuilt the studio’s opening experience as a three-slide client presentation: studio film, Drop Pod Villas walkthrough and Garuda Spark spatial model. Walkthrough/WebGL launch in the existing dialog and offer full-presentation links. Shared renovation direction and material brief continue through the session.
+
+Replaced all studio stills with fresh concept renovation and material imagery or actual presentation screenshots; refreshed video poster frames. Branding stays original. Seven video hashes match the previous version. Desktop/mobile checks passed: hero/explanation order, slide visibility, both presentation dialogs, comparison input, material atlas/detail tile selection, saved finishes and direction reaching inquiry, decoded images, zero horizontal overflow and runtime errors. Screenshots: verification/client-studio-*.png. Concept visuals and image origins are recorded in assets/studio-client-provenance.json. Build and JavaScript syntax checks passed.

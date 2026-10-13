@@ -198,7 +198,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  function syncSelection(){
   document.querySelectorAll('[data-asset-save]').forEach(input=>input.checked=selected.has(input.dataset.assetSave));
   summary.replaceChildren();
-  if(!selected.size){const li=document.createElement('li');li.textContent='No finishes selected yet. Open Shape the palette to explore.';summary.append(li);}
+  if(!selected.size){const li=document.createElement('li');li.textContent='No finishes selected yet. Open Materials & details to explore.';summary.append(li);}
   for(const key of selected){const li=document.createElement('li'),text=document.createElement('span'),remove=document.createElement('button');text.textContent=byKey(key).title;remove.type='button';remove.textContent='Remove';remove.setAttribute('aria-label','Remove '+byKey(key).title+' from brief');remove.addEventListener('click',()=>{selected.delete(key);syncSelection();(summary.querySelector("button")||document.getElementById("asset-inquiry")).focus({preventScroll:true});});li.append(text,remove);summary.append(li);}
   document.getElementById('asset-brief-goal').textContent=goals[goal].label;
   document.getElementById('asset-brief-status').textContent=selected.size?selected.size+' renovation '+(selected.size===1?'category':'categories')+' saved to your brief.':'Your direction and selected finishes will be added to the inquiry.';
@@ -208,7 +208,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  document.querySelectorAll('[data-asset-filter]').forEach(button=>button.addEventListener('click',()=>{const family=button.dataset.assetFilter;document.querySelectorAll('[data-asset-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));document.querySelectorAll('[data-asset-family]').forEach(card=>card.hidden=family!=='all'&&card.dataset.assetFamily!==family);}));
  document.querySelectorAll('[data-asset-save]').forEach(input=>input.addEventListener('change',()=>{if(input.checked)selected.add(input.dataset.assetSave);else selected.delete(input.dataset.assetSave);syncSelection();}));
  const detail=document.getElementById('asset-material-dialog');
- document.querySelectorAll('[data-asset-detail]').forEach(button=>button.addEventListener('click',()=>{detailKey=button.dataset.assetDetail;detailOrigin=button;const material=byKey(detailKey);const image=document.getElementById('asset-detail-image');image.src='./assets/'+material.image+'.jpg';image.alt='Original concept study of '+material.title.toLowerCase();for(const [id,text] of Object.entries({'asset-material-title':material.title,'asset-material-intro':material.intro,'asset-material-options':material.options,'asset-material-uses':material.uses,'asset-material-resolve':material.resolve}))document.getElementById(id).textContent=text;syncSelection();detail.showModal();document.body.classList.add('dialog-open');detail.querySelector('.asset-material-close').focus();}));
+ document.querySelectorAll('[data-asset-detail]').forEach(button=>button.addEventListener('click',()=>{detailKey=button.dataset.assetDetail;detailOrigin=button;const material=byKey(detailKey);const image=document.getElementById('asset-detail-image');image.src='./assets/'+(material.imageFile||material.image+'.jpg');image.parentElement.style.setProperty('--tile-x',material.tileX||0);image.parentElement.style.setProperty('--tile-y',material.tileY||0);image.alt='Original concept study of '+material.title.toLowerCase();for(const [id,text] of Object.entries({'asset-material-title':material.title,'asset-material-intro':material.intro,'asset-material-options':material.options,'asset-material-uses':material.uses,'asset-material-resolve':material.resolve}))document.getElementById(id).textContent=text;syncSelection();detail.showModal();document.body.classList.add('dialog-open');detail.querySelector('.asset-material-close').focus();}));
  detail.querySelector('.asset-material-close').addEventListener('click',()=>detail.close());
  document.getElementById('asset-detail-save').addEventListener('click',()=>{if(selected.has(detailKey))selected.delete(detailKey);else selected.add(detailKey);syncSelection();});
  detail.addEventListener('close',()=>{document.body.classList.remove('dialog-open');detailOrigin?.focus({preventScroll:true});});
@@ -242,4 +242,12 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  document.addEventListener('click',event=>{const link=event.target.closest('a[href^="#"]');if(link&&aliases[link.getAttribute('href')]){event.preventDefault();history.pushState(null,'',link.getAttribute('href'));route(link.getAttribute('href'),true);}});
  window.addEventListener('hashchange',()=>route(location.hash,true));
  activate(aliases[location.hash]||'explore');if(aliases[location.hash])requestAnimationFrame(()=>route(location.hash,true));
+})();
+
+// A client presentation deck within the single working studio.
+(() => {
+ const buttons=[...document.querySelectorAll('[data-client-select]')];
+ const slides=[...document.querySelectorAll('[data-client-slide]')];
+ function select(key){buttons.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.clientSelect===key)));slides.forEach((slide,index)=>{const active=slide.dataset.clientSlide===key;slide.hidden=!active;if(!active)slide.querySelectorAll('video').forEach(video=>video.pause());else document.getElementById('client-slide-count').textContent=String(index+1).padStart(2,'0')+' / 03';});}
+ buttons.forEach(button=>button.addEventListener('click',()=>select(button.dataset.clientSelect)));select('film');
 })();
