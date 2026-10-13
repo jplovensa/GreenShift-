@@ -1,6 +1,6 @@
 # GreenShift — reference website adaptation
 
-The website now follows the captured greenshift.id layout: a transparent fixed header and full-screen architecture hero, white philosophy section, immersive studio video, dark ecosystem grid, four video-led architectural tiers, the 45-day timeline, contact form and white footer. The existing copy is preserved. The user-supplied GreenShift/Fjäll logo assets and 540-to-45-day opening video sequence remain.
+GreenShift now uses one coherent studio layout: cinematic hero, the requested delivery explanation, studio identity, a full-width client presentation, an open refurbishment and material journey, development approaches, delivery context and inquiry. The stylesheet was rebuilt from scratch and captured inline layouts removed. Original brand assets, service copy and all seven MP4s remain. The optional 540-to-45-day introduction remains skippable.
 
 ## Hosting
 
@@ -54,10 +54,6 @@ Eight original AI-assisted visual studies support the experience. The 24-second 
 
 The 60fps film uses fractional-coordinate cubic sampling to avoid stepped zoom jitter, holds the finished interior at its end, and supports explicit replay. Re-render with `python scripts/render-asset-film.py` (FFmpeg required). The film supports play/pause, a full-view dialog, reduced-motion fallback, Escape dismissal and focus return. Static studio content and the contact route remain available without JavaScript. Deployment retains customer-focused cards and filters for new builds or existing spaces, and links directly into the studio.
 
-## Unified studio experience
+## Current studio flow
 
-GreenShift’s explanation appears directly below the hero. The former standalone studio, experience, refurbishment and project-route sections are replaced by one workspace at `#studio`. Three accessible tabs hold walkthroughs/WebGL, renovation film and comparison, and the material palette. One persistent brief carries direction and finishes into the inquiry. Previous refurbishment and experience anchors select the corresponding tab. Tab arrows, Home/End, next-step controls and brief edit controls support keyboard use. Without JavaScript all panels remain readable. Seven original video files remain unchanged. Supporting new-development protocol copy appears once after deployment options.
-
-## Client presentation studio
-
-The exact delivery-system explanation appears directly after the hero. The studio opens with a three-slide client presentation: studio film, Drop Pod Villas walkthrough, and Garuda Spark spatial presentation. Both demos launch in an accessible dialog with full-presentation links. Renovation and materials remain connected to the shared brief. Original generated concept imagery replaces the renovation and six material visuals; previews are screenshots of the real presentations. Video posters are refreshed from the unchanged MP4s. Provenance: assets/studio-client-provenance.json.
+The client presentation is full width, with film, walkthrough and spatial-model controls. Refurbishment is a continuous visible journey through film, direction, comparison, materials and brief. There are no dashboard tabs or fixed brief sidebar. Presentation dialogs, material details, tier details and WhatsApp inquiry review remain functional. Without JavaScript, the static content and contact information remain visible. Screenshots: verification/reset-site-*.png.
