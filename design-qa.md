@@ -123,3 +123,9 @@ Desktop and mobile Chromium checks passed for section order, absence of dashboar
 Removed Georgia and serif styling from emphasized headings; they now inherit Inter with normal styling. Presentation previews previously kept their HTML height of 900px even when their width shrank. Their container now reserves a 16:10 frame, with the image positioned inside at 100% width and height using object-fit: cover. Original screenshots retain their natural proportions.
 
 Chromium checks passed at desktop, tablet and mobile widths: Inter font loaded, Inter heading family, proportional preview frames, decoded images filling each frame, and no horizontal overflow or runtime errors. Inspected mobile walkthrough screenshot. Build and whitespace checks passed. Evidence: verification/inter-cover-*.png.
+
+## Distinct material image repair
+
+The full-site cleanup removed inline crop selections, causing all six cards to show the atlas’s first image. Category-specific stylesheet rules now select the six views using stable material keys; filtering cannot change their mapping.
+
+Desktop/mobile verification passed: six different rendered-image screenshot hashes, the correct view in every detail dialog, and the partition image after filtering. Inspected the full desktop palette. Build and whitespace checks passed. Evidence: verification/distinct-materials-*.png.

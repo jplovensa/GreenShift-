@@ -50,3 +50,10 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
 @media(max-width:420px){.asset-material-grid{grid-template-columns:1fr}.delivery-timeline{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
 .brand img{object-fit:cover}.arrow-mark{display:inline-block;width:16px;height:16px;vertical-align:middle;flex-shrink:0}.ph{font-family:Arial,sans-serif}.client-slide-preview>span,.header-cta{display:flex;align-items:center;gap:14px}
+/* Each category selects its own material image, including after filtering. */
+.material-atlas[data-asset-detail="panels"]{--tile-x:0;--tile-y:0}
+.material-atlas[data-asset-detail="partitions"]{--tile-x:1;--tile-y:0}
+.material-atlas[data-asset-detail="finishes"]{--tile-x:2;--tile-y:0}
+.material-atlas[data-asset-detail="floors"]{--tile-x:0;--tile-y:1}
+.material-atlas[data-asset-detail="joinery"]{--tile-x:1;--tile-y:1}
+.material-atlas[data-asset-detail="lighting"]{--tile-x:2;--tile-y:1}
