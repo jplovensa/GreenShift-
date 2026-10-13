@@ -46,7 +46,7 @@ The spatial presentation uses vendored Three.js 0.160.0 (MIT license included) a
 
 ## Asset Repurposing Studio
 
-The studio at `#refurbish` is a GreenShift experience for development concepts, renovation aesthetics and asset repurposing. Clients choose a starting direction, explore the existing-space study, browse six renovation categories, and collect a palette for their inquiry. The section uses original imagery and its own film; the Fjäll product catalog and Garuda Spark footage are removed from this journey.
+The studio at `#refurbish` is a GreenShift experience for development concepts, renovation aesthetics and asset repurposing. Clients watch the transformation, choose a starting direction, compare the existing-space and renovation studies with a keyboard-accessible reveal slider, browse six renovation categories, and collect a palette for their inquiry. A sticky desktop brief keeps their choices visible beside the library; mobile stacks the brief after the palette. The section uses original imagery and its own film; the Fjäll product catalog and Garuda Spark footage are removed from this journey.
 
 The renovation library at `#material-library` covers finishing panels, partitions, wall finishes, flooring, joinery and lighting. Filter categories, open detail dialogs, save or remove selections, and pass the direction and palette into a Retrofit inquiry. Existing customer notes remain intact; repeated use updates the generated brief instead of duplicating it. Sending remains an explicit reviewed WhatsApp handoff.
 
