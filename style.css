@@ -66,8 +66,6 @@ a,button{touch-action:manipulation}a:focus-visible,button:focus-visible,[role=bu
  #studio .r-studio{gap:60px!important}.r-split{gap:48px!important}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
-/* Keep the supplied studio logo at the reference artwork's display size. */
-#studio img:not(.studio-fjall-logo){width:190px!important;height:32px!important;object-fit:cover}
 .studio-fjall-logo{display:block;width:240px;max-width:100%;height:auto;margin:0 auto 24px;filter:brightness(0) invert(1)}
 .intro-greenshift{filter:invert(1) hue-rotate(180deg);mix-blend-mode:screen}
 .intro-fjall{filter:brightness(0) invert(1)}
@@ -382,3 +380,6 @@ a,button{touch-action:manipulation}a:focus-visible,button:focus-visible,[role=bu
 @media(max-width:1050px){.unified-workbench{grid-template-columns:minmax(0,1fr) 250px;gap:24px}.unified-tabs button{font-size:11px;padding:16px 8px;gap:8px}.unified-panel .experience-projects{grid-template-columns:1fr}}
 @media(max-width:760px){.gs-about{padding:56px 24px}.gs-about-grid,.unified-heading{grid-template-columns:1fr;gap:24px}.gs-about-grid p{font-size:14px}#studio.unified-studio{padding:56px 20px}.unified-workbench{grid-template-columns:1fr;gap:32px}.unified-tabs{gap:0}.unified-tabs button{flex-direction:column;align-items:flex-start;gap:8px;padding:14px 8px;min-height:76px;font-size:11px}.unified-panel .experience-projects{grid-template-columns:1fr}.unified-panel .asset-film-caption p{font-size:26px}.unified-panel .asset-film-top{top:16px;left:16px;right:16px}.unified-panel .asset-film-top>span{font-size:8px;padding:8px}.unified-panel .asset-film-caption{left:16px;bottom:16px}.unified-panel .asset-film-caption button{font-size:10px;padding:10px}.unified-panel .asset-retention-notes{grid-template-columns:1fr}.unified-panel .asset-film-stage{aspect-ratio:4/3}.unified-workbench>.asset-brief{position:static}.unified-heading{margin-bottom:28px}}
 .studio-brief-edit{display:inline-block;border:0;border-bottom:1px solid #b5cfb8;background:transparent;color:#c5d6c0;padding:4px 0;font:inherit;font-size:11px;cursor:pointer;margin:0 0 20px}.unified-workbench #asset-brief-goal{margin-bottom:10px}
+/* Keep brief labels and edit controls on separate lines. */
+.unified-workbench .asset-brief-summary>.service-eyebrow{display:block}
+.unified-workbench .studio-brief-edit{display:block;width:fit-content}

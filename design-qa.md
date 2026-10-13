@@ -99,3 +99,9 @@ Passed desktop and mobile Chromium checks: section order, all three project rout
 The explanation of GreenShift now follows the hero. Removed the separate project-route, studio introduction, experience-studio, and refurbishment section wrappers. One studio contains three accessible panels: walkthrough/WebGL, renovation exploration, and material palette. One brief persists across all panels. Redundant studio process lists, repeated introductions and separate contact prompts were removed.
 
 Desktop and mobile Chromium checks passed: explanation order; one studio and one brief; tab arrows and panel visibility; direction selection; reveal slider; film modal; material filtering/detail selection; selections surviving panel changes; WebGL iframe opening and cleanup; inquiry handoff; previous refurbishment deep links; mobile navigation; no horizontal overflow or JavaScript errors. All seven MP4 files match their original hashes. Build, JavaScript syntax and whitespace checks passed. Screenshots: `verification/unified-studio-*.png`.
+
+## Studio image sizing repair
+
+Removed the obsolete `#studio img:not(.studio-fjall-logo)` rule that forced all studio images to 190 × 32 pixels. Project previews, both renovation comparison layers and six material images now use their component dimensions. Also separated brief labels from edit controls after visual review.
+
+Verified that all visible studio images decode and fill their containers on desktop and mobile. Comparison input and material dialog still work, with no horizontal overflow or JavaScript errors. Inspected renovation and mobile palette screenshots; evidence: `verification/studio-images-*.png`. All source JPGs decoded successfully; no video assets changed. Build and whitespace checks passed.
