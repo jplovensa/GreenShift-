@@ -57,3 +57,5 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
 .material-atlas[data-asset-detail="floors"]{--tile-x:0;--tile-y:1}
 .material-atlas[data-asset-detail="joinery"]{--tile-x:1;--tile-y:1}
 .material-atlas[data-asset-detail="lighting"]{--tile-x:2;--tile-y:1}
+/* User-uploaded transformation film replaces the still-image comparison. */
+.transformation-timelapse{margin:0}.transformation-timelapse video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:contain;background:#102c26}.transformation-timelapse figcaption{font-size:10px;color:var(--muted);padding:16px 0;border-bottom:1px solid var(--line)}

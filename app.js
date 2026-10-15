@@ -96,7 +96,7 @@ document.addEventListener('keydown',event=>{
  if(event.key==='Escape' && !menu.hidden){setMenu(false);toggle.focus();}
  if(event.key==='Tab' && !menu.hidden){const focusables=[toggle,...menu.querySelectorAll('a')];const idx=focusables.indexOf(document.activeElement);event.preventDefault();focusables[(idx+(event.shiftKey?-1:1)+focusables.length)%focusables.length].focus();}
 });
-const videos=[...document.querySelectorAll('main video')];
+const videos=[...document.querySelectorAll('main video:not([data-native-playback])')];
 const videoObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries=>{for(const entry of entries){const video=entry.target;if(entry.isIntersecting && (!reduced.matches || video.dataset.manualPlayback==='true') && video.dataset.userPaused!=='true' && !video.ended)video.play().catch(()=>{});else video.pause();}},{threshold:.15}) : null;
 for(const video of videos){video.muted=true;if(videoObserver)videoObserver.observe(video);}
 const heroVideo=document.querySelector('#hero video');
@@ -188,8 +188,6 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
 })();
 
 (() => {
- const compare=document.getElementById('asset-compare'),range=document.getElementById('asset-compare-range');
- range.addEventListener('input',()=>{compare.style.setProperty('--reveal',range.value+'%');range.setAttribute('aria-valuetext',range.value+'% existing space visible');});
  const materials=JSON.parse(document.getElementById('asset-material-data').textContent);
  const selected=new Set();let goal='layout',detailKey=null,detailOrigin=null;
  const goals={layout:{label:'Make the layout work harder',title:'Layout & circulation',copy:'Review how people move, meet and use the space. Explore new zones, partitions, storage and circulation around the existing structure.'},identity:{label:'Give the interior a new identity',title:'Materials & atmosphere',copy:'Explore a coordinated palette of finishing panels, surfaces, joinery and lighting to change how an existing interior feels.'},repurpose:{label:'Prepare the asset for a new use',title:'Asset repositioning',copy:'Start with the intended new use. Review spatial needs, retained elements and the design changes needed to give the asset its next purpose.'}};

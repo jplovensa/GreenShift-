@@ -135,3 +135,9 @@ Desktop/mobile verification passed: six different rendered-image screenshot hash
 Replaced the refurbishment background and full-view sources with the uploaded 1080p, 24fps, 5.04-second MP4. Original H.264 video and AAC audio were preserved via stream copy; fast-start metadata enables progressive playback. Extracted a fresh poster and updated the duration label and provenance.
 
 Desktop/mobile Chromium checks passed for the new source/poster, loaded duration, reduced-motion pause, manual play/pause, final-frame hold, explicit replay, full-view playback and focus return on close. No runtime errors. Build and whitespace checks passed. Evidence: verification/uploaded-refurbishment-*.png.
+
+## Uploaded considered-transformation timelapse
+
+Replaced the considered-transformation image reveal slider with the uploaded 1080p, 24fps, 5.04-second video and a poster from that upload. H.264 video and AAC audio are preserved by stream copy, with MP4 fast-start enabled. Native controls support user-initiated playback, audio and fullscreen. This video is excluded from the background-video observer so playback and pause remain under user control. Removed the old slider handler without affecting material selection.
+
+Desktop/mobile Chromium checks passed: removed slider, correct video source and duration, 16:9 framing, native click-to-play, pause surviving scrolling, final-frame hold, replay, and material selection/inquiry handoff. No runtime errors or overflow. The previous refurbishment film remains unchanged. Build, syntax and whitespace checks passed. Evidence: verification/transformation-timelapse-*.png.

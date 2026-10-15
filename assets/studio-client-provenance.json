@@ -27,5 +27,13 @@
     "duration_seconds": 5.041667,
     "encoding": "Original H.264 video and AAC audio preserved; MP4 optimized for progressive playback",
     "poster": "refurbishment-studio-poster.jpg, frame from uploaded film"
+  },
+  "transformation_timelapse": {
+    "file": "transformation-timelapse.mp4",
+    "origin": "User-uploaded 25b11559-887f-4341-8bf7-0dc4b69e8036.mp4",
+    "duration_seconds": 5.041667,
+    "encoding": "Original 1080p H.264 video and AAC audio preserved; progressive MP4 playback",
+    "poster": "transformation-timelapse-poster.jpg, extracted from the upload",
+    "replaces": "Considered transformation image comparison slider"
   }
 }

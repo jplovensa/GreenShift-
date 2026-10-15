@@ -56,4 +56,6 @@ The film supports play/pause, a full-view dialog, reduced-motion fallback, final
 
 ## Current studio flow
 
-The client presentation is full width, with film, walkthrough and spatial-model controls. Refurbishment is a continuous visible journey through film, direction, comparison, materials and brief. There are no dashboard tabs or fixed brief sidebar. Presentation dialogs, material details, tier details and WhatsApp inquiry review remain functional. Without JavaScript, the static content and contact information remain visible. Screenshots: verification/reset-site-*.png.
+The client presentation is full width, with film, walkthrough and spatial-model controls. Refurbishment is a continuous visible journey through film, direction, uploaded transformation timelapse, materials and brief. There are no dashboard tabs or fixed brief sidebar. Presentation dialogs, material details, tier details and WhatsApp inquiry review remain functional. Without JavaScript, the static content and contact information remain visible. Screenshots: verification/reset-site-*.png.
+
+The considered-transformation section now uses the uploaded `assets/transformation-timelapse.mp4` with native video controls, a matching poster and original audio. Playback starts on user interaction; the previous image reveal slider is removed.
