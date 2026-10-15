@@ -136,7 +136,8 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
 (() => {
  const projects = {
   drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
-  spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' }
+  spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' },
+  renovation: { title: 'GreenShift — Renovation Playground', url: './assets/renovation-studio.html' }
  };
  const dialog = document.getElementById('experience-dialog');
  const host = document.getElementById('experience-frame');
@@ -232,3 +233,30 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
 
 // Brief controls link to the visible studio sections.
 document.querySelectorAll('.studio-brief-edit').forEach(button=>button.addEventListener('click',()=>document.getElementById(button.dataset.studioNext==='renovate'?'asset-direction':'material-library').scrollIntoView({block:'start',behavior:'instant'})));
+
+// Accept a brief only from our own, currently open renovation planner.
+(() => {
+ const dialog=document.getElementById('experience-dialog');
+ function addPlan(plan){
+  if(!plan||plan.version!==1||!Number.isFinite(plan.area)||plan.area<9||plan.area>144)return false;
+  for(const key of ['room','floor','wall','objects','layout'])if(typeof plan[key]!=='string'||plan[key].length>5000)return false;
+  const form=document.getElementById('inquiry'),field=form.querySelector('[name=message]');
+  const start='[GreenShift renovation simulation]',end='[/GreenShift renovation simulation]';
+  const existing=field.value.replace(/\n*\[GreenShift renovation simulation\][\s\S]*?\[\/GreenShift renovation simulation\]/g,'').trim();
+  const heading=start+'\nRoom: '+plan.room+' ('+plan.area+' m²)\nFloor: '+plan.floor+'\nWalls: '+plan.wall+'\nObjects: '+plan.objects;
+  let brief=heading+'\nLayout:\n'+plan.layout+'\nConcept only; requires design review.\n'+end;
+  if((existing+'\n\n'+brief).length>field.maxLength)brief=heading+'\nPositions retained in the downloadable plan.\nConcept only; requires design review.\n'+end;
+  const next=(existing?existing+'\n\n':'')+brief;if(next.length>field.maxLength)return false;
+  field.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));
+  const focus=()=>{document.getElementById('contact').scrollIntoView({block:'start',behavior:'instant'});form.querySelector('[name=name]').focus({preventScroll:true});};
+  if(dialog.open){dialog.addEventListener('close',()=>requestAnimationFrame(focus),{once:true});dialog.close();}else focus();return true;
+ }
+ window.addEventListener('message',event=>{
+  const frame=document.querySelector('#experience-frame iframe');
+  if(event.origin!==location.origin||!dialog.open||!frame||event.source!==frame.contentWindow||!frame.src.endsWith('/assets/renovation-studio.html')||event.data?.type!=='greenshift:renovation-plan')return;
+  const ok=addPlan(event.data.plan);event.source.postMessage({type:'greenshift:renovation-result',message:ok?'Your concept has been added to the project inquiry.':'Your existing inquiry has too little space. Download the plan or shorten the notes first.'},location.origin);
+ });
+ if(new URLSearchParams(location.search).get('renovation')==='1'){
+  try{const raw=localStorage.getItem('greenshift:pending-renovation');if(raw&&addPlan(JSON.parse(raw)))localStorage.removeItem('greenshift:pending-renovation');}catch{}
+ }
+})();

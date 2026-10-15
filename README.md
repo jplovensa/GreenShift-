@@ -59,3 +59,16 @@ The film supports play/pause, a full-view dialog, reduced-motion fallback, final
 The client presentation is full width, with film, walkthrough and spatial-model controls. Refurbishment is a continuous visible journey through film, direction, uploaded transformation timelapse, materials and brief. There are no dashboard tabs or fixed brief sidebar. Presentation dialogs, material details, tier details and WhatsApp inquiry review remain functional. Without JavaScript, the static content and contact information remain visible. Screenshots: verification/reset-site-*.png.
 
 The considered-transformation section now uses the uploaded `assets/transformation-timelapse.mp4` with native video controls, a matching poster and original audio. Playback starts on user interaction; the previous image reveal slider is removed.
+
+## Renovation Playground / WebGL planner
+
+Open `assets/renovation-studio.html` directly or launch it from `#simulation-studio`. The planner uses the existing locally hosted Three.js library and procedural geometry, with no external 3D assets or build dependencies.
+
+- Choose a 6×5 m lounge/work preset or a blank room; resize each side from 3–12 m.
+- Place and drag eight object types, rotate in quarter-turns, or position them numerically. Objects snap to a 0.25 m grid. Boundary, overlap, entrance and design-credit checks reject invalid placement.
+- Change floor/wall finishes, switch between 3D and top views, and walk with W A S D, arrows, or touch controls.
+- Complete five design goals for XP. Credits are game points and never a renovation quote.
+- Undo, autosave on the current browser/device, download a JSON plan, and import a previously downloaded plan. Up to 40 objects and 40 undo steps are retained during a session. A plan stores concept dimensions, placements and finishes; it does not provide construction documentation.
+- “Use this plan” transfers a summary and positions to the existing project inquiry. It preserves existing notes and deduplicates repeat transfers. The parent accepts messages only from the currently open, same-origin planner iframe. Standalone mode returns to the contact form through a one-time local pending brief.
+
+Checks: start `npm run dev`, then run `python scripts/verify-renovation-studio.py` with Python Playwright and Chromium installed. `GREENSHIFT_TEST_URL` can select another running site. The check exercises the actual WebGL scene, pointer placement/drag, collision rejection, rotation, finishes, undo, persistence, export/import validation, quests, credit limit, walkthrough, mobile controls, parent/standalone handoff and WebGL-unavailable fallback. Screenshots are in `verification/renovation-planner-*.png`. Existing films remain unchanged.
