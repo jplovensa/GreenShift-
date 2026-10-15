@@ -129,3 +129,9 @@ Chromium checks passed at desktop, tablet and mobile widths: Inter font loaded, 
 The full-site cleanup removed inline crop selections, causing all six cards to show the atlas’s first image. Category-specific stylesheet rules now select the six views using stable material keys; filtering cannot change their mapping.
 
 Desktop/mobile verification passed: six different rendered-image screenshot hashes, the correct view in every detail dialog, and the partition image after filtering. Inspected the full desktop palette. Build and whitespace checks passed. Evidence: verification/distinct-materials-*.png.
+
+## User-uploaded refurbishment film
+
+Replaced the refurbishment background and full-view sources with the uploaded 1080p, 24fps, 5.04-second MP4. Original H.264 video and AAC audio were preserved via stream copy; fast-start metadata enables progressive playback. Extracted a fresh poster and updated the duration label and provenance.
+
+Desktop/mobile Chromium checks passed for the new source/poster, loaded duration, reduced-motion pause, manual play/pause, final-frame hold, explicit replay, full-view playback and focus return on close. No runtime errors. Build and whitespace checks passed. Evidence: verification/uploaded-refurbishment-*.png.

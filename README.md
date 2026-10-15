@@ -1,6 +1,6 @@
 # GreenShift — reference website adaptation
 
-GreenShift now uses one coherent studio layout: cinematic hero, the requested delivery explanation, studio identity, a full-width client presentation, an open refurbishment and material journey, development approaches, delivery context and inquiry. The stylesheet was rebuilt from scratch and captured inline layouts removed. Original brand assets, service copy and all seven MP4s remain. The optional 540-to-45-day introduction remains skippable.
+GreenShift now uses one coherent studio layout: cinematic hero, the requested delivery explanation, studio identity, a full-width client presentation, an open refurbishment and material journey, development approaches, delivery context and inquiry. The stylesheet was rebuilt from scratch and captured inline layouts removed. Original brand assets and service copy remain. The refurbishment film uses the latest user upload; the other videos remain unchanged. The optional 540-to-45-day introduction remains skippable.
 
 ## Hosting
 
@@ -50,9 +50,9 @@ The studio at `#refurbish` is a GreenShift experience for development concepts, 
 
 The renovation library at `#material-library` covers finishing panels, partitions, wall finishes, flooring, joinery and lighting. Filter categories, open detail dialogs, save or remove selections, and pass the direction and palette into a Retrofit inquiry. Existing customer notes remain intact; repeated use updates the generated brief instead of duplicating it. Sending remains an explicit reviewed WhatsApp handoff.
 
-Eight original AI-assisted visual studies support the experience. The 24-second MP4 is an original animated concept film assembled from the existing-shell and reimagined-interior studies, with one shared camera trajectory and a four-second dissolve. It is labelled as a concept film and does not claim to document a completed project or a measured before/after transformation. Media is hosted locally. Provenance: `assets/asset-studio-provenance.json`.
+Original concept studies support the renovation and material library. The current refurbishment film is the user-supplied 5.04-second 1080p MP4 at `assets/refurbishment-studio.mp4`, with its original H.264 video and AAC audio preserved. The MP4 is optimized for progressive playback and its poster is extracted from the upload. Provenance: `assets/studio-client-provenance.json`.
 
-The 60fps film uses fractional-coordinate cubic sampling to avoid stepped zoom jitter, holds the finished interior at its end, and supports explicit replay. Re-render with `python scripts/render-asset-film.py` (FFmpeg required). The film supports play/pause, a full-view dialog, reduced-motion fallback, Escape dismissal and focus return. Static studio content and the contact route remain available without JavaScript. Deployment retains customer-focused cards and filters for new builds or existing spaces, and links directly into the studio.
+The film supports play/pause, a full-view dialog, reduced-motion fallback, final-frame hold, explicit replay, Escape dismissal and focus return. `scripts/render-asset-film.py` reproduces the previous concept montage and is retained as an archive helper. Static studio content and the contact route remain available without JavaScript.
 
 ## Current studio flow
 

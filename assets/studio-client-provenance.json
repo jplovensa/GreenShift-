@@ -20,5 +20,12 @@
   "video_posters": {
     "origin": "New frames extracted from original unchanged local videos"
   },
-  "video_integrity": "All seven MP4 SHA-256 hashes verified unchanged"
+  "video_integrity": "User-uploaded refurbishment film replaces the generated concept montage. Other videos are unchanged.",
+  "refurbishment_film": {
+    "file": "refurbishment-studio.mp4",
+    "origin": "User-uploaded 456adbdb-d029-4e03-abb9-1e9c03b5da14.mp4",
+    "duration_seconds": 5.041667,
+    "encoding": "Original H.264 video and AAC audio preserved; MP4 optimized for progressive playback",
+    "poster": "refurbishment-studio-poster.jpg, frame from uploaded film"
+  }
 }
