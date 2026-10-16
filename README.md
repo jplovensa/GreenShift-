@@ -82,3 +82,27 @@ The existing planner URL now opens the Asset Repurposing Studio. Existing v1 pla
 Interaction upgrades include axis-constrained dragging, duplicate, redo, focus view, pinch/button zoom, existing/proposed/EPS views, screenshot capture and walkthrough collision through doors. On mobile, installed and supply core volumes remain visible in a fixed summary. Rendering uses beveled procedural geometry, PBR materials, fabric/wood/EPS bump textures, PMREM environment lighting, contact shadows and day/golden/evening moods. Native GPU rendering starts in Studio quality; software renderers start in Performance quality. Users can choose either. Static shadow maps are cached until geometry or lighting changes. This remains locally hosted Three.js/WebGL, with no Unreal Engine runtime, paid streaming service or remote asset dependency.
 
 Verification: `node tests/eps-takeoff.mjs`; `python scripts/verify-asset-studio.py`; `python scripts/verify-asset-interactions.py`; `python scripts/verify-eps-walkthrough.py`; and the original planner regression `python scripts/verify-renovation-studio.py`. Run the local server first. EPS tests cover all four thicknesses, openings, mixed cores, corner deduction, scope exclusions, waste, invalid inputs and CSV totals. Browser tests cover actual WebGL, editing, quantity updates, compatibility, persistence, brief handoff, touch zoom, geometry-aware doors and fallback. Preview and captures are in `verification/asset-repurposing-*.png`.
+
+## Measured EPS and facade facelift studios
+
+Both studios retain Inter and use local WebGL assets. Choose a studio through the illustrated 3D selector. Furniture catalog images are captures of the actual procedural assets, rather than Unicode symbols. Existing uploaded films remain unchanged.
+
+Interior (`assets/renovation-studio.html?v=studio3`):
+
+- New plans start with zero EPS; existing v2 plans keep their checked lining scope.
+- A guided measured-wall form accepts length, height, core thickness and actual door/window sizes. The inspector edits those measurements, position and a precise 0–359° angle. Quick controls turn ±15° or 90°. Rotation changes the layout, not the material quantity.
+- Each surface shows `(length × height − openings) × thickness in metres`, including individual opening dimensions. Core volume and extra supply allowance are separate. Quantities display up to six decimals without unnecessary trailing zeros.
+- Oriented rectangle collision checks validate arbitrary-angle walls against objects, entrance and room limits. Walls cannot overlap, avoiding duplicate EPS volumes. Rear/left lining keeps the existing butt-joint rule.
+- Per-wall values, imported legacy files, saved layouts, CSV schedules and inquiry summaries share the same estimator. Position snapping does not round the wall's measured length/height.
+
+Facade (`assets/facade-studio.html?v=studio3`, launched at `#facelift-studio`):
+
+- Independent concept, browser save, JSON import/export and inquiry handoff.
+- Measured width/depth/height, floor count, custom window/door dimensions, three finishing directions, trim, canopy, shading fins, roofline frame and lighting.
+- Orbit/pinch/keyboard camera, front elevation, street view, existing/proposed/EPS phases, direct 3D surface selection and PNG capture. Five journey tasks award exploration XP.
+- Selected front EPS deducts the actual front cutouts; optional side returns are solid. With front EPS, returns extend by core thickness at exterior butt joints, without overlapping the front panel. The rendered geometry and schedule use that joint rule.
+- Concept extensions move the front and lengthen the side returns. Added footprint is reported separately; the tool performs no engineering or structural verification. Canopy, finish layers, frames, roof detailing, fixings and structure are excluded from EPS core quantity.
+
+The calculation is exact for the rectangular geometry and opening dimensions entered, subject to display rounding. Site measurements, construction tolerances, assembly specification and procurement quantities require a measured review. A volume is not a construction cost or an approved EPS product system.
+
+Checks: `node tests/eps-takeoff.mjs`, `node tests/facade-takeoff.mjs`, `python scripts/verify-studio-upgrade.py`. The browser check covers measured custom openings, arbitrary rotation, validation, four core thicknesses, facade returns/extensions, 3D selection, CSV/JSON/PNG, separate saves, homepage/standalone briefs, mobile pinch and WebGL fallback. `GREENSHIFT_TEST_URL` can target a production-style `/GreenShift-/` build.

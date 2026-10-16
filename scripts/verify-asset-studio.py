@@ -7,18 +7,19 @@ def close(a,b):assert abs(a-b)<1e-7,(a,b)
 def load(p,state):
  p.locator('#import-plan').set_input_files({'name':'asset.json','mimeType':'application/json','buffer':json.dumps(state).encode()});p.wait_for_function('(s)=>JSON.stringify(GreenShiftPlanner.getPlan())===JSON.stringify(s)',arg=state)
 def blank(p):
+ p.locator('details.lining-settings').evaluate('(el)=>el.open=true')
  p.locator('#preset').select_option('blank');p.locator('#line-rear').uncheck();p.locator('#line-left').uncheck();p.locator('#rear-openings').fill('0') if p.locator('#rear-openings').is_enabled() else None;p.locator('#apply-eps').click()
 with sync_playwright() as pw:
- b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=FLAGS);p=b.new_page(viewport={'width':1440,'height':1000});errors=[];p.on('pageerror',lambda e:errors.append(str(e)));p.goto(BASE+'/assets/renovation-studio.html');p.wait_for_function('window.GreenShiftPlanner');assert not p.locator('#webgl-error').is_visible();assert plan(p)['version']==2;close(q(p)['volume'],3.52512)
+ b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=FLAGS);p=b.new_page(viewport={'width':1440,'height':1000});errors=[];p.on('pageerror',lambda e:errors.append(str(e)));p.goto(BASE+'/assets/renovation-studio.html');p.wait_for_function('window.GreenShiftPlanner');assert not p.locator('#webgl-error').is_visible();assert plan(p)['version']==2;close(q(p)['volume'],0);p.locator('details.lining-settings').evaluate('(el)=>el.open=true');p.locator('#line-rear').check();p.locator('#line-left').check();p.locator('#apply-eps').click();close(q(p)['volume'],3.52512)
  for cm in [10,12,15,20]:
   p.locator('[data-thickness="'+str(cm)+'"]').click();assert plan(p)['eps']['thickness']==cm;close(q(p)['volume'],2.7*(11-cm/100)*cm/100)
  p.locator('[data-thickness="12"]').click()
  blank(p);close(q(p)['volume'],0);p.locator('[data-item="epswall"]').click();p.locator('#auto-place').click();assert plan(p)['objects'][0]['type']=='epswall'
- for cm,volume in [(10,.648),(12,.7776),(15,.972),(20,1.296)]:p.locator('[data-thickness="'+str(cm)+'"]').click();close(q(p)['volume'],volume);assert plan(p)['objects'][0]['thickness']==cm
+ for cm,volume in [(10,.648),(12,.7776),(15,.972),(20,1.296)]:p.locator('#wall-thickness').select_option(str(cm));p.locator('#apply-wall').click();close(q(p)['volume'],volume);assert plan(p)['objects'][0]['thickness']==cm
  p.locator('#wall-thickness').select_option('12');p.locator('#wall-opening').select_option('door');p.locator('#apply-wall').click();close(q(p)['volume'],.5508)
  p.locator('#wall-opening').select_option('window');p.locator('#apply-wall').click();close(q(p)['volume'],.6048)
  p.locator('#wall-opening').select_option('both');p.locator('#apply-wall').click();close(q(p)['volume'],.378)
- p.locator('#wall-length').fill('0.8');p.locator('#apply-wall').click();assert plan(p)['objects'][0]['length']==2.4;assert 'does not fit' in p.locator('#studio-status').inner_text()
+ p.locator('#wall-length').fill('0.8');p.locator('#apply-wall').click();assert plan(p)['objects'][0]['length']==2.4;assert 'opening' in p.locator('#studio-status').inner_text().lower() or 'window' in p.locator('#studio-status').inner_text().lower()
  p.locator('#wall-length').fill('2.4');p.locator('#wall-opening').select_option('solid');p.locator('#apply-wall').click();p.locator('#duplicate').click();assert len(plan(p)['objects'])==2;close(q(p)['volume'],1.5552)
  p.locator('#wall-thickness').select_option('20');p.locator('#apply-wall').click();assert [g['thickness'] for g in q(p)['groups']]==[12,20];close(q(p)['volume'],2.0736)
  p.locator('#undo').click();close(q(p)['volume'],1.5552);p.locator('#undo-redo').click();close(q(p)['volume'],2.0736)
