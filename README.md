@@ -87,7 +87,7 @@ Verification: `node tests/eps-takeoff.mjs`; `python scripts/verify-asset-studio.
 
 Both studios retain Inter and use local WebGL assets. Choose a studio through the illustrated 3D selector. Furniture catalog images are captures of the actual procedural assets, rather than Unicode symbols. Existing uploaded films remain unchanged.
 
-Interior (`assets/renovation-studio.html?v=studio3`):
+Interior (`assets/renovation-studio.html?v=studio4`):
 
 - New plans start with zero EPS; existing v2 plans keep their checked lining scope.
 - A guided measured-wall form accepts length, height, core thickness and actual door/window sizes. The inspector edits those measurements, position and a precise 0–359° angle. Quick controls turn ±15° or 90°. Rotation changes the layout, not the material quantity.
@@ -95,7 +95,7 @@ Interior (`assets/renovation-studio.html?v=studio3`):
 - Oriented rectangle collision checks validate arbitrary-angle walls against objects, entrance and room limits. Walls cannot overlap, avoiding duplicate EPS volumes. Rear/left lining keeps the existing butt-joint rule.
 - Per-wall values, imported legacy files, saved layouts, CSV schedules and inquiry summaries share the same estimator. Position snapping does not round the wall's measured length/height.
 
-Facade (`assets/facade-studio.html?v=studio3`, launched at `#facelift-studio`):
+Facade (`assets/facade-studio.html?v=studio4`, launched at `#facelift-studio`):
 
 - Independent concept, browser save, JSON import/export and inquiry handoff.
 - Measured width/depth/height, floor count, custom window/door dimensions, three finishing directions, trim, canopy, shading fins, roofline frame and lighting.
@@ -106,3 +106,17 @@ Facade (`assets/facade-studio.html?v=studio3`, launched at `#facelift-studio`):
 The calculation is exact for the rectangular geometry and opening dimensions entered, subject to display rounding. Site measurements, construction tolerances, assembly specification and procurement quantities require a measured review. A volume is not a construction cost or an approved EPS product system.
 
 Checks: `node tests/eps-takeoff.mjs`, `node tests/facade-takeoff.mjs`, `python scripts/verify-studio-upgrade.py`. The browser check covers measured custom openings, arbitrary rotation, validation, four core thicknesses, facade returns/extensions, 3D selection, CSV/JSON/PNG, separate saves, homepage/standalone briefs, mobile pinch and WebGL fallback. `GREENSHIFT_TEST_URL` can target a production-style `/GreenShift-/` build.
+
+## Form and style simulation — studio 4
+
+The facade studio now changes the actual building envelope, with six form presets: architectural box, sweeping curve, organic wave, folded planes, asymmetric wing and pitched pavilion. Projection, eaves height, roof shape/rise and extension remain independently editable. The camera toolbar includes a quick form selector. Roof slabs, side returns, facade panels, glazing and frames follow the selected profile. Click a window or its frame to edit that opening's developed position, sill, width and height. A retained-shell outline supports comparison; the retained view is a rectangular concept baseline, not a measured site scan.
+
+Both studios share six complete design specifications: Contemporary, Japandi, Tropical Modern, Industrial, Mediterranean and Urban Colour. These coordinate materials, palette, lighting and details. Interior variants also change furnishings, feature-wall treatments and ceiling/pendant assemblies while preserving measured layout and EPS quantities. Facade finishes can still be customised independently. Styles, form parameters and individual opening edits persist in saved/exported plans. Old plans receive defaults for new fields.
+
+A six-stage sequence previews Survey, Prepare, Envelope, Services, Finish and Handover. Interior preparation shows indicative studs and opening headers; services show indicative routes; finishes precede furnishing. Facade preparation shows support rails, followed by the EPS envelope, service/support studies and finish layers. These are visual concept stages, not a site programme or an approved structural/MEP assembly. Walkthrough returns to the furnished proposal so hidden objects do not produce invisible collisions.
+
+Facade EPS quantities are computed from closed, normal-offset solids with actual opening cutouts and profiled roof heights. Curves use a 96-segment base profile with additional feature/opening splits. End trims and solid side returns meet at vertical butt joints without volume overlap. The exposed rendering boundary has the same volume as the closed calculation mesh; hidden internal faces are removed to avoid striping. Tight profiles that fold an EPS offset back through itself are rejected. This is exact for the segmented model, subject to numeric/display rounding, and approximates a continuous fabricated curve.
+
+Build schedules export developed facade length, front finish and opening areas, roof surface, added concept footprint, canopy allowance, shading fin count and EPS supply. Interior schedules cover floor finish, visible retained walls, both faces of placed EPS partitions, ceiling raft and furniture count. Roofs, finish layers, fixings and structure remain excluded from EPS core quantities. Final fabrication, structure, weathering details, service design and procurement still require project detailing.
+
+Validation: `node tests/facade-forms.mjs` independently integrates profile cross-sections and verifies 24 form/thickness combinations, render-boundary/solid volume equality, opening-volume subtraction, roof areas and invalid profiles. `python scripts/verify-studio-forms.py` exercises actual desktop/mobile WebGL form/style/opening edits, build stages, schedules, save/restore and website handoff. `scripts/capture-studio-variants.py` captures the actual procedural forms and coordinated styles used in the menus. All uploaded films and Inter remain unchanged.

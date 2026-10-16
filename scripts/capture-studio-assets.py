@@ -22,8 +22,8 @@ with sync_playwright() as p:
  page.goto('http://127.0.0.1:4173/assets/facade-studio.html?v=studio3');page.wait_for_function('window.GreenShiftFacadeStudio');page.wait_for_timeout(1500)
  assert not page.locator('#webgl-error').is_visible();assert not errors,errors
  for key in ['mineral','timber','terracotta']:
-  page.locator('[data-direction="'+key+'"]').click();page.wait_for_timeout(300);page.locator('#facade-canvas').screenshot(path=str(root/('facade-'+key+'.png')))
- page.locator('[data-direction="timber"]').click();page.locator('[data-light="golden"]').click();page.wait_for_timeout(300)
+  page.locator('#finish').select_option(key);page.wait_for_timeout(300);page.locator('#facade-canvas').screenshot(path=str(root/('facade-'+key+'.png')))
+ page.locator('#finish').select_option('timber');page.locator('[data-light="golden"]').click();page.wait_for_timeout(300)
  page.locator('#facade-canvas').screenshot(path=str(root/'studio-facade.png'))
  page.reload();page.wait_for_function('window.GreenShiftFacadeStudio');page.wait_for_timeout(500);page.evaluate('document.querySelectorAll("aside").forEach(el=>el.scrollTop=0)');page.screenshot(path=str(root/'facade-studio-preview.png'))
  assert not errors,errors
