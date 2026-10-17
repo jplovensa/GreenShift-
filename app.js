@@ -2,6 +2,7 @@
 (() => {
   const app = document.getElementById('app');
   if (!app) return;
+  try { if (sessionStorage.getItem('greenshift:intro-seen') === '1' && !new URLSearchParams(location.search).has('replayIntro')) return; } catch {}
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const intro = document.createElement('section');
   intro.className = 'studio-intro';
@@ -19,6 +20,7 @@
   function finish() {
     if (closed) return;
     closed = true;
+    try { sessionStorage.setItem('greenshift:intro-seen','1'); } catch {}
     timers.forEach(clearTimeout);
     cancelAnimationFrame(frame);
     media.pause();
@@ -145,7 +147,7 @@ const form=document.getElementById('inquiry');
 const review=document.getElementById('inquiry-review');
 form.addEventListener('submit',event=>{
  event.preventDefault();if(!form.reportValidity())return;
- const data=new FormData(form);const text=`GreenShift project inquiry\n\nFull name: ${data.get('name')}\nEmail: ${data.get('email')}\nCompany: ${data.get('company')||'—'}\nInterest: ${data.get('interest')}\n\n${data.get('message')}`;
+ const data=new FormData(form);const text=`GreenShift project inquiry\n\nFull name: ${data.get('name')}\nEmail: ${data.get('email')}\nCompany: ${data.get('company')||'—'}\nInterest: ${data.get('interest')}\nProject city: ${data.get('city')||'To be confirmed'}\nApproximate area: ${data.get('area')?data.get('area')+' m²':'To be confirmed'}\nDesired timing: ${data.get('timing')||'Exploring options'}\n\n${data.get('message')}`;
  review.querySelector('pre').textContent=text;review.querySelector('a').href='https://wa.me/6287786010290?text='+encodeURIComponent(text);review.hidden=false;review.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'center'});
 });
 form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').removeAttribute('href');});document.getElementById('edit-inquiry').addEventListener('click',()=>{review.hidden=true;document.querySelector('[name=message]').focus();});
@@ -155,8 +157,8 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  const projects = {
   drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
   spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' },
-  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=studio4' },
-  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=studio4' }
+  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=space1' },
+  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=space1' }
  };
  const dialog = document.getElementById('experience-dialog');
  const host = document.getElementById('experience-frame');
@@ -165,12 +167,19 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
   button.addEventListener('click', () => {
    const project = projects[button.dataset.experience];
    if (!project) return;
-   trigger = button;
+   trigger = button.id === 'space-dialog-launch' ? document.getElementById('space-open-studio') : button;
    document.getElementById('experience-dialog-title').textContent = project.title;
    document.getElementById('experience-external').href = project.external || project.url;
    const frame = document.createElement('iframe');
    frame.title = project.title;
-   frame.src = project.url;
+   const fromSpace = button.id === 'space-dialog-launch';
+   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '');
+   frame.src = studioURL;
+   document.getElementById('experience-external').href = project.external || studioURL;
+   if (fromSpace) frame.addEventListener('load', () => {
+    const brief = globalThis.GreenShiftSpaceDraft?.();
+    if (brief) frame.contentWindow.postMessage({type:'greenshift:space-brief',brief}, location.origin);
+   }, {once:true});
    frame.allow = 'fullscreen; autoplay; xr-spatial-tracking';
    frame.allowFullscreen = true;
    frame.referrerPolicy = 'strict-origin-when-cross-origin';
@@ -280,3 +289,11 @@ document.querySelectorAll('.studio-brief-edit').forEach(button=>button.addEventL
   try{const raw=localStorage.getItem('greenshift:pending-renovation');if(raw&&addPlan(JSON.parse(raw)))localStorage.removeItem('greenshift:pending-renovation');}catch{}
  }
 })();
+
+// First-party integration hooks: no analytics requests and no personal brief data.
+globalThis.GreenShiftJourney=(event,service='general',source='website')=>{
+ if(!['service_selected','brief_completed','studio_opened','inquiry_prepared','whatsapp_clicked'].includes(event))return;
+ window.dispatchEvent(new CustomEvent('greenshift:journey',{detail:{event,service,source}}));
+};
+document.getElementById('inquiry').addEventListener('submit',()=>{if(document.getElementById('inquiry').checkValidity())GreenShiftJourney('inquiry_prepared','general','contact');});
+document.addEventListener('click',e=>{const link=e.target.closest('a');if(link?.href.startsWith('https://wa.me/'))GreenShiftJourney('whatsapp_clicked','general',link.classList.contains('review-send')?'inquiry':'direct');});

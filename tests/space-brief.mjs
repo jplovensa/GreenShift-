@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+await import('../assets/space-brief-model.js');
+const M=globalThis.GreenShiftSpace,b=M.initial();
+assert.equal(M.summary(b).find(r=>r[0]==='Planning footprint')[1],'30 m²');
+const unicode={...b,city:'Jakarta — 北',notes:'Keep <existing> walls & daylight.',photo:'data:image/jpeg;base64,YWJj'};
+const restored=M.decode(M.encode(unicode));assert.equal(restored.city,unicode.city);assert.equal(restored.notes,unicode.notes);assert.equal(restored.photo,'');assert.equal(restored.step,3);
+for(const changes of [{width:NaN},{width:0},{depth:101},{height:Infinity},{service:'constructor'},{style:'toString'},{city:'x'.repeat(81)},{notes:'x'.repeat(601)},{version:2}])assert.throws(()=>M.normalize({...b,...changes}));
+for(const bad of ['<script>','!','a'.repeat(9001),'eyJ2ZXJzaW9uIjoyfQ'])assert.throws(()=>M.decode(bad));
+assert.equal(M.normalize({...b,photo:'data:image/svg+xml;base64,YWJj'}).photo,'');
+assert.equal(M.studio({...b,width:8.3}).w,8.5);assert.equal(M.studio({...b,width:8.3}).adjusted,true);assert.equal(M.studio({...b,width:80}).w,12);assert.equal(M.studio({...b,width:80}).note.includes('80'),true);
+const facade=M.studio({...b,service:'facade',width:8.3,depth:6.5,height:3.2});assert.equal(facade.w,8.3);assert.equal(facade.h,3.2);assert.equal(facade.adjusted,false);assert.equal(facade.kind,'facade');
+assert.equal(M.summary({...b,service:'facade',width:8,height:3}).find(r=>r[0]==='Front elevation area')[1],'24 m²');
+console.log('Space brief: bounded schema, Unicode share round trip, photo exclusion, unsafe input rejection, independent area and explicit model limits passed.');

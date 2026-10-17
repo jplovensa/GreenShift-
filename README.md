@@ -1,6 +1,20 @@
 # GreenShift — reference website adaptation
 
-GreenShift now uses one coherent studio layout: cinematic hero, the requested delivery explanation, studio identity, a full-width client presentation, an open refurbishment and material journey, development approaches, delivery context and inquiry. The stylesheet was rebuilt from scratch and captured inline layouts removed. Original brand assets and service copy remain. The refurbishment film uses the latest user upload; the other videos remain unchanged. The optional 540-to-45-day introduction remains skippable.
+GreenShift’s client journey now starts with its design/development identity and three service routes: interior refurbishment, facade facelift and development concepts. The cinematic opening, uploaded films, client presentations, material library and advanced WebGL studios remain available. Housing delivery copy is retained in its modular-development context with explicit eligibility and programme notes.
+
+## Start with your space
+
+The guided, mobile-friendly brief accepts an optional local photo, dimensions, a goal, city, timing and one of six coordinated style references. Drafts save on the current device. Clients can return, copy a share link (photo excluded), download JSON, open a print-ready PDF view or carry the brief into an explicit WhatsApp inquiry preview. Photos are downscaled locally and never uploaded by this feature; they can be attached separately in WhatsApp by the client.
+
+The reference imagery is rendered from the actual studios and labelled as illustrative, not an automatic alteration of the uploaded photo. A measured footprint/elevation preview and a visible scope note keep the actual brief separate from the studios’ model bounds. Launching a studio offers **Apply brief to a new concept** or **Keep current plan**. Applying is explicit and undoable. A same-origin message supports the handoff even when local storage is blocked.
+
+- Shared schema: `assets/space-brief-model.js`; guided UI: `assets/space-builder.js`; explicit studio handoff: `assets/space-studio-bridge.js`.
+- Interior models: 3–12 m in half-metre increments, 2.4–4.5 m height. Facade models: 3–20 m width/depth, 2.4–12 m height. The brief retains original entered dimensions, and any adjusted model study zone is explained before launch.
+- First-party `greenshift:journey` browser events expose service selection, completed briefs, studio opening, inquiry preparation and WhatsApp clicks. Only event/service/source are emitted; no photo, project notes or contact data. No third-party analytics provider is configured.
+- Existing Drop Pod / Garuda Spark presentations are labelled presentation studies. Completed-project case studies, verified client testimonials, actual fees and availability must come from approved business records; none have been invented.
+
+For production-path checks, build and run `node scripts/serve.mjs --dist --port 4174 --base /GreenShift-/`, then run `node tests/space-brief.mjs`, `python scripts/verify-space-journey.py` and `python scripts/verify-space-edge-cases.py`. The studio regression suite remains in `tests/` and `scripts/verify-studio-forms.py`.
+
 
 ## Hosting
 

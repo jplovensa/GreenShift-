@@ -51,5 +51,11 @@
     ],
     "render_script": "scripts/render-studio-film.py",
     "scope": "Illustrative concept studies, not documentation of completed client projects"
+  },
+  "space_brief_references": {
+    "files": "space-interior-*.webp / space-facade-*.webp",
+    "origin": "Clean moving-camera-stage renders from the actual local GreenShift WebGL interior/facade models, captured with capture-only instrumentation. No baked-in UI or sample quantity labels.",
+    "script": "scripts/capture-space-references.py",
+    "scope": "Illustrative style references, not photographs of client projects or remodels of uploaded photos."
   }
 }
