@@ -2,6 +2,16 @@
 
 GreenShift’s client journey now starts with its design/development identity and three service routes: interior refurbishment, facade facelift and development concepts. The cinematic opening, uploaded films, client presentations, material library and advanced WebGL studios remain available. Housing delivery copy is retained in its modular-development context with explicit eligibility and programme notes.
 
+## Indonesia and bilingual experience
+
+The opening positions GreenShift for architecture, refurbishment and development concepts in Indonesia. A keyboard-accessible local/overseas client path explains site information, remote design reviews, scope, responsibilities and project-specific approvals. The Projects section links directly to **https://jplovensa.github.io/FG_Website/index.html** in a new tab. GreenShift’s interactive studies remain clearly identified as concept presentations.
+
+Choose **ID / EN** in the header or studio. The language follows an explicit `?lang=id` / `?lang=en` link, then the saved preference, then the browser’s Indonesian/English setting. It persists on this device and accompanies shared briefs and local studio launches. Local/overseas origin is retained in the Space brief. The inquiry also records preferred conversation language and an optional client-selected IDR investment range; those ranges are not service prices or a construction quotation.
+
+Edit translations in `assets/language-id.json`. The build generates `assets/language-data.js`; `assets/language.js` applies reversible local translations, including dynamically created controls, while preserving canonical option values, measurements, user-authored notes and city names. User text is excluded from automatic translation. PDFs and WhatsApp summaries use the selected language. The process film retains its original bytes with optional Bahasa Indonesia captions. English and normal contact remain available if language assets cannot load. No external translation API is used.
+
+Bilingual workflow checks: `python scripts/verify-indonesia-journey.py` and `python scripts/verify-language-fallback.py` against the production-path development server. Existing Space and studio tests still apply.
+
 ## Start with your space
 
 The guided, mobile-friendly brief accepts an optional local photo, dimensions, a goal, city, timing and one of six coordinated style references. Drafts save on the current device. Clients can return, copy a share link (photo excluded), download JSON, open a print-ready PDF view or carry the brief into an explicit WhatsApp inquiry preview. Photos are downscaled locally and never uploaded by this feature; they can be attached separately in WhatsApp by the client.

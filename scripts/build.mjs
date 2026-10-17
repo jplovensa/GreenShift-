@@ -4,6 +4,8 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const output = new URL('../dist/', import.meta.url);
 await rm(output, {recursive:true, force:true});
 await mkdir(output, {recursive:true});
+const translations = JSON.parse(await readFile(root + 'assets/language-id.json', 'utf8'));
+await writeFile(root + 'assets/language-data.js', 'globalThis.GreenShiftTranslations=' + JSON.stringify(translations) + ';\n');
 // Keep embedded behavior and styles synchronized with the editable source.
 let html = await readFile(root + 'index.html', 'utf8');
 for (const [id, file] of [['studio-styles', 'style.css'], ['studio-behavior', 'app.js'], ['studio-data', 'content.json']]) {

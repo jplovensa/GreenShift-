@@ -136,7 +136,7 @@ function openTier(card){
  origin=card;
  dialog.replaceChildren(document.getElementById('tier-template-'+idx).content.cloneNode(true));
  dialog.querySelector('.close-tier').addEventListener('click',closeDialog);
- dialog.querySelector('.tier-inquiry').addEventListener('click',()=>{document.querySelector('[name=interest]').value=dialog.querySelector('#tier-title').textContent;closeDialog();document.getElementById('contact').scrollIntoView({behavior:reduced.matches?'instant':'smooth'});document.querySelector('[name=name]').focus({preventScroll:true});});
+ dialog.querySelector('.tier-inquiry').addEventListener('click',()=>{document.querySelector('[name=interest]').value=['Commercial','Premium','Bespoke','Retrofit'][idx];closeDialog();document.getElementById('contact').scrollIntoView({behavior:reduced.matches?'instant':'smooth'});document.querySelector('[name=name]').focus({preventScroll:true});});
  dialog.showModal();document.body.classList.add('dialog-open');
  const video=dialog.querySelector('video');if(video){video.muted=true;if(!reduced.matches)video.play().catch(()=>{});}
 }
@@ -147,7 +147,9 @@ const form=document.getElementById('inquiry');
 const review=document.getElementById('inquiry-review');
 form.addEventListener('submit',event=>{
  event.preventDefault();if(!form.reportValidity())return;
- const data=new FormData(form);const text=`GreenShift project inquiry\n\nFull name: ${data.get('name')}\nEmail: ${data.get('email')}\nCompany: ${data.get('company')||'—'}\nInterest: ${data.get('interest')}\nProject city: ${data.get('city')||'To be confirmed'}\nApproximate area: ${data.get('area')?data.get('area')+' m²':'To be confirmed'}\nDesired timing: ${data.get('timing')||'Exploring options'}\n\n${data.get('message')}`;
+ const data=new FormData(form),tr=s=>globalThis.GreenShiftLanguage?.t(s)||s;
+ const rows=[['Full name',data.get('name')],['Email',data.get('email')],['Company',data.get('company')||'—'],['Interest',tr(data.get('interest'))],['Project city',data.get('city')||tr('To be confirmed')],['Approximate area',data.get('area')?data.get('area')+' m²':tr('To be confirmed')],['Desired timing',tr(data.get('timing')||'Exploring options')],['Planning from',tr(data.get('origin')||'In Indonesia')],['Preferred language',data.get('language')||'English'],['Investment range',tr(data.get('budget')||'To discuss')]];
+ const text=tr('GreenShift project inquiry')+'\n\n'+rows.map(([key,value])=>tr(key)+': '+value).join('\n')+'\n\n'+data.get('message');
  review.querySelector('pre').textContent=text;review.querySelector('a').href='https://wa.me/6287786010290?text='+encodeURIComponent(text);review.hidden=false;review.scrollIntoView({behavior:reduced.matches?'instant':'smooth',block:'center'});
 });
 form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').removeAttribute('href');});document.getElementById('edit-inquiry').addEventListener('click',()=>{review.hidden=true;document.querySelector('[name=message]').focus();});
@@ -157,8 +159,8 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  const projects = {
   drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
   spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' },
-  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=space1' },
-  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=space1' }
+  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=indonesia1' },
+  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=indonesia1' }
  };
  const dialog = document.getElementById('experience-dialog');
  const host = document.getElementById('experience-frame');
@@ -173,7 +175,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
    const frame = document.createElement('iframe');
    frame.title = project.title;
    const fromSpace = button.id === 'space-dialog-launch';
-   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '');
+   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '') + (['facade','renovation'].includes(button.dataset.experience) ? '&lang='+(globalThis.GreenShiftLanguage?.language||'en') : '');
    frame.src = studioURL;
    document.getElementById('experience-external').href = project.external || studioURL;
    if (fromSpace) frame.addEventListener('load', () => {
@@ -239,7 +241,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  detail.querySelector('.asset-material-close').addEventListener('click',()=>detail.close());
  document.getElementById('asset-detail-save').addEventListener('click',()=>{if(selected.has(detailKey))selected.delete(detailKey);else selected.add(detailKey);syncSelection();});
  detail.addEventListener('close',()=>{document.body.classList.remove('dialog-open');detailOrigin?.focus({preventScroll:true});});
- document.getElementById('asset-inquiry').addEventListener('click',event=>{const form=document.getElementById('inquiry'),message=form.querySelector('[name=message]');const block='[GreenShift asset repurposing brief]\nDirection: '+goals[goal].label+'\nRenovation palette: '+([...selected].map(key=>byKey(key).title).join(', ')||'To explore with the studio')+'\n[/GreenShift asset repurposing brief]';const notes=message.value.replace(/\n*\[GreenShift asset repurposing brief\][\s\S]*?\[\/GreenShift asset repurposing brief\]/g,'');const next=notes.trim()?notes+'\n\n'+block:block;if(next.length>message.maxLength){event.preventDefault();document.getElementById('asset-brief-status').textContent='Your existing notes leave too little room for this brief. Shorten the inquiry message before adding it.';return;}message.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));});
+ document.getElementById('asset-inquiry').addEventListener('click',event=>{const form=document.getElementById('inquiry'),message=form.querySelector('[name=message]');const block='[GreenShift asset repurposing brief]\nDirection: '+goals[goal].label+'\nRenovation palette: '+([...selected].map(key=>byKey(key).title).join(', ')||'To explore with the studio')+'\n[/GreenShift asset repurposing brief]';const notes=message.value.replace(/\n*\[GreenShift asset repurposing brief\][\s\S]*?\[\/GreenShift asset repurposing brief\]/g,'');const localized=globalThis.GreenShiftLanguage?.t(block)||block;const next=notes.trim()?notes+'\n\n'+localized:localized;if(next.length>message.maxLength){event.preventDefault();document.getElementById('asset-brief-status').textContent='Your existing notes leave too little room for this brief. Shorten the inquiry message before adding it.';return;}message.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));});
  const background=document.getElementById('asset-film'),toggle=document.getElementById('asset-film-toggle');
  function syncFilm(){const paused=background.paused;toggle.innerHTML='<i class="ph ph-'+(paused?'play':'pause')+'" aria-hidden="true"></i>';toggle.setAttribute('aria-label',(background.ended?'Replay':paused?'Play':'Pause')+' concept film');}
  background.addEventListener('play',syncFilm);background.addEventListener('pause',syncFilm);background.addEventListener('ended',syncFilm);syncFilm();
@@ -276,7 +278,7 @@ document.querySelectorAll('.studio-brief-edit').forEach(button=>button.addEventL
   let brief=heading+eps+'\nLayout:\n'+plan.layout+'\nConcept only; requires design review.\n'+end;
   if((existing+'\n\n'+brief).length>field.maxLength)brief=heading+eps+'\nPositions retained in the downloadable plan.\nConcept only; requires design review.\n'+end;
   const next=(existing?existing+'\n\n':'')+brief;if(next.length>field.maxLength)return false;
-  field.value=next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));
+  field.value=globalThis.GreenShiftLanguage?.language==='id'?(existing?existing+'\n\n':'')+GreenShiftLanguage.t(brief):next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));
   const focus=()=>{document.getElementById('contact').scrollIntoView({block:'start',behavior:'instant'});form.querySelector('[name=name]').focus({preventScroll:true});};
   if(dialog.open){dialog.addEventListener('close',()=>requestAnimationFrame(focus),{once:true});dialog.close();}else focus();return true;
  }
