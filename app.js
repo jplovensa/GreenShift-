@@ -8,7 +8,8 @@
   intro.setAttribute('role', 'dialog');
   intro.setAttribute('aria-modal', 'true');
   intro.setAttribute('aria-label', 'GreenShift introduction — from 540 to 45 days, part of Fjäll Group');
-  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="metadata" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><button class="intro-skip" type="button">Skip intro <i class="ph ph-arrow-right" aria-hidden="true"></i></button><div class="intro-count" aria-hidden="true"><p class="eyebrow">Build your home. Without the wait.</p><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span><p class="intro-range">540 days <span>→</span> 45 days</p></div><div class="intro-brand"><div class="intro-brand-sheet"><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div>`;
+  intro.dataset.sequence = 'cinematic-countdown-v2';
+  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="auto" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><div class="intro-grain" aria-hidden="true"></div><div class="intro-letterbox intro-letterbox-top" aria-hidden="true"></div><div class="intro-letterbox intro-letterbox-bottom" aria-hidden="true"></div><div class="intro-edition" aria-hidden="true"><span class="intro-signal"></span> GREENSHIFT <span>/</span> A NEW WAY TO BUILD</div><button class="intro-skip" type="button">Skip intro <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13 13 3M3 3h10v10" stroke="currentColor" stroke-width="1.2"/></svg></button><div class="intro-orbit" aria-hidden="true"><span></span></div><div class="intro-count" aria-hidden="true"><p class="intro-chapter">01 / RETHINK TIME</p><p class="intro-title">Build your home.<br><span>Without the wait.</span></p><div class="intro-number-wrap"><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span></div><p class="intro-count-caption">The way it was. <span>The way forward.</span></p></div><div class="intro-timeline" aria-hidden="true"><div class="intro-timeline-labels"><span>540 <small>DAYS</small></span><span class="intro-stage">RETHINK THE WAIT</span><span>45 <small>DAYS</small></span></div><div class="intro-track"><span class="intro-track-fill"></span></div><div class="intro-ticks"></div></div><div class="intro-brand" aria-hidden="true"><div class="intro-brand-sheet"><p class="intro-chapter">THE FUTURE. BROUGHT FORWARD.</p><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><div class="intro-brand-divider"></div><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div><div class="intro-footnote" aria-hidden="true"><span>DESIGN. DEVELOP. TRANSFORM.</span><span class="intro-scene">540 → 45</span></div>`;
   let closed = false, frame = 0;
   const timers = [];
   const previousFocus = document.activeElement;
@@ -21,12 +22,16 @@
     timers.forEach(clearTimeout);
     cancelAnimationFrame(frame);
     media.pause();
+    const restoreFocus = intro.contains(document.activeElement);
     intro.remove();
     app.inert = previousInert;
     document.body.classList.remove('intro-open');
     document.removeEventListener('keydown', onKey);
     document.removeEventListener('visibilitychange', onVisibility);
-    if (document.activeElement === document.body && previousFocus && previousFocus !== document.body) previousFocus.focus({preventScroll:true});
+    if (restoreFocus) {
+      const target = previousFocus && previousFocus !== document.body ? previousFocus : app.querySelector('a, button');
+      if (target) target.focus({preventScroll:true});
+    }
   }
   function onKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); finish(); }
@@ -35,7 +40,7 @@
   function onVisibility() { if (document.hidden) finish(); }
   // Independent upper bound: failed video, missing logo, or interrupted animation
   // must never trap visitors behind a loader.
-  timers.push(setTimeout(finish, 6200));
+  timers.push(setTimeout(finish, 8500));
   skip.addEventListener('click', finish);
   document.addEventListener('keydown', onKey);
   document.addEventListener('visibilitychange', onVisibility);
@@ -46,10 +51,11 @@
   function reveal() {
     intro.querySelector('.intro-number').textContent = '45';
     intro.classList.add('is-brand');
+    intro.querySelector('.intro-stage').textContent = 'THE FUTURE. BROUGHT FORWARD.';
     timers.push(setTimeout(() => {
       intro.classList.add('is-leaving');
-      timers.push(setTimeout(finish, reduced ? 0 : 500));
-    }, reduced ? 700 : 1500));
+      timers.push(setTimeout(finish, reduced ? 0 : 800));
+    }, reduced ? 900 : 1900));
   }
   if (reduced) {
     intro.classList.add('is-reduced');
@@ -58,13 +64,25 @@
   }
   media.play().catch(() => {}); // Poster remains visible if playback is unavailable.
   const start = performance.now();
+  const number = intro.querySelector('.intro-number');
+  const stage = intro.querySelector('.intro-stage');
   function tick(now) {
     if (closed) return;
-    const progress = Math.min(1, (now - start) / 2600);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    intro.querySelector('.intro-number').textContent = String(Math.round(540 - 495 * eased));
+    // Hold the starting point, accelerate, then settle deliberately on 45.
+    // This is a brand timeline, independent of network or video load progress.
+    const progress = Math.max(0, Math.min(1, (now - start - 650) / 3500));
+    const eased = progress < .5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+    number.textContent = String(Math.round(540 - 495 * eased));
+    intro.style.setProperty('--intro-progress', eased.toFixed(4));
+    intro.classList.toggle('is-running', progress > 0);
+    if (progress > .72) stage.textContent = 'PRECISION. AT A NEW PACE.';
+    else if (progress > .28) stage.textContent = 'BRING THE FUTURE FORWARD';
     if (progress < 1) frame = requestAnimationFrame(tick);
-    else timers.push(setTimeout(reveal, 350));
+    else {
+      intro.classList.add('is-arrived');
+      stage.textContent = '45 DAYS. WITHOUT THE WAIT.';
+      timers.push(setTimeout(reveal, 700));
+    }
   }
   frame = requestAnimationFrame(tick);
 })();

@@ -4626,33 +4626,50 @@
 @font-face{font-family:Inter;font-style:normal;font-weight:500;font-display:swap;src:url('./assets/inter-500.woff2') format('woff2')}
 @font-face{font-family:Inter;font-style:normal;font-weight:600;font-display:swap;src:url('./assets/inter-600.woff2') format('woff2')}
 @font-face{font-family:Inter;font-style:normal;font-weight:700;font-display:swap;src:url('./assets/inter-700.woff2') format('woff2')}
-/* Optional video introduction. The HTML page remains visible if scripting fails. */
+/* Cinematic countdown: a timed brand film, never a dependency for the page. */
 .intro-open{overflow:hidden}
-.studio-intro{position:fixed;inset:0;z-index:1000;background:#0c2118;color:#fff;display:grid;place-items:center;opacity:1;transition:opacity .5s ease;isolation:isolate}
-.intro-video,.intro-shade{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
-.intro-video{opacity:.5}
-.intro-shade{background:#0c211880;z-index:-1}
-.intro-skip{position:absolute;right:clamp(22px,4vw,64px);top:28px;display:flex;align-items:center;gap:20px;padding:12px 18px;background:transparent;color:#fff;border:1px solid #ffffff70;font-size:12px;z-index:3}
-.intro-skip:hover{background:#ffffff18}
-.intro-count{text-align:center;transition:opacity .5s,transform .5s}
-.intro-count>.eyebrow{margin:0 20px 30px;color:#e2e9dc}
-.intro-number{display:block;font-size:clamp(130px,24vw,330px);line-height:.95;font-weight:400;letter-spacing:-.07em;font-variant-numeric:tabular-nums;min-width:3.3ch;padding-right:.07em}
-.intro-days{display:block;font-size:12px;letter-spacing:.6em;margin-top:24px;padding-left:.6em}
-.intro-range{font-size:12px;letter-spacing:.08em;margin:42px 0 0;color:#e2e9dc}
-.intro-range span{margin:0 25px}
-.intro-brand{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(18px);transition:opacity .65s,transform .65s;pointer-events:none;padding:24px}
-.intro-brand-sheet{background:transparent;color:#fff;width:min(590px,100%);padding:55px 40px;text-align:center}
-.intro-greenshift{display:block;width:min(360px,100%);height:68px;object-fit:cover;margin:0 auto 28px}
-.intro-brand-sheet>.eyebrow{margin:0 0 16px;color:#dcebe6}
-.intro-fjall{display:block;width:min(240px,100%);height:85px;object-fit:contain;margin:0 auto}
-.intro-promise{font-size:13px;margin:30px 0 0;color:#dcebe6}
-.studio-intro.is-brand .intro-count{opacity:0;transform:translateY(-18px)}
-.studio-intro.is-brand .intro-brand{opacity:1;transform:none}
-.studio-intro.is-leaving{opacity:0;pointer-events:none}
-.studio-intro.is-reduced .intro-video{display:none}
-@media(max-width:580px){.intro-number{font-size:42vw}.intro-count>.eyebrow{font-size:9px;letter-spacing:.12em}.intro-brand-sheet{padding:45px 24px}.intro-greenshift{height:52px}.intro-skip{top:20px}.intro-fjall{width:210px;height:76px}}
-@media(prefers-reduced-motion:reduce){.studio-intro,.intro-count,.intro-brand{transition:none}}
-
+.studio-intro{--intro-progress:0;--intro-edge:clamp(24px,5vw,80px);position:fixed;inset:0;z-index:1000;background:#06130f;color:#f1f6ee;display:grid;place-items:center;overflow:hidden;opacity:1;transition:opacity .8s ease;isolation:isolate;font-family:Inter,Arial,sans-serif}
+.intro-video,.intro-shade,.intro-grain{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.intro-video{object-fit:cover;z-index:-4;opacity:.66;filter:saturate(.62);animation:intro-camera 8s cubic-bezier(.16,.5,.3,1) both}
+.intro-shade{z-index:-3;background:radial-gradient(ellipse at 50% 44%,#0c292b25 0%,#05130e91 65%,#010806e8 100%),linear-gradient(90deg,#05130d99,transparent 60%),linear-gradient(0deg,#02110ce6,transparent 55%,#02110c70)}
+.intro-grain{z-index:3;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23g)' d='M0 0h180v180H0z'/%3E%3C/svg%3E")}
+.intro-letterbox{position:absolute;left:0;right:0;height:clamp(30px,7vh,78px);background:#020806;z-index:2;pointer-events:none;transition:transform 1s cubic-bezier(.2,.7,.2,1)}
+.intro-letterbox-top{top:0}.intro-letterbox-bottom{bottom:0}
+.intro-edition,.intro-footnote{position:absolute;left:var(--intro-edge);right:var(--intro-edge);display:flex;align-items:center;font-size:9px;letter-spacing:.2em;z-index:4;color:#cfdfd4}
+.intro-edition{top:clamp(13px,2.7vh,30px);gap:14px;right:180px}.intro-edition>span:not(.intro-signal){opacity:.4}
+.intro-signal{height:5px;width:5px;background:#60e5b5;border-radius:50%;box-shadow:0 0 14px #60e5b5}
+.intro-footnote{bottom:clamp(12px,2.6vh,28px);justify-content:space-between;font-size:8px}
+.intro-skip{position:absolute;right:var(--intro-edge);top:clamp(8px,1.6vh,20px);display:flex;align-items:center;gap:26px;padding:10px 0;background:transparent;color:#fff;border:0;border-bottom:1px solid #ffffff50;font:400 10px Inter,sans-serif;letter-spacing:.05em;z-index:5;cursor:pointer}
+.intro-skip svg{display:block;flex-shrink:0}.intro-skip:hover{color:#7be0bc;border-color:currentColor}.intro-skip:focus-visible{outline:2px solid #9eefd0;outline-offset:5px}
+.intro-count{position:relative;text-align:center;transition:opacity .65s,transform 1s cubic-bezier(.2,.7,.2,1);margin-top:-28px;z-index:1}
+.intro-chapter{font-size:9px;font-weight:500;letter-spacing:.3em;color:#a6d1bd;margin:0 0 24px}
+.intro-title{font-size:clamp(18px,2.3vw,32px);line-height:1.3;letter-spacing:-.04em;margin:0 0 12px;font-weight:400}.intro-title>span{color:#b3c9bc}
+.intro-number-wrap{position:relative;display:flex;align-items:baseline;justify-content:center;gap:16px}
+.intro-number{font-size:clamp(125px,22vw,310px);line-height:1.03;font-weight:500;letter-spacing:-.085em;font-variant-numeric:tabular-nums;min-width:3.2ch;padding-right:.085em;text-shadow:0 8px 60px #0004;transition:color .6s,text-shadow .6s}
+.intro-days{position:absolute;left:calc(100% + 4px);bottom:22%;font-size:10px;letter-spacing:.3em;writing-mode:vertical-rl}
+.intro-count-caption{font-size:10px;letter-spacing:.06em;color:#acbfb2;margin:16px 0 0}.intro-count-caption span{color:#f0f5ed;margin-left:9px}
+.intro-orbit{position:absolute;top:50%;left:50%;width:min(66vw,670px);aspect-ratio:1;border:1px solid #c3e8d31c;border-radius:50%;transform:translate(-50%,-53%);transition:opacity .8s,transform 1.4s;pointer-events:none}
+.intro-orbit:before,.intro-orbit:after{content:'';position:absolute;inset:18px;border:1px dashed #c3e8d314;border-radius:50%}.intro-orbit:after{inset:-16px;border-style:solid;border-color:#c3e8d309}
+.intro-orbit>span{position:absolute;inset:50% -28px auto;height:1px;background:#c3e8d314}
+.intro-timeline{position:absolute;bottom:clamp(86px,15vh,150px);left:var(--intro-edge);right:var(--intro-edge);transition:opacity .6s,transform .8s}
+.intro-timeline-labels{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:.1em;margin-bottom:14px}.intro-timeline-labels small{font-size:8px;color:#a9beb0;margin-left:5px}.intro-stage{font-size:8px;letter-spacing:.2em;color:#b2c7ba;text-align:center;margin:0 12px}
+.intro-track{position:relative;height:1px;background:#e8f5ec33}.intro-track-fill{position:absolute;inset:0;transform-origin:left;transform:scaleX(var(--intro-progress));background:#a1edca;box-shadow:0 0 12px #8de5b9}
+.intro-track-fill:after{position:absolute;content:'';right:0;top:-2px;width:5px;height:5px;background:#d7ffec;border-radius:50%}
+.intro-ticks{height:7px;margin-top:7px;background:repeating-linear-gradient(90deg,#d7eddf55 0 1px,transparent 1px calc(100% / 48))}
+.intro-brand{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:translateY(24px) scale(.97);transition:opacity .85s,transform 1.2s cubic-bezier(.2,.7,.2,1);pointer-events:none;padding:60px 24px;z-index:1}
+.intro-brand-sheet{background:transparent;color:#fff;width:min(590px,100%);padding:24px;text-align:center}.intro-brand-sheet>.intro-chapter{margin-bottom:30px}
+.intro-greenshift{display:block;width:min(390px,100%);height:auto;aspect-ratio:5.25;object-fit:cover;margin:0 auto}
+.intro-brand-divider{height:30px;width:1px;background:#b2d4c06b;margin:22px auto 18px}
+.intro-brand-sheet>.eyebrow{margin:0 0 14px;color:#c2d7c9;font-size:8px;letter-spacing:.25em}
+.intro-fjall{display:block;width:min(200px,75%);height:70px;object-fit:contain;margin:0 auto}.intro-promise{font-size:12px;letter-spacing:.03em;margin:30px 0 0;color:#dcebe6}
+.studio-intro.is-arrived .intro-number{color:#a1edca;text-shadow:0 0 70px #73e7b83b}.studio-intro.is-arrived .intro-orbit{transform:translate(-50%,-53%) scale(1.07)}
+.studio-intro.is-brand .intro-count{opacity:0;transform:translateY(-22px) scale(1.04)}.studio-intro.is-brand .intro-brand{opacity:1;transform:none}.studio-intro.is-brand .intro-orbit{opacity:0;transform:translate(-50%,-53%) scale(1.25)}.studio-intro.is-brand .intro-timeline{opacity:0;transform:translateY(12px)}
+.studio-intro.is-leaving{opacity:0;pointer-events:none}.studio-intro.is-leaving .intro-letterbox-top{transform:translateY(-100%)}.studio-intro.is-leaving .intro-letterbox-bottom{transform:translateY(100%)}
+.studio-intro.is-reduced .intro-video,.studio-intro.is-reduced .intro-orbit,.studio-intro.is-reduced .intro-timeline{display:none}
+@keyframes intro-camera{from{transform:scale(1.14)}to{transform:scale(1.02)}}
+@media(max-width:580px){.intro-edition{font-size:7px;gap:8px}.intro-edition>span:not(.intro-signal){display:none}.intro-edition{font-size:0}.intro-edition:after{content:'GREENSHIFT';font-size:8px;letter-spacing:.2em}.intro-number{font-size:43vw}.intro-days{left:100%;font-size:8px}.intro-title{font-size:23px}.intro-count{margin-top:-35px}.intro-orbit{width:87vw}.intro-timeline{bottom:105px}.intro-chapter{font-size:8px}.intro-stage{font-size:6px;letter-spacing:.12em}.intro-footnote{font-size:6px;letter-spacing:.12em}.intro-brand-sheet{padding:12px}.intro-greenshift{width:300px}.intro-fjall{height:64px}.intro-brand-sheet>.intro-chapter{font-size:7px}}
+@media(max-height:600px) and (min-width:581px){.intro-number{font-size:26vh}.intro-count{margin-top:-35px}.intro-count-caption{display:none}.intro-title{font-size:18px}.intro-chapter{margin-bottom:10px}.intro-timeline{bottom:65px}.intro-brand-divider{height:12px;margin:12px auto}.intro-brand-sheet>.intro-chapter{margin-bottom:14px}.intro-fjall{height:45px}.intro-promise{margin-top:14px}.intro-greenshift{width:280px}.intro-orbit{width:65vh}}
+@media(prefers-reduced-motion:reduce){.studio-intro,.intro-count,.intro-brand{transition:none}.intro-video{animation:none}}
 
 /* GreenShift studio — one visual language, no captured inline layouts. */
 :root{--ink:#17352d;--paper:#f4f1e9;--muted:#727c70;--line:#17352d30}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:88px}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,Arial,sans-serif;font-size:14px;line-height:1.65}h1,h2,h3,h4,p,figure{margin:0}h1,h2,h3,h4{font-weight:400;line-height:1.1;letter-spacing:-.045em}em{font-family:inherit;font-style:normal;font-weight:400}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}button,a{touch-action:manipulation}img,video{display:block;max-width:100%}button{border:0}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #05b083;outline-offset:5px}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.section-pad{padding:100px clamp(24px,7vw,110px)}.service-eyebrow,.eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px;font-weight:500}.section-heading{display:grid;grid-template-columns:1.1fr 1fr;gap:24px 80px;align-items:end;margin-bottom:48px}.section-heading>.service-eyebrow{grid-column:1/-1;margin:0}.section-heading h2{font-size:clamp(42px,5.8vw,78px)}.section-heading>p:last-child{font-size:15px;line-height:1.8;max-width:460px}.ph{font-style:normal}.ph:before{content:'↗'}.ph-play:before{content:'▷'}.ph-pause:before{content:'Ⅱ'}.ph-x:before{content:'×'}.ph-list:before{content:'☰'}.ph-arrow-right:before{content:'→'}
@@ -4812,7 +4829,8 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
   intro.setAttribute('role', 'dialog');
   intro.setAttribute('aria-modal', 'true');
   intro.setAttribute('aria-label', 'GreenShift introduction — from 540 to 45 days, part of Fjäll Group');
-  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="metadata" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><button class="intro-skip" type="button">Skip intro <i class="ph ph-arrow-right" aria-hidden="true"></i></button><div class="intro-count" aria-hidden="true"><p class="eyebrow">Build your home. Without the wait.</p><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span><p class="intro-range">540 days <span>→</span> 45 days</p></div><div class="intro-brand"><div class="intro-brand-sheet"><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div>`;
+  intro.dataset.sequence = 'cinematic-countdown-v2';
+  intro.innerHTML = `<video class="intro-video" muted loop playsinline preload="auto" poster="./assets/hero-poster.jpg" aria-hidden="true"><source src="./assets/hero-studio.mp4" type="video/mp4"></video><div class="intro-shade"></div><div class="intro-grain" aria-hidden="true"></div><div class="intro-letterbox intro-letterbox-top" aria-hidden="true"></div><div class="intro-letterbox intro-letterbox-bottom" aria-hidden="true"></div><div class="intro-edition" aria-hidden="true"><span class="intro-signal"></span> GREENSHIFT <span>/</span> A NEW WAY TO BUILD</div><button class="intro-skip" type="button">Skip intro <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 13 13 3M3 3h10v10" stroke="currentColor" stroke-width="1.2"/></svg></button><div class="intro-orbit" aria-hidden="true"><span></span></div><div class="intro-count" aria-hidden="true"><p class="intro-chapter">01 / RETHINK TIME</p><p class="intro-title">Build your home.<br><span>Without the wait.</span></p><div class="intro-number-wrap"><span class="intro-number">${reduced ? '45' : '540'}</span><span class="intro-days">DAYS</span></div><p class="intro-count-caption">The way it was. <span>The way forward.</span></p></div><div class="intro-timeline" aria-hidden="true"><div class="intro-timeline-labels"><span>540 <small>DAYS</small></span><span class="intro-stage">RETHINK THE WAIT</span><span>45 <small>DAYS</small></span></div><div class="intro-track"><span class="intro-track-fill"></span></div><div class="intro-ticks"></div></div><div class="intro-brand" aria-hidden="true"><div class="intro-brand-sheet"><p class="intro-chapter">THE FUTURE. BROUGHT FORWARD.</p><img class="intro-greenshift" src="./assets/logo.png" alt="GreenShift"><div class="intro-brand-divider"></div><p class="eyebrow">Part of</p><img class="intro-fjall" src="./assets/fjall-group.png" alt="Fjäll Group"><p class="intro-promise">45 days. Without the wait.</p></div></div><div class="intro-footnote" aria-hidden="true"><span>DESIGN. DEVELOP. TRANSFORM.</span><span class="intro-scene">540 → 45</span></div>`;
   let closed = false, frame = 0;
   const timers = [];
   const previousFocus = document.activeElement;
@@ -4825,12 +4843,16 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
     timers.forEach(clearTimeout);
     cancelAnimationFrame(frame);
     media.pause();
+    const restoreFocus = intro.contains(document.activeElement);
     intro.remove();
     app.inert = previousInert;
     document.body.classList.remove('intro-open');
     document.removeEventListener('keydown', onKey);
     document.removeEventListener('visibilitychange', onVisibility);
-    if (document.activeElement === document.body && previousFocus && previousFocus !== document.body) previousFocus.focus({preventScroll:true});
+    if (restoreFocus) {
+      const target = previousFocus && previousFocus !== document.body ? previousFocus : app.querySelector('a, button');
+      if (target) target.focus({preventScroll:true});
+    }
   }
   function onKey(event) {
     if (event.key === 'Escape') { event.preventDefault(); finish(); }
@@ -4839,7 +4861,7 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
   function onVisibility() { if (document.hidden) finish(); }
   // Independent upper bound: failed video, missing logo, or interrupted animation
   // must never trap visitors behind a loader.
-  timers.push(setTimeout(finish, 6200));
+  timers.push(setTimeout(finish, 8500));
   skip.addEventListener('click', finish);
   document.addEventListener('keydown', onKey);
   document.addEventListener('visibilitychange', onVisibility);
@@ -4850,10 +4872,11 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
   function reveal() {
     intro.querySelector('.intro-number').textContent = '45';
     intro.classList.add('is-brand');
+    intro.querySelector('.intro-stage').textContent = 'THE FUTURE. BROUGHT FORWARD.';
     timers.push(setTimeout(() => {
       intro.classList.add('is-leaving');
-      timers.push(setTimeout(finish, reduced ? 0 : 500));
-    }, reduced ? 700 : 1500));
+      timers.push(setTimeout(finish, reduced ? 0 : 800));
+    }, reduced ? 900 : 1900));
   }
   if (reduced) {
     intro.classList.add('is-reduced');
@@ -4862,13 +4885,25 @@ dialog{padding:0;border:0;width:min(1100px,94vw);max-width:94vw;max-height:92dvh
   }
   media.play().catch(() => {}); // Poster remains visible if playback is unavailable.
   const start = performance.now();
+  const number = intro.querySelector('.intro-number');
+  const stage = intro.querySelector('.intro-stage');
   function tick(now) {
     if (closed) return;
-    const progress = Math.min(1, (now - start) / 2600);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    intro.querySelector('.intro-number').textContent = String(Math.round(540 - 495 * eased));
+    // Hold the starting point, accelerate, then settle deliberately on 45.
+    // This is a brand timeline, independent of network or video load progress.
+    const progress = Math.max(0, Math.min(1, (now - start - 650) / 3500));
+    const eased = progress < .5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
+    number.textContent = String(Math.round(540 - 495 * eased));
+    intro.style.setProperty('--intro-progress', eased.toFixed(4));
+    intro.classList.toggle('is-running', progress > 0);
+    if (progress > .72) stage.textContent = 'PRECISION. AT A NEW PACE.';
+    else if (progress > .28) stage.textContent = 'BRING THE FUTURE FORWARD';
     if (progress < 1) frame = requestAnimationFrame(tick);
-    else timers.push(setTimeout(reveal, 350));
+    else {
+      intro.classList.add('is-arrived');
+      stage.textContent = '45 DAYS. WITHOUT THE WAIT.';
+      timers.push(setTimeout(reveal, 700));
+    }
   }
   frame = requestAnimationFrame(tick);
 })();
