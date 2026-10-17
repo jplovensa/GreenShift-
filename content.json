@@ -3,7 +3,7 @@
     "Mid-Range": {
       "label": "MID-RANGE BOUTIQUE",
       "title": "Commercial",
-      "description": "The equilibrium of architectural elegance and absolute modular efficiency. The Commercial tier allows for higher aesthetic customisation while maintaining the 45-day deployment speed.",
+      "description": "A coordinated architectural approach for hospitality and multi-unit development, balancing design character, repeatable systems and project requirements.",
       "video": "/videos/tier-midrange.mp4",
       "structural": "Enhanced thermal isolation via GX-100 panels, customisable facade treatments, and capabilities for multi-storey structural stacking.",
       "projectRange": "50 - 500 Units",
@@ -12,7 +12,7 @@
     "Luxury": {
       "label": "LUXURY REAL ESTATE",
       "title": "Premium",
-      "description": "Uncompromising luxury built with precision. The Premium tier utilises expansive floorplans and high-end finishes, completely disrupting how luxury real estate is delivered.",
+      "description": "Considered spatial planning and refined finishes for medium-to-high-end homes and destinations. The specification and programme follow your agreed brief.",
       "video": "/videos/tier-luxury.mp4",
       "structural": "Bespoke spatial engineering, premium material integration (glass, natural stone textures), and smart-home embedded grids.",
       "projectRange": "10 - 100 Units",
@@ -21,7 +21,7 @@
     "Avant-Garde": {
       "label": "AVANT-GARDE VISIONARY",
       "title": "Bespoke",
-      "description": "Pushing the boundaries of the modular format. The Bespoke tier involves complex hybrid engineering for visionary, limit-testing structural concepts.",
+      "description": "A project-specific architectural concept, developed around the site, intended use, design ambition and specialist requirements.",
       "video": "/videos/tier-avantgarde.mp4",
       "structural": "Parametric hybrid design, radical material science applications, and limit-testing spans not possible with traditional methods.",
       "projectRange": "1 - 10 Signature Builds",
@@ -88,13 +88,13 @@
     },
     {
       "num": "02",
-      "day": "Day 02–30",
+      "day": "Day 02\u201330",
       "title": "Indoor Construction",
       "desc": "Your home is built module-by-module in our dry, perfect-climate facility. Quality is standardized and rigorously tested."
     },
     {
       "num": "03",
-      "day": "Day 31–44",
+      "day": "Day 31\u201344",
       "title": "Site Assembly",
       "desc": "We deliver the finished modules to your land, locking them instantly into the foundation and connecting all utilities."
     },

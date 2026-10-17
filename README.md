@@ -144,3 +144,19 @@ Facade EPS quantities are computed from closed, normal-offset solids with actual
 Build schedules export developed facade length, front finish and opening areas, roof surface, added concept footprint, canopy allowance, shading fin count and EPS supply. Interior schedules cover floor finish, visible retained walls, both faces of placed EPS partitions, ceiling raft and furniture count. Roofs, finish layers, fixings and structure remain excluded from EPS core quantities. Final fabrication, structure, weathering details, service design and procurement still require project detailing.
 
 Validation: `node tests/facade-forms.mjs` independently integrates profile cross-sections and verifies 24 form/thickness combinations, render-boundary/solid volume equality, opening-volume subtraction, roof areas and invalid profiles. `python scripts/verify-studio-forms.py` exercises actual desktop/mobile WebGL form/style/opening edits, build stages, schedules, save/restore and website handoff. `scripts/capture-studio-variants.py` captures the actual procedural forms and coordinated styles used in the menus. All uploaded films and Inter remain unchanged.
+
+### Consolidated studio journey (October 2026)
+
+The homepage has eight primary sections: hero, GreenShift introduction, services, Fjäll projects, one studio hub, working together, Space brief and inquiry. New-development approaches live beside services in an optional disclosure. The studio has keyboard-accessible Presentation / Refurbishment / Facade modes; refurbishment films and materials open on demand. Existing studio and material fragment links reveal the relevant mode and disclosure.
+
+The refurbishment planner now offers architectural elements only: measured EPS partitions, glazed screens, feature panels, portals and ceiling rafts. Furnishing objects in imported legacy plans are excluded from this architectural planner. Version 3 uses a separate local save key, leaving the previous version 2 save intact. Finishes and architectural elements are excluded from EPS core quantities. Final light fixtures appear in the handover stage after the finish stage.
+
+`assets/hero-architecture.mp4` uses the original five-second hero footage with the lower 7% cropped because the small Chinese text was present throughout. The original source is retained. Both the hero and cinematic introduction use the cropped clip and its matching poster.
+
+Additional functional check (with a production server at the Pages path):
+
+```sh
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-consolidated-studio.py
+```
+
+This exercises the shortened page, keyboard modes, fragment links, materials-to-inquiry, real WebGL studios, EPS invariance, architecture-only plans, import/export, bilingual labels and mobile overflow. It does not send an external message.
