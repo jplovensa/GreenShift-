@@ -10,12 +10,16 @@ const clone=x=>JSON.parse(JSON.stringify(x));
 const id=()=>Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9);
 const defaults=(context='interior')=>({version:1,context,w:6,d:5,h:context==='facade'?8:4.5,snap:.1,waste:5,finish:'mineral',brief:briefDefaults(),showFurniture:true,cutaway:true,light:'day',parts:[]});
 function part(type='wall',patch={}){return {id:id(),type,length:2.4,height:type==='glass'?2.4:['slab','roof'].includes(type)?.15:2.7,depth:type==='wall'?.12:type==='glass'?.04:2,x:0,y:0,z:0,angle:0,opening:'none',ow:.9,oh:2.1,sill:.8,...patch};}
-function holes(p){if(p.opening==='none')return [];return [{x:0,y:p.opening==='door'?0:p.sill,w:p.ow,h:p.oh}];}
+function holes(p){if(Array.isArray(p.openings))return p.openings;if(p.opening==='none')return [];return [{x:0,y:p.opening==='door'?0:p.sill,w:p.ow,h:p.oh}];}
 function axes(p){const a=p.angle*Math.PI/180;return [[Math.cos(a),-Math.sin(a)],[Math.sin(a),Math.cos(a)]];}
 function solidOverlap(a,b){if(a.y+a.height<=b.y+1e-6||b.y+b.height<=a.y+1e-6)return false;const [ax,az]=axes(a),[bx,bz]=axes(b);for(const axis of [ax,az,bx,bz]){const dot=(u,v)=>u[0]*v[0]+u[1]*v[1],ra=Math.abs(dot(ax,axis))*a.length/2+Math.abs(dot(az,axis))*a.depth/2,rb=Math.abs(dot(bx,axis))*b.length/2+Math.abs(dot(bz,axis))*b.depth/2;if(Math.abs((b.x-a.x)*axis[0]+(b.z-a.z)*axis[1])>=ra+rb-1e-6)return false;}return true;}
 function solids(p){
- if(!['wall','glass'].includes(p.type)||p.opening==='none')return [p];const h=holes(p)[0],u=axes(p)[0],out=[];
- for(const [x,y,w,height] of [[-(p.length+h.w)/4,0,(p.length-h.w)/2,p.height],[(p.length+h.w)/4,0,(p.length-h.w)/2,p.height],[0,0,h.w,h.y],[0,h.y+h.h,h.w,p.height-h.y-h.h]])if(w>1e-8&&height>1e-8)out.push({...p,length:w,height,x:p.x+u[0]*x,y:p.y+y,z:p.z+u[1]*x,opening:'none'});return out;
+ const hs=holes(p);if(!['wall','glass'].includes(p.type)||!hs.length)return [p];
+ const xs=[...new Set([-p.length/2,p.length/2,...hs.flatMap(h=>[h.x-h.w/2,h.x+h.w/2])])].sort((a,b)=>a-b),u=axes(p)[0],out=[];
+ for(let i=1;i<xs.length;i++){const left=xs[i-1],right=xs[i],x=(left+right)/2,blocked=hs.filter(h=>x>h.x-h.w/2-1e-9&&x<h.x+h.w/2+1e-9).sort((a,b)=>a.y-b.y);let y=0;
+  const emit=top=>{if(top-y>1e-8)out.push({...p,length:right-left,height:top-y,x:p.x+u[0]*x,y:p.y+y,z:p.z+u[1]*x,opening:'none',openings:[]});};
+  for(const h of blocked){emit(h.y);y=h.y+h.h;}emit(p.height);
+ }return out;
 }
 function overlap(a,b){return solids(a).some(x=>solids(b).some(y=>solidOverlap(x,y)));}
 function normalize(raw){
@@ -29,7 +33,8 @@ function normalize(raw){
   if(q.length<.3||q.length>40||q.height<.05||q.height>24||q.depth<.02||q.depth>40||q.y<0||q.angle<0||q.angle>=360)throw Error('Keep element sizes and positions inside the measured workspace.');
   if(q.type==='wall'&&![.1,.12,.15,.2].some(t=>Math.abs(t-q.depth)<1e-8))throw Error('Choose 10, 12, 15 or 20 cm EPS.');
   if(!['none','door','window'].includes(q.opening)||q.ow<.2||q.oh<.2||q.sill<0||q.opening!=='none'&&!['wall','glass'].includes(q.type))throw Error('Choose a valid opening on a vertical panel.');
-  for(const hole of holes(q))if(hole.w>q.length-.1+1e-8||hole.y+hole.h>q.height-.05+1e-8)throw Error('The opening does not fit. Enlarge the panel or reduce the opening.');
+  if(q.openings!==undefined){if(!['wall','glass'].includes(q.type)||!Array.isArray(q.openings)||q.openings.length>12)throw Error('Use up to 12 openings on a vertical panel.');q.openings=q.openings.map(h=>{if(!h||['x','y','w','h'].some(k=>!Number.isFinite(h[k]))||h.w<.2||h.h<.2||h.y<0)throw Error('Enter valid measured opening dimensions.');return {x:h.x,y:h.y,w:h.w,h:h.h,kind:h.kind==='door'?'door':'window'};});}
+  const cuts=holes(q);for(const [i,hole] of cuts.entries()){if(Math.abs(hole.x)+hole.w/2>q.length/2-.05+1e-8||hole.y+hole.h>q.height-.05+1e-8)throw Error('The opening does not fit. Leave at least 5 cm at each side and above it.');if(cuts.slice(0,i).some(h=>Math.abs(h.x-hole.x)<(h.w+hole.w)/2-1e-8&&h.y<hole.y+hole.h-1e-8&&hole.y<h.y+h.h-1e-8))throw Error('Openings overlap. Separate them so their area is deducted once.');}
   const [a,b]=axes(q),ex=Math.abs(a[0])*q.length/2+Math.abs(b[0])*q.depth/2,ez=Math.abs(a[1])*q.length/2+Math.abs(b[1])*q.depth/2;
   if(Math.abs(q.x)+ex>p.w/2+1e-6||Math.abs(q.z)+ez>p.d/2+1e-6||q.y+q.height>p.h+1e-6)throw Error('An element extends beyond the workspace. Move it inward or enlarge the workspace.');
   if(p.parts.some(other=>overlap(q,other)))throw Error('Elements overlap. Use a butt joint, move the element or stack it above the other.');p.parts.push(q);

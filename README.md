@@ -205,3 +205,27 @@ GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-cli
 ```
 
 These check all nine concepts in both contexts, collision-valid layouts, furniture exclusion from EPS, feature toggles, rendering resources, PDF page count/A4 dimensions, matching PDF/JSON IDs, full-note retention, editable import, snapshot state restoration, phone overflow, guided exports and the homepage inquiry handoff without sending a message. The existing assembly and guided form tests also remain applicable.
+
+
+### Focused planner, beginner EPS and bounded A4 export
+
+The assembly workspace has five task panels: Concept, Build, Materials, EPS estimate and Your brief. One panel is visible at a time; the numeric inspector appears when an element is selected. Mobile uses a compact header, five task buttons and a resized live model above the controls. Existing project categories, measured editing, furniture references, copying, rotation, walkthrough and guided facade tools remain available.
+
+The beginner EPS workflow accepts metres or centimetres and decimal dots or commas. It previews one wall with up to 12 separately positioned door/window openings, the actual elevation, gross/opening/net areas, installed core volume and supply including allowance. Adding a wall or updating the selected wall commits those same solids to the 3D scene and project total. Overlapping cutouts and out-of-bounds openings are rejected, preventing double deductions. The EPS-only starter clears the active model with Undo support. Units convert entered measurements; changing units does not change physical dimensions. Existing single-opening assemblies remain compatible.
+
+The WebGL scene now uses depth-aware ambient contact shading, edge smoothing, consistent material UV scale and shadows fitted to the model. High-quality snapshots use an independently fitted 3D view and square plan. Rendering falls back to the normal renderer when depth-texture support is unavailable. If WebGL is disabled, measured editing and plan-backed GreenShift Pass PDFs continue to work.
+
+GreenShift Pass uses a 14 mm A4 safe area, separate measured text rectangles and consistent column gutters. Long words, explicit newlines, CJK and emoji wrap to measured widths; oversized content is visibly shortened and full notes remain in the editable file. The exported PDF is one page. Layout bounds are retained in the export diagnostics for verification. The body is rasterised at approximately 200 dpi.
+
+Verification:
+
+```sh
+node tests/easy-eps.mjs
+node tests/pass-typesetting.mjs
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-planner-workspace.py
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-planner-fallback.py
+```
+
+These cover independent multi-opening EPS quantities at all four cores, unit equivalence, invalid input preservation, real geometry and copy/rotation, contextual panels, shaders, phone layouts, worst-case text bounds/margins and PDF page count, editable export consistency, and measured/PDF use with WebGL disabled. Existing assembly/client Pass regressions follow the new panel navigation.
+
+The Planner Studio reference URL could not be inspected because the cloud environment's HTTP allowlist denied the domain. Required domain additions were saved in the environment configuration draft. The new interface and renderer are GreenShift implementations; matching the reference's details and verifying visual parity remain pending reference access.
