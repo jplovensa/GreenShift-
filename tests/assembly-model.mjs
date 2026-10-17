@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import '../assets/assembly-model.js';
+const A=globalThis.GreenShiftAssembly,near=(a,b)=>assert.ok(Math.abs(a-b)<1e-8,`${a} != ${b}`);
+let p=A.defaults();const wall=A.part('wall');p=A.normalize({...p,parts:[wall]});near(A.estimate(p).volume,2.4*2.7*.12);
+p=A.transform(p,[wall.id],{opening:'door'});near(A.estimate(p).volume,(2.4*2.7-.9*2.1)*.12);
+for(const cm of [10,12,15,20]){const q=A.transform(p,[wall.id],{depth:cm/100});near(A.estimate(q).volume,(2.4*2.7-.9*2.1)*cm/100);}
+const glazing=A.part('glass',{length:.8,height:2,y:0,depth:.04});near(A.estimate(A.normalize({...p,parts:[...p.parts,glazing]})).volume,A.estimate(p).volume);assert.throws(()=>A.normalize({...p,parts:[...p.parts,{...glazing,length:1.1}]}),/overlap/);
+const pasted=A.paste(p,[p.parts[0]]);assert.equal(pasted.plan.parts.length,2);assert.notEqual(pasted.ids[0],wall.id);near(A.estimate(pasted.plan).volume,A.estimate(p).volume*2);assert.equal(pasted.plan.parts[1].opening,'door');
+for(const angle of [0,15,45,90,180,270])near(A.estimate(A.transform(p,[wall.id],{angle})).volume,A.estimate(p).volume);
+const longer=A.transform(p,[wall.id],{length:4.8});near(A.estimate(longer).volume,(4.8*2.7-.9*2.1)*.12);
+assert.throws(()=>A.transform(p,[wall.id],{length:.5}),/opening/);assert.throws(()=>A.transform(p,[wall.id],{x:3}),/workspace/);assert.throws(()=>A.normalize({...p,parts:[wall,{...wall,id:A.id()}]}),/overlap/);
+const room=A.room(A.defaults());assert.equal(room.parts.length,4);near(A.estimate(room).volume,(2*6*2.7+2*(5-.24)*2.7-.9*2.1)*.12);
+const roof=A.part('roof',{length:6,depth:5,height:.15,y:2.7});const roofed=A.normalize({...room,parts:[...room.parts,roof]});near(A.estimate(roofed).volume,A.estimate(room).volume);
+const stacked=A.normalize({...p,parts:[...p.parts,A.part('wall',{height:1,y:2.7})]});near(A.estimate(stacked).volume,A.estimate(p).volume+2.4*.12);
+assert.throws(()=>A.transform(stacked,[stacked.parts[1].id],{y:2.6}),/overlap/);
+const original=JSON.stringify(p);A.paste(p,p.parts);assert.equal(JSON.stringify(p),original);assert.deepEqual(A.normalize(JSON.parse(JSON.stringify(roofed))),roofed);
+for(const bad of [NaN,Infinity,-1])assert.throws(()=>A.transform(p,[wall.id],{length:bad}));
+assert.throws(()=>A.normalize({...p,parts:[{...wall,angle:360}]}));assert.throws(()=>A.normalize({...p,parts:[{...wall,id:'<script>'}]}));
+const joined=A.drawWall({...A.defaults(),parts:[A.part('wall')]},{x:1.2,z:0},{x:1.2,z:2});assert.equal(joined.trimmed,true);near(joined.plan.parts[1].length,1.94);near(A.estimate(joined.plan).volume,(2.4+1.94)*2.7*.12);assert.throws(()=>A.drawWall({...A.defaults(),parts:[A.part('wall')]},{x:0,z:-2},{x:0,z:2}),/crosses/);
+console.log('Assembly model: exact EPS and openings at four cores, rotated/copy quantities, resizing, butt joints, stacking, non-EPS exclusion, overlap/bounds rejection, immutable clipboard and JSON restore passed.');

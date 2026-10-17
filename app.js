@@ -157,8 +157,8 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  const projects = {
   drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
   spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' },
-  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=journey2' },
-  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=journey2' }
+  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=assembly1' },
+  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=assembly1' }
  };
  const dialog = document.getElementById('experience-dialog');
  const host = document.getElementById('experience-frame');
@@ -173,7 +173,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
    const frame = document.createElement('iframe');
    frame.title = project.title;
    const fromSpace = button.id === 'space-dialog-launch';
-   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '') + (['facade','renovation'].includes(button.dataset.experience) ? '&lang='+(globalThis.GreenShiftLanguage?.language||'en') : '');
+   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '') + (['facade','renovation'].includes(button.dataset.experience) ? '&lang='+(globalThis.GreenShiftLanguage?.language||'en') : '') + (button.dataset.assembly ? '&assembly=1' : '');
    frame.src = studioURL;
    document.getElementById('experience-external').href = project.external || studioURL;
    if (fromSpace) frame.addEventListener('load', () => {
@@ -276,7 +276,7 @@ document.querySelectorAll('.studio-brief-edit').forEach(button=>button.addEventL
   let brief=heading+eps+'\nLayout:\n'+plan.layout+'\nConcept only; requires design review.\n'+end;
   if((existing+'\n\n'+brief).length>field.maxLength)brief=heading+eps+'\nPositions retained in the downloadable plan.\nConcept only; requires design review.\n'+end;
   const next=(existing?existing+'\n\n':'')+brief;if(next.length>field.maxLength)return false;
-  field.value=globalThis.GreenShiftLanguage?.language==='id'?(existing?existing+'\n\n':'')+GreenShiftLanguage.t(brief):next;form.querySelector('[name=interest]').value='Retrofit';form.dispatchEvent(new Event('input',{bubbles:true}));
+  field.value=globalThis.GreenShiftLanguage?.language==='id'?(existing?existing+'\n\n':'')+GreenShiftLanguage.t(brief):next;form.querySelector('[name=interest]').value=plan.service==='Facade facelift'?'Facade facelift':'Interior refurbishment';form.dispatchEvent(new Event('input',{bubbles:true}));
   const focus=()=>{document.getElementById('contact').scrollIntoView({block:'start',behavior:'instant'});form.querySelector('[name=name]').focus({preventScroll:true});};
   if(dialog.open){dialog.addEventListener('close',()=>requestAnimationFrame(focus),{once:true});dialog.close();}else focus();return true;
  }

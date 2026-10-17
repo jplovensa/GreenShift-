@@ -164,3 +164,20 @@ This exercises the shortened page, keyboard modes, fragment links, materials-to-
 ### Restored opening, deployment and HD cover
 
 The cinematic video countdown now opens on every page load, with Skip/Escape and the existing timeout and reduced-motion support. Deployment scale is again a visible standalone section after services, including four approaches, filters and detail dialogs. The Space brief no longer offers photo upload, reference images or photo output in its PDF. Legacy stored photos are cleared when opening the brief. The asset repurposing cover is a new 2560 × 1387 WebP capture (approximately 110 KB) of the actual architecture-only WebGL studio, without the old interface screenshot.
+
+### Measured Build & assemble mode
+
+Both studios now include a separate `Build & assemble` workspace, also opened directly from each homepage studio mode. Append `?assembly=1` (or `&assembly=1` when a query is present) to a studio URL to open it immediately. This leaves guided studio plans intact and saves an independent assembly per studio. The hero now uses “Space for your next possibility” without limiting its headline to Indonesia.
+
+Assembly tools include two-click EPS wall drawing, select/drag, coloured dimension handles, numeric length/height/thickness, openings, X/Y/Z placement, rotation, multi-selection, grouped move/rotate, copy/paste/duplicate, floor and roof plates, a four-wall butt-jointed room starter, plan/elevation/3D/walk views, undo/redo, JSON import/export, EPS CSV, PNG capture and inquiry handoff. Copy/paste uses an internal session clipboard without asking for system clipboard permissions. Shortcuts: Ctrl/Cmd+C, V, X, D, A, S, Z and Shift+Z; arrow keys nudge; R rotates. Text fields retain their normal keyboard behavior. The guided interior studio also has copy/paste buttons and measured EPS length/height increments. Placed guided EPS panels with zero or one opening can be brought into assembly mode; combined door/window panels and retained-wall linings remain in guided mode.
+
+`assets/assembly-model.js` supplies validated dimensions and opening polygons to both rendering and the EPS takeoff. Assemblies allow up to 60 parts; the planning zone is 3–12 m per side and up to 4.5 m high for interiors, or 3–20 m per side and up to 12 m high for facades. Positive solid overlaps are rejected using oriented footprints and vertical intervals; joints can touch. EPS core includes vertical EPS panels only, with opening deductions and a separate 0–20% supply allowance. Glass and conceptual floor/roof plates, finishes, connections and structural design are excluded.
+
+Validation:
+
+```sh
+node tests/assembly-model.mjs
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-assembly-studio.py
+```
+
+The browser check edits both real WebGL studios, drags a dimension handle, draws a wall, copies and rotates groups, checks quantity preservation, rejects invalid edits, restores saved plans, exercises CSV/JSON and inquiry handoff, and checks English/Indonesian and phone layouts. It does not send an external message.
