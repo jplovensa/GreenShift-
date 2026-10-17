@@ -181,3 +181,27 @@ GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-ass
 ```
 
 The browser check edits both real WebGL studios, drags a dimension handle, draws a wall, copies and rotates groups, checks quantity preservation, rejects invalid edits, restores saved plans, exercises CSV/JSON and inquiry handoff, and checks English/Indonesian and phone layouts. It does not send an external message.
+
+
+### Client concept studio and GreenShift Pass — October 2026
+
+The primary interior and exterior homepage previews now open the concept assembly studio directly. The secondary actions retain the guided measured EPS tools and six-form facade workflow. Existing films, hero, cinematic opening, Inter typography, deployment scale and Fjäll portfolio links remain in place.
+
+Clients can choose nine starter layouts: villa suite/family/courtyard, commercial workplace/café/showroom, and landmark pavilion/gallery/cultural. Programme-specific options add bedrooms, lounge, dining, terrace, pool, workstations, meeting, reception, retail displays, gallery, canopy, sculpture or landscape references. Furniture is illustrative and editable for scale and circulation; GreenShift is not offering furniture supply. Loading another starter replaces the active concept with undo support; feature selection preserves manually added elements.
+
+Assembly now supports up to 180 elements, 3–40 m planning zones and up to 24 m height. These supersede the initial assembly limits above. Architectural elements and reference objects share move, rotate, resize, copy/paste, multi-select, undo, JSON restore and walkthrough tools. A cutaway and reference visibility layer preserve all saved geometry and quantities. Only measured EPS wall solids enter EPS takeoff; glazing, reference furniture, landscape, slabs, roofs, columns, finish layers and structure are excluded.
+
+The renderer uses locally generated plaster, wood, stone, fabric, concrete and water textures, physical materials, bump/roughness detail, environment reflections, glazing, rounded furniture, directional shadows and daylight/golden/evening presentation. Balanced quality prioritises mobile use; Render increases resolution and shadow detail. Material and geometry caches avoid shader recompilation during ordinary editing. This is a real-time concept renderer, not structural modelling or a path-traced production renderer.
+
+GreenShift Pass is available in both concept and guided studios. Clients enter their name, project, location, scope, investment preference, timing, priorities and questions. The download is a single A4 PDF containing a rendered concept and plan, model dimensions, EPS quantities and discussion details. A matching ID links a companion JSON package that preserves all notes and editable geometry; import it in the same studio to restore. PDF notes are shortened when needed to maintain one page; complete notes remain in JSON. Neither export submits a message. The existing inquiry handoff carries the selected scope and client notes for review before contact.
+
+The PDF is generated entirely in the browser without a third-party service. Its page is a high-resolution raster with embedded PDF metadata. It remains a discussion brief; site dimensions, engineering, specifications, pricing and programme require team review.
+
+Validation additions:
+
+```sh
+node tests/concept-catalog.mjs
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-client-pass.py
+```
+
+These check all nine concepts in both contexts, collision-valid layouts, furniture exclusion from EPS, feature toggles, rendering resources, PDF page count/A4 dimensions, matching PDF/JSON IDs, full-note retention, editable import, snapshot state restoration, phone overflow, guided exports and the homepage inquiry handoff without sending a message. The existing assembly and guided form tests also remain applicable.

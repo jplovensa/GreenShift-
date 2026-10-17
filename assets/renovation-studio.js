@@ -53,7 +53,8 @@ function applySpaceBrief(raw){
  if(!commit(next,'Your Space brief is applied. Explore styles, add measured partitions or walk inside. Undo restores the previous concept.'))return false;
  setPhase('proposed');setView('iso');return true;
 }
-window.GreenShiftPlanner=Object.freeze({applySpaceBrief,getPlan:()=>copy(state),getBrief:summary,getTakeoff:()=>copy(EPS.estimate(state)),getBuildSchedule:()=>copy(fitoutSchedule()),getView:()=>({view,phase,distance,camera:camera?.position.toArray(),aspect:camera?.aspect})});
+function getPassSource(){let image;const ratio=renderer?.getPixelRatio(),size=renderer?.getSize(new T.Vector2()),aspect=camera?.aspect;try{if(renderer){renderer.setPixelRatio(1.5);renderer.setSize(1280,960,false);camera.aspect=4/3;camera.updateProjectionMatrix();updateCamera();renderer.render(scene,camera);image=canvas.toDataURL('image/jpeg',.94);}}finally{if(renderer&&size){renderer.setPixelRatio(ratio);renderer.setSize(size.x,size.y,false);camera.aspect=aspect;camera.updateProjectionMatrix();updateCamera();}}return {source:'guided-interior',plan:copy(state),takeoff:copy(EPS.estimate(state)),images:image?[image]:[],layoutSummary:summary().layout};}
+window.GreenShiftPlanner=Object.freeze({getPassSource,applySpaceBrief,getPlan:()=>copy(state),getBrief:summary,getTakeoff:()=>copy(EPS.estimate(state)),getBuildSchedule:()=>copy(fitoutSchedule()),getView:()=>({view,phase,distance,camera:camera?.position.toArray(),aspect:camera?.aspect})});
 // WebGL room. All geometry, materials and controls are local; no remote 3D assets.
 const T=window.THREE;
 let softwareRenderer=false;let gizmo=null;let renderAssets=null,keyLight,fillLight,hemiLight,environmentTarget;
