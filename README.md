@@ -160,3 +160,7 @@ GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-con
 ```
 
 This exercises the shortened page, keyboard modes, fragment links, materials-to-inquiry, real WebGL studios, EPS invariance, architecture-only plans, import/export, bilingual labels and mobile overflow. It does not send an external message.
+
+### Restored opening, deployment and HD cover
+
+The cinematic video countdown now opens on every page load, with Skip/Escape and the existing timeout and reduced-motion support. Deployment scale is again a visible standalone section after services, including four approaches, filters and detail dialogs. The Space brief no longer offers photo upload, reference images or photo output in its PDF. Legacy stored photos are cleared when opening the brief. The asset repurposing cover is a new 2560 × 1387 WebP capture (approximately 110 KB) of the actual architecture-only WebGL studio, without the old interface screenshot.

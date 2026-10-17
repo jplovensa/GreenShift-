@@ -2,7 +2,6 @@
 (() => {
   const app = document.getElementById('app');
   if (!app) return;
-  try { if (sessionStorage.getItem('greenshift:intro-seen') === '1' && !new URLSearchParams(location.search).has('replayIntro')) return; } catch {}
   const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const intro = document.createElement('section');
   intro.className = 'studio-intro';
@@ -20,7 +19,6 @@
   function finish() {
     if (closed) return;
     closed = true;
-    try { sessionStorage.setItem('greenshift:intro-seen','1'); } catch {}
     timers.forEach(clearTimeout);
     cancelAnimationFrame(frame);
     media.pause();
@@ -208,7 +206,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  const grid=document.querySelector('.deployment-grid');
  const cards=[...grid.querySelectorAll('[data-deployment-kind]')];
  const filters=[...document.querySelectorAll('[data-deployment-filter]')];
- const descriptions={all:'Three approaches for new development.',new:'Three approaches for your new build.',existing:'Refurbish and repurpose your existing space.'};
+ const descriptions={all:'Four approaches. One studio.',new:'Three approaches for your new build.',existing:'Refurbish and repurpose your existing space.'};
  filters.forEach(button=>button.addEventListener('click',()=>{
   const kind=button.dataset.deploymentFilter;
   for (const filter of filters) filter.setAttribute('aria-pressed',String(filter===button));
