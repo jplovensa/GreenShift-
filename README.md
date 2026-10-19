@@ -244,3 +244,11 @@ GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-ref
 ```
 
 This checks local catalogue imagery, swatch/dropdown updates, selected measured labels, unchanged EPS, fixed summary controls and phone/tablet widths. Existing EPS, planner workflow, fallback and Pass checks remain applicable. Browser navigation checks allow software WebGL's initial shader compilation time.
+
+### Direct studio entry and visible launch controls
+
+Bare studio URLs and old `?v=...` bookmarks now open the redesigned concept planner by default. `?assembly=1` remains supported, and `?panel=eps` opens the beginner estimator directly. `?guided=1` explicitly opens the older measured tools; the advanced-tools control records that choice in the URL, while opening the concept studio removes it. Existing `?space=1` measured-room handoff retains its explicit apply/undo workflow.
+
+The homepage studio heading includes direct Design Studio and EPS launch buttons. The refurbishment EPS action opens the new estimator, with the older wall tools separately labelled Advanced wall tools. Script/style URLs use `entry4` so the new entry behavior is fetched with the release. Existing guided-interface checks and capture helpers request `guided=1` explicitly.
+
+`python scripts/verify-studio-entry.py` verifies plain and old-version URLs, advanced-mode reload behavior, EPS deep links, homepage launches, measured space handoff and mobile overflow. This fixes a navigation ambiguity: the previous direct page opened the old guided interface unless `assembly=1` was present.

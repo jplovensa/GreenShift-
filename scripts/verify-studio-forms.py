@@ -9,7 +9,7 @@ def fq(p):return p.evaluate('GreenShiftFacadeStudio.getTakeoff()')
 def ip(p):return p.evaluate('GreenShiftPlanner.getPlan()')
 with sync_playwright() as pw:
  b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=FLAGS);p=b.new_page(viewport={'width':1440,'height':1000});errors=[];bad=[];p.on('pageerror',lambda e:errors.append(str(e)));p.on('response',lambda r:bad.append(r.url) if r.status>=400 and '/assets/' in r.url else None)
- p.goto(BASE+'/assets/facade-studio.html?v=studio4');p.wait_for_function('window.GreenShiftFacadeStudio');assert not p.locator('#webgl-error').is_visible();close(fq(p)['volume'],4.4616)
+ p.goto(BASE+'/assets/facade-studio.html?guided=1&v=studio4');p.wait_for_function('window.GreenShiftFacadeStudio');assert not p.locator('#webgl-error').is_visible();close(fq(p)['volume'],4.4616)
  quantities=[]
  for form in ['box','curve','wave','folded','asymmetric','gable']:
   p.locator('[data-form="'+form+'"]').click();assert fp(p)['form']==form;quantities.append(fq(p)['volume']);assert form=='box' or fq(p)['volume']!=4.4616
@@ -35,7 +35,7 @@ with sync_playwright() as pw:
  with p.expect_download() as d:p.locator('#export').click()
  exported=json.load(open(d.value.path()));assert exported==saved;p.reload();p.wait_for_function('window.GreenShiftFacadeStudio');assert fp(p)==saved;close(fq(p)['volume'],core)
  p.locator('[data-form="asymmetric"]').click();p.locator('[data-style="tropical"]').click();p.evaluate('document.querySelectorAll("aside").forEach(el=>el.scrollTop=0)');p.locator('#studio-toast').evaluate('(el)=>el.hidden=true');p.screenshot(path=str(ROOT/'verification/studio4-facade-desktop.png'));assert p.locator('img[src]').evaluate_all('(imgs)=>imgs.every(i=>i.complete&&i.naturalWidth>0)');assert not errors,errors;assert not bad,bad;print('Facade: six real forms × four cores, six coordinated styles, direct curved-window picking/editing, invalid edits, six build stages, schedule/JSON, undo/redo and persistence passed.',flush=True)
- p.goto(BASE+'/assets/renovation-studio.html?v=studio4');p.wait_for_function('window.GreenShiftPlanner');p.locator('#preset').select_option('blank');p.locator('#add-measured-wall').click();p.locator('#turn-right').click();p.locator('[data-item="panel"]').click();p.locator('#auto-place').click();p.locator('#item-x').fill('1.75');p.locator('#item-z').fill('0.75');p.locator('#move-item').click();objects=ip(p)['objects'];core=p.evaluate('GreenShiftPlanner.getTakeoff().volume')
+ p.goto(BASE+'/assets/renovation-studio.html?guided=1&v=studio4');p.wait_for_function('window.GreenShiftPlanner');p.locator('#preset').select_option('blank');p.locator('#add-measured-wall').click();p.locator('#turn-right').click();p.locator('[data-item="panel"]').click();p.locator('#auto-place').click();p.locator('#item-x').fill('1.75');p.locator('#item-z').fill('0.75');p.locator('#move-item').click();objects=ip(p)['objects'];core=p.evaluate('GreenShiftPlanner.getTakeoff().volume')
  for style in ['contemporary','japandi','tropical','industrial','mediterranean','bold']:
   p.locator('[data-style="'+style+'"]').click();assert ip(p)['designStyle']==style;assert ip(p)['objects']==objects;close(p.evaluate('GreenShiftPlanner.getTakeoff().volume'),core)
  shots=[]

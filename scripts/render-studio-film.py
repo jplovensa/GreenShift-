@@ -48,7 +48,7 @@ with sync_playwright() as pw:
   for i in range(FPS*DURATION):
    data=p.evaluate('([t,k,c,h,d])=>__filmFrame(t,k,c,h,d)',[i/(FPS*DURATION-1),kind,chapter,title,detail]);(folder/f'{i:04}.jpg').write_bytes(base64.b64decode(data))
   out=FRAMES/(name+'.mp4');subprocess.run(['ffmpeg','-y','-loglevel','error','-framerate',str(FPS),'-i',str(folder/'%04d.jpg'),'-c:v','libx264','-preset','medium','-crf','19','-pix_fmt','yuv420p',str(out)],check=True);shots.append(out);print('Rendered '+name,flush=True)
- p.goto(BASE+'renovation-studio.html?v=studio4');p.wait_for_function('window.__filmFrame&&window.GreenShiftPlanner');p.locator('[data-style="japandi"]').click()
+ p.goto(BASE+'renovation-studio.html?guided=1&v=studio4');p.wait_for_function('window.__filmFrame&&window.GreenShiftPlanner');p.locator('[data-style="japandi"]').click()
  p.locator('[data-item="epswall"]').click();p.locator('#auto-place').click();p.locator('#wall-opening').select_option('door');p.locator('#apply-wall').click()
  p.locator('[data-build-stage="existing"]').click()
  capture('01-retain','interior','01 / Read the space','Retain the asset.','Start with the existing shell. Understand what can work harder.')
@@ -56,7 +56,7 @@ with sync_playwright() as pw:
  capture('02-plan','interior','02 / Shape the plan','Give the space a new purpose.','Place measured EPS partitions. Coordinate openings and movement.')
  p.locator('[data-build-stage="proposed"]').click()
  capture('03-finish','interior','03 / Material & light','Make the design tangible.','Review finishes, furniture and lighting as one coordinated direction.')
- p.goto(BASE+'facade-studio.html?v=studio4');p.wait_for_function('window.__filmFrame&&window.GreenShiftFacadeStudio');p.locator('[data-form="curve"]').click();p.locator('[data-style="tropical"]').click();p.locator('[data-build-stage="eps"]').click()
+ p.goto(BASE+'facade-studio.html?guided=1&v=studio4');p.wait_for_function('window.__filmFrame&&window.GreenShiftFacadeStudio');p.locator('[data-form="curve"]').click();p.locator('[data-style="tropical"]').click();p.locator('[data-build-stage="eps"]').click()
  capture('04-envelope','facade','04 / Form & envelope','Change the building’s presence.','Explore curved profiles, measured openings and the EPS envelope.')
  p.locator('[data-build-stage="proposed"]').click()
  capture('05-present','facade','05 / Present the concept','Review the direction. Together.','Walk the interior. Explore the facade. Take the concept into development.')

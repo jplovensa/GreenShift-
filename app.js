@@ -157,8 +157,8 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
  const projects = {
   drop: { title: 'Drop Pod Villas — Client Walkthrough', url: 'https://jplovensa.github.io/Drop-Pod-Experience-/experience.html' },
   spatial: { title: 'Garuda Spark Innovation Hub — WebGL Presentation', url: './assets/spatial-presentation.html', external: 'https://jplovensa.github.io/SCH-FG_GSIH_MCC/' },
-  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=reference3' },
-  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=reference3' }
+  facade: { title: 'GreenShift — Facade Facelift Studio', url: './assets/facade-studio.html?v=entry4' },
+  renovation: { title: 'GreenShift — Asset Repurposing Studio', url: './assets/renovation-studio.html?v=entry4' }
  };
  const dialog = document.getElementById('experience-dialog');
  const host = document.getElementById('experience-frame');
@@ -173,7 +173,7 @@ form.addEventListener('input',()=>{review.hidden=true;review.querySelector('a').
    const frame = document.createElement('iframe');
    frame.title = project.title;
    const fromSpace = button.id === 'space-dialog-launch';
-   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '') + (['facade','renovation'].includes(button.dataset.experience) ? '&lang='+(globalThis.GreenShiftLanguage?.language||'en') : '') + (button.dataset.assembly ? '&assembly=1' : '');
+   const studioURL = project.url + (fromSpace ? (project.url.includes('?') ? '&' : '?') + 'space=1' : '') + (['facade','renovation'].includes(button.dataset.experience) ? '&lang='+(globalThis.GreenShiftLanguage?.language||'en') : '') + (['facade','renovation'].includes(button.dataset.experience) ? (fromSpace||button.dataset.guided ? '&guided=1' : '&assembly=1') : '') + (button.dataset.panel ? '&panel='+encodeURIComponent(button.dataset.panel) : '');
    frame.src = studioURL;
    document.getElementById('experience-external').href = project.external || studioURL;
    if (fromSpace) frame.addEventListener('load', () => {
