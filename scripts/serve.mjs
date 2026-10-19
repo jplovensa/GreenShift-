@@ -12,7 +12,7 @@ http.createServer(async(req,res)=>{
   let route=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
   if(base && route!==base && !route.startsWith(base+'/')){res.writeHead(404).end();return;}
   route=route.slice(base.length).replace(/^\//,'')||'index.html';
-  if(!/^(index\.html|cinematic\.html|editorial\.html|atelier\.html|app\.js|content\.js|style\.css|assets\/[A-Za-z0-9_.-]+)$/.test(route)){res.writeHead(404).end();return;}
+  if(!/^(index\.html|cinematic\.html|editorial\.html|atelier\.html|app\.js|content\.js|style\.css|assets\/(?:studio-parts\/)?[A-Za-z0-9_.-]+)$/.test(route)){res.writeHead(404).end();return;}
   const body=await readFile(root+route);
   res.writeHead(200,{'Content-Type':types[route.split('.').pop()]||'application/octet-stream','Content-Length':body.length});
   res.end(req.method==='HEAD'?undefined:body);

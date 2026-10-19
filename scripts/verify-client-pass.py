@@ -7,7 +7,7 @@ OUT=Path('/workspace/greenshift-pass-check');OUT.mkdir(exist_ok=True)
 def plan(p):return p.evaluate('GreenShiftAssemblyStudio.getPlan()')
 def qty(p):return p.evaluate('GreenShiftAssemblyStudio.getTakeoff().volume')
 with sync_playwright() as pw:
- b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--enable-unsafe-swiftshader','--use-angle=swiftshader']);p=b.new_page(viewport={'width':1600,'height':1000});errors=[];bad=[];p.on('pageerror',lambda e:errors.append(e.stack));p.on('response',lambda r:bad.append(r.url) if r.status>=400 else None)
+ b=pw.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--enable-unsafe-swiftshader','--use-angle=swiftshader']);p=b.new_page(viewport={'width':1600,'height':1000});p.set_default_navigation_timeout(90000);errors=[];bad=[];p.on('pageerror',lambda e:errors.append(e.stack));p.on('response',lambda r:bad.append(r.url) if r.status>=400 else None)
  for studio in ['renovation','facade']:
   p.goto(BASE+'assets/'+studio+'-studio.html?assembly=1&lang=en');p.locator('#assembly-dialog').wait_for(state='visible');p.wait_for_function('GreenShiftAssemblyStudio.getRenderInfo().triangles>0');assert p.evaluate('GreenShiftAssemblyStudio.getRenderInfo().environment');assert p.evaluate('GreenShiftAssemblyStudio.getRenderInfo().textured')>0;assert p.evaluate('GreenShiftAssemblyStudio.getRenderInfo().physical')>0;p.locator('[data-workflow=materials]').click();p.locator('.ab-catalog summary').filter(has_text='03 / Finish & presentation').click()
   for program,variant in [('villa','courtyard'),('commercial','workplace'),('landmark','gallery')]:

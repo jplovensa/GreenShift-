@@ -228,4 +228,19 @@ GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-pla
 
 These cover independent multi-opening EPS quantities at all four cores, unit equivalence, invalid input preservation, real geometry and copy/rotation, contextual panels, shaders, phone layouts, worst-case text bounds/margins and PDF page count, editable export consistency, and measured/PDF use with WebGL disabled. Existing assembly/client Pass regressions follow the new panel navigation.
 
-The Planner Studio reference URL could not be inspected because the cloud environment's HTTP allowlist denied the domain. Required domain additions were saved in the environment configuration draft. The new interface and renderer are GreenShift implementations; matching the reference's details and verifying visual parity remain pending reference access.
+Planner Studio's public website, room-planner page, examples, modular/generator demonstration films and dimension/material screenshots were inspected after reference access became available. The studio adapts their compact white catalogue, visual component selection, neutral canvas, fixed configuration summary and object dimension annotations to GreenShift's architectural workflow. All catalogue geometry, previews and materials are GreenShift's own assets; reference-site product assets are not bundled.
+
+
+### Reference-based studio presentation — 19 October 2026
+
+The planner now uses a compact tabbed catalogue beside a large neutral 3D canvas. Its fixed summary shows the live installed EPS core quantity and the existing concept-to-inquiry action. The selected-element inspector remains contextual. Mobile keeps the summary and primary action available while scrolling configuration controls.
+
+Fifteen original catalogue previews are rendered from the same architectural/furniture geometry and materials used in the studio. `scripts/capture-studio-parts.py` regenerates them with the local browser; the preview server permits only this specific additional asset subfolder. Material swatches and the existing finish dropdown stay in sync and preserve all dimensions and EPS quantities. The first element added to an empty workspace fits into view automatically.
+
+Selected elements display measured length, height and depth beside the actual 3D object. The Dimensions switch controls these presentation annotations; rotation, selection and camera movement keep them aligned. Clean image/Pass captures omit the editing annotations. The PDF typesetting and EPS calculation models are unchanged.
+
+```sh
+GREENSHIFT_TEST_URL=http://localhost:4175/GreenShift-/ python scripts/verify-reference-visuals.py
+```
+
+This checks local catalogue imagery, swatch/dropdown updates, selected measured labels, unchanged EPS, fixed summary controls and phone/tablet widths. Existing EPS, planner workflow, fallback and Pass checks remain applicable. Browser navigation checks allow software WebGL's initial shader compilation time.

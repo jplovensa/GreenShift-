@@ -603,7 +603,7 @@
   "Wall colour": "Warna dinding",
   "Chalk": "Putih kapur",
   "Sage": "Hijau sage",
-  "Clay": "Tanah liat",
+  "Clay": "Terakota",
   "Start over with a blank room": "Mulai ulang dengan ruang kosong",
   "Build / 3D": "Rancang / 3D",
   "Floor plan": "Denah",
@@ -2330,5 +2330,16 @@
   "Enter opening width as a positive number, for example 3.5 or 3,5.": "Masukkan lebar bukaan sebagai angka positif, misalnya 3.5 atau 3,5.",
   "Enter opening height as a positive number, for example 3.5 or 3,5.": "Masukkan tinggi bukaan sebagai angka positif, misalnya 3.5 atau 3,5.",
   "Enter distance from the left edge as a positive number, for example 3.5 or 3,5.": "Masukkan jarak dari tepi kiri sebagai angka positif, misalnya 3.5 atau 3,5.",
-  "Enter window sill as a positive number, for example 3.5 or 3,5.": "Masukkan ambang jendela sebagai angka positif, misalnya 3.5 atau 3,5."
+  "Enter window sill as a positive number, for example 3.5 or 3,5.": "Masukkan ambang jendela sebagai angka positif, misalnya 3.5 atau 3,5.",
+  "Live concept summary": "Ringkasan konsep langsung",
+  "Installed EPS core": "Inti EPS terpasang",
+  "EPS walls": "dinding EPS",
+  "furniture excluded": "furnitur tidak dihitung",
+  "Architectural finish swatches": "Pilihan contoh finishing arsitektur",
+  "Selected element dimensions": "Ukuran elemen terpilih",
+  "Plaster": "Plester",
+  "Timber": "Kayu",
+  "Stone": "Batu",
+  "Concrete": "Beton",
+  "EPS wall": "dinding EPS"
 }
