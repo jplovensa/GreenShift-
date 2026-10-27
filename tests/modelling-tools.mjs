@@ -12,3 +12,5 @@ console.log('Modelling: XYZ moves, rotation-invariant EPS, anchored push/pull, f
 const floor={...A.defaults(),w:8,d:6,h:4.5,parts:[A.part('slab',{length:6,depth:5,height:.12})]};const drawn=A.drawWall(floor,{x:-1,z:0},{x:1,z:0},{base:.12});near(drawn.plan.parts.at(-1).y,.12);near(A.estimate(drawn.plan).volume,2*2.7*.12);
 
 const pair={...A.defaults(),w:12,d:12,h:6,parts:[A.part('wall',{length:1,height:3,depth:.12,x:-2}),A.part('wall',{length:1,height:3,depth:.15,x:2})]};const rotatedPair=M.rotate(pair,pair.parts.map(p=>p.id),15);near(rotatedPair.parts[0].x,-2*Math.cos(Math.PI/12));near(rotatedPair.parts[0].z,2*Math.sin(Math.PI/12));near(A.estimate(rotatedPair).volume,A.estimate(pair).volume);
+
+const door=A.part('wall',{length:4,height:3,opening:'door'});const doorPlan={...p,parts:[door]};assert.equal(A.holes(M.pushPull(doorPlan,door.id,'length',1).parts[0])[0].kind,'door');
