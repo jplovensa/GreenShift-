@@ -57,9 +57,9 @@ function paste(raw,items){
  }
  throw Error('No clear space fits the copied elements. Make space or enlarge the workspace.');
 }
-function drawWall(raw,from,to){
+function drawWall(raw,from,to,options={}){
  const plan=normalize(raw),dx=to.x-from.x,dz=to.z-from.z,length=Math.hypot(dx,dz);if(length<.3)throw Error('Draw a wall at least 30 cm long.');
- const u=[dx/length,dz/length],v=[-u[1],u[0]],wall=part('wall',{length,height:Math.min(2.7,plan.h),x:(from.x+to.x)/2,z:(from.z+to.z)/2,angle:(-Math.atan2(dz,dx)*180/Math.PI+360)%360});let start=0,end=length;
+ const u=[dx/length,dz/length],v=[-u[1],u[0]],wall=part('wall',{length,y:options.base??0,height:Math.min(2.7,plan.h-(options.base??0)),x:(from.x+to.x)/2,z:(from.z+to.z)/2,angle:(-Math.atan2(dz,dx)*180/Math.PI+360)%360});let start=0,end=length;
  for(const other of plan.parts){if(other.type!=='wall'||!overlap(wall,other))continue;let enter=-Infinity,leave=Infinity;const base=[from.x-other.x,from.z-other.z];for(const [axis,radius] of [[axes(other)[0],other.length/2],[axes(other)[1],other.depth/2]]){const origin=base[0]*axis[0]+base[1]*axis[1],direction=u[0]*axis[0]+u[1]*axis[1],extent=radius+Math.abs(v[0]*axis[0]+v[1]*axis[1])*wall.depth/2;if(Math.abs(direction)<1e-10){if(Math.abs(origin)>extent){enter=Infinity;break;}}else{const a=(-extent-origin)/direction,b=(extent-origin)/direction;enter=Math.max(enter,Math.min(a,b));leave=Math.min(leave,Math.max(a,b));}}
   if(enter>leave)continue;if(enter<=1e-6)start=Math.max(start,leave);else if(leave>=length-1e-6)end=Math.min(end,enter);else throw Error('This wall crosses another panel. End at its face or draw separate runs.');
  }
